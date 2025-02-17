@@ -43,7 +43,7 @@ class batalla:
         print("⍚Estadisticas del contrincante")
         print("Nombre: ", self.contrincante.nombre)
         print("Vida: ", self.contrincante.vida)
-        print(f"Habilidades:  Ataque: {self.contrincante.habilidades["ataque"]} Defenza: {self.contrincante.habilidades["defender"]}")
+        print(f"Habilidades:  Ataque: {self.contrincante.habilidades['ataque']} Defenza: {self.contrincante.habilidades['defender']}")
         print("Nivel de combate: ", self.contrincante.nivel_combate)
 
     def iniciar(self):

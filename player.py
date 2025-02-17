@@ -14,7 +14,7 @@ class player:
         print(f"☺ Nombre: {self.nombre}")
         print(f"🎔 Vida: {self.vida}")
         print(f"⍚ Nivel de combate: {self.nivel_combate}")
-        print(f"❖ Habilidades: Ataque:{self.habilidades["atacar"]} Defensa:{self.habilidades["defender"]}")
+        print(f"❖ Habilidades: Ataque:{self.habilidades['atacar']} Defensa:{self.habilidades['defender']}")
      
     def mover_a(self, direccion):
         "necesitara un parametro la cual es la direccion"
