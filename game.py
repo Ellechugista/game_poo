@@ -1,5 +1,5 @@
 # archivo principal
-from lugares import lugar, casa 
+from lugares import casa 
 from personajes import entidad, dialogos_ejemplos
 from player import player
 import random
