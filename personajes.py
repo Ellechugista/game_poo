@@ -3,12 +3,13 @@ import random
 # entidad otros seres personajes y demás 
 class entidad:
    
-    def __init__(self, nombre: str, dialogos, vida:float,descripcion:str=None, rutinas=None, nivel_combate=4, habilidades:dict = {"atacar": 5, "defender": 5}):
+    def __init__(self, nombre: str, dialogos, vida:float,descripcion:str=None, rutinas=None, nivel_combate=4, habilidades:dict = {"atacar": 5, "defender": 5}, animo="normal"):
         self.nombre = nombre
         # los dialogos deben ser un diccionario como clave el tipo de diálogo y como valor un diccionario con las opciones de respuesta
         self.dialogos = dialogos
         self.vida = vida
         self.descripcion = descripcion
+        self.animo = animo
         self.rutinas = rutinas
         self.habilidades = habilidades
         self.nivel_combate = nivel_combate
@@ -23,9 +24,9 @@ class entidad:
         print(f"❖ Habilidades: Ataque:{self.habilidades['atacar']} Defensa:{self.habilidades['defender']}")
         print("⊢---------------------------------------------⊣")
       
-    def hablar(self, animo: str):
+    def hablar(self):
         """aqui el sujeto tendrá una lista de diccionarios qué tendrán textos que mostrará según el carácter de la entidad, y otro diccionario que tendrá las respuestas que el usuario puede darle"""
-        match animo:
+        match self.animo:
             case "normal":
                 respuesta = random.choice(self.dialogos["normal"])
                 print(f"{self.nombre} dice: {respuesta}")
@@ -135,6 +136,8 @@ class entidad:
         self.defensa_activa = True
         print(f"{self.nombre} se defiende")
         print(" ")
+        
+        
         
 #estendemos la clase entidad para crear razas o tipos de entidades
 class humano(entidad):

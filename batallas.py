@@ -43,6 +43,8 @@ class batalla:
 
     def iniciar(self):
         """esta funcion controla todo el flujo de una batalla incluyendo turnos y acciones"""
+        #aqui tenemos que cambiar el animo del personaje con quien peliemos a enojado
+        self.contrincante.animo = "enojado"
         batalla_acabada = self.validar_ganador()
         limpiar_consola()
         # cuando validar ganador sea "ninguno"
@@ -83,6 +85,13 @@ class batalla:
         # cuando batalla_acabada sea True osea gano el jugador
         if batalla_acabada:
             print("⌘Has ganado la batalla")
+            print(" ")
+            print("⌘¿Deseas dejar vivo al contrincante? si/no")
+            respuesta = str(input("> ")).lower().split()
+            if respuesta[0] == "si":
+                self.contrincante.destruir()
+            else:
+                print("⌘El contrincante se aleja")
             puntos = (self.turno + self.jugador.vida) * 0.2
             self.jugador.nivel_combate += puntos
             print(" ")
@@ -90,6 +99,8 @@ class batalla:
         # cuando validar_ganador sea false osea perdio el jugador
         elif not batalla_acabada:
             print("⌘Has perdido la batalla")
+            #debemos actualizar el animo del personaje con quien peliemos a feliz porque gano
+            self.contrincante.animo = "feliz"
             self.jugador.game_over()
 
 # test
