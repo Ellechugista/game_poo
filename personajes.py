@@ -3,14 +3,14 @@ import random
 # entidad otros seres personajes y demás 
 class entidad:
    
-    def __init__(self, nombre: str, dialogos, vida:float,descripcion:str=None, rutinas=None, nivel_combate=4):
+    def __init__(self, nombre: str, dialogos, vida:float,descripcion:str=None, rutinas=None, nivel_combate=4, habilidades:dict = {"atacar": 5, "defender": 5}):
         self.nombre = nombre
         # los dialogos deben ser un diccionario como clave el tipo de diálogo y como valor un diccionario con las opciones de respuesta
         self.dialogos = dialogos
         self.vida = vida
         self.descripcion = descripcion
         self.rutinas = rutinas
-        self.habilidades = {"atacar": 5, "defender": 5}
+        self.habilidades = habilidades
         self.nivel_combate = nivel_combate
         self.defensa_activa = False
         
@@ -135,6 +135,14 @@ class entidad:
         self.defensa_activa = True
         print(f"{self.nombre} se defiende")
         print(" ")
+        
+#estendemos la clase entidad para crear razas o tipos de entidades
+class humano(entidad):
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=5, habilidades = { "atacar": 5,"defender": 5 }):
+        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades)
+    def presentacion(self):
+        print(f"{self.nombre} es un humano")
+
 
    
 # aqui creamos los dialogos de la entidad para que pueda hablar cuando llamemos a la función de la clase estos son una base y deberían modificarse o añadir un diccionario de listas más especializado para cada entidad
@@ -210,9 +218,11 @@ dialogos_ejemplos = {
     "enojado": enojado,
     "repetido": repetitivo
 }
+
+
 if __name__ == "__main__":
     # aqui creamos la entidad
-    pablo = entidad("marco", dialogos_ejemplos, 100)
-    pablo.presentacion()
-    pablo.hablar("repetido")
+    marcelito = humano("marcelito", dialogos_ejemplos, 100)
+    marcelito.presentacion()
+    marcelito.hablar("repetido")
 
