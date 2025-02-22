@@ -1,4 +1,5 @@
 # archivo principal
+#esta es una prueba
 from lugares import casa 
 from personajes import entidad, dialogos_ejemplos
 from player import player
