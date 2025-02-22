@@ -1,5 +1,5 @@
 from lugares import casa 
-from personajes import entidad, dialogos_ejemplos
+from personajes import *
 from player import player
 from utils import *
 import random
@@ -106,7 +106,7 @@ class batalla:
 # test
 if __name__ == "__main__":
     lechuga = player("El Lechugista", casa,habilidades={"atacar": 10, "defender": 5},nivel_combate=10, vida=10)
-    pablo = entidad("pablo", dialogos_ejemplos, vida=10, nivel_combate=10)
+    pablo = humano("pablo", dialogos_ejemplos, vida=10, nivel_combate=10)
     print(" ")
     batalla_1 = batalla(lechuga, pablo)
     batalla_1.iniciar()

@@ -1,4 +1,3 @@
-
 import random
 class player:   
     def __init__(self, nombre:str, lugar_actual, vida:float=10, habilidades:dict = {"atacar": 5, "defender": 5}, nivel_combate = 10):
@@ -29,20 +28,35 @@ class player:
             print("El jugador no esta en ningun lugar")
          
     def agregar_inventario(self, objeto):
-        self.inventario.append(objeto)
-        print(f"has tomado el {objeto}")
+        for item in self.inventario:
+            if item.nombre == objeto.nombre:
+                item.cantidad += objeto.cantidad
+                break
+        else:
+            self.inventario.append(objeto)
+        print(f"has tomado el {objeto.nombre} (Cantidad: {objeto.cantidad})")
        
     def quitar_inventario(self, objeto):
-        if objeto in self.inventario:
-            self.inventario.remove(objeto)
+        for item in self.inventario:
+            if item.nombre == objeto.nombre:
+                if item.cantidad > objeto.cantidad:
+                    item.cantidad -= objeto.cantidad
+                elif item.cantidad == objeto.cantidad:
+                    self.inventario.remove(item)
+                else:
+                    print(f"No tienes suficiente cantidad de {objeto.nombre} en tu inventario")
+                break
         else:
-            print("no tienes ese objeto en tu inventario")
+            print(f"No tienes {objeto.nombre} en tu inventario")
          
     def mostrar_inventario(self):
         if self.inventario:
             print("Tienes:")
             for item in self.inventario:
-                print(f"- {item}")
+                if item.cantidad == 0:
+                    print(f"- {item.nombre}")
+                else:
+                    print(f"- {item.nombre} > {item.cantidad}")
         else:
             print("no tienes nada en tu inventario")
             
@@ -131,6 +145,6 @@ class player:
         self.defensa_activa = True
         print(f"{self.nombre} se defiende")
         print(" ")
-        
-        
-            
+
+
+

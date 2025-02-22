@@ -138,13 +138,26 @@ class entidad:
         print(" ")
         
         
-        
+# -----------ENTIDADESSSSSSS----------------------------------------------
 #estendemos la clase entidad para crear razas o tipos de entidades
+#humanos
 class humano(entidad):
     def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=5, habilidades = { "atacar": 5,"defender": 5 }):
         super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades)
     def presentacion(self):
         print(f"{self.nombre} es un humano")
+#ELFOS  
+class elfo(entidad):
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=8, habilidades = { "atacar": 8,"defender": 15 }):
+        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades)
+    def presentacion(self):
+        print(f"{self.nombre} es un elfo")
+#ORCOS
+class orco(entidad):
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=3, habilidades = { "atacar": 15,"defender": 12 }):
+        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades)
+    def presentacion(self):
+        print(f"{self.nombre} es un orco")
 
 
    
