@@ -56,6 +56,12 @@ class contenedor:
                 self.contenido.append(objeto)
 
 
+
+#creamos objetos magicos
+orbe_verde = objeto("Orbe verde", "objeto magico con modificador estadistico", efectos{"vida":10})
+orbe_rojo = objeto("Orbe rojo", "objeto magico con modificador estadistico", efectos{"vida":-5, "ataque": 8, "defensa":2})
+
+
 if __name__ == "__main__":
     monedax10 = objeto("moneda", "una moneda de oro", 10)
     monedax5 = objeto("moneda", "una moneda de oro", 5)
