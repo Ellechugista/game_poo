@@ -18,8 +18,7 @@ class game:
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def iniciar(self):
-        contador = 0
-        
+        #aqui se maneja el input del jugador prara ver que  accion quiere hacer dentro de cada escenario y se le muestra la informacion en desarrollo
         while True:
             lugar_actual = self.player.lugar_actual
             lugar_actual.presentar_lugar()
@@ -42,26 +41,30 @@ class game:
                 case "inventario":
                     self.player.mostrar_inventario()
                 case "informacion":
-                    if self.player.inventario:
-                        for item in self.player.inventario:
-                            if item.nombre == comando[1]:
-                                self.player.descrip_objeto(item)
-                                break
+                    if len(comando) > 1:
+                        if self.player.inventario:
+                            for item in self.player.inventario:
+                                print(item.nombre.lower())
+                                if item.nombre.lower() == comando[1].strip():
+                                    self.player.descrip_objeto(item)
+                                    break
+                            else:
+                                limpiar_consola()
+                                print(f"No tienes {comando[1]} en tu inventario")
                         else:
-                            print(f"No tienes {comando[1]} en tu inventario")
+                            limpiar_consola()
+                            print("No tienes nada en tu inventario")  
                     else:
-                        print("No tienes nada en tu inventario")
+                        limpiar_consola()
+                        print("Debes especificar el objeto del que quieres informacion")  
+                    
                 case "estadisticas":
                     self.player.estadisticas()
                 case "salir":
                     break
                 case _:
+                    limpiar_consola()
                     print("Comando no valido")
-            
-            # Incrementar el contador y limpiar la consola cada 3 iteraciones
-            contador += 1
-            if contador % 3 == 0:
-                limpiar_consola()
 
 if __name__ == "__main__":
     juego = game()

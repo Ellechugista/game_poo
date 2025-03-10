@@ -91,7 +91,7 @@ class armario(contenedor):
 #creamos objetos magicos
 orbe_verde = objeto("Orbe verde", "objeto magico con modificador estadistico", efectos={"vida":10})
 orbe_rojo = objeto("Orbe rojo", "objeto magico con modificador estadistico", efectos={"vida":-5, "ataque": 8, "defensa":2})
-baston_curativo = objeto("baston_curativo", "Un baston de madera antiguo que rebosa de vida.", efectos={"vida":5})
+baston_curativo = objeto("Baston_curativo", "Un baston de madera antiguo que rebosa de vida.", efectos={"vida":5})
 #objetos generales que son acumulables
 monedax10 = objeto("moneda", "una moneda de oro", 10)
 monedax5 = objeto("moneda", "una moneda de oro", 5)
@@ -111,10 +111,10 @@ coraza = objeto("Coraza_hierro", "Una coraza de hierro", efectos={"defensa":6})
 botas = objeto("Botas_hierro", "Botas de hierro", efectos={"defensa":4})
 guantes = objeto("Guantes_hierro", "Guantes de hierro", efectos={"defensa":3})
 #armaduras cuero
-casco_cuero = objeto("Casco_de_cuero", "Un casco de cuero", efectos={"defensa":2})
-coraza_cuero = objeto("Coraza_de_cuero", "Una coraza de cuero", efectos={"defensa":3})
-botas_cuero = objeto("botas_de_cuero", "Botas de cuero", efectos={"defensa":2})
-guantes_cuero = objeto("Guantes_de_cuero", "Guantes de cuero", efectos={"defensa":1})
+casco_cuero = objeto("Casco_cuero", "Un casco de cuero", efectos={"defensa":2})
+coraza_cuero = objeto("Coraza_cuero", "Una coraza de cuero", efectos={"defensa":3})
+botas_cuero = objeto("Botas_cuero", "Botas de cuero", efectos={"defensa":2})
+guantes_cuero = objeto("Guantes_cuero", "Guantes de cuero", efectos={"defensa":1})
 
 
 

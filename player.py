@@ -26,8 +26,10 @@ class player:
                 self.lugar_actual.presentar_lugar()
             else:
                 print("No puedes ir en esa direccion")
+                print(" ")
         else:
             print("El jugador no esta en ningun lugar")
+            print(" ")
          
     def agregar_inventario(self, objeto):
         """esta funcion agrega un objeto al inventario del jugador"""
@@ -81,12 +83,13 @@ class player:
                 print("⌘No puedes tomar un cofre")
                 print(" ")
                 return False
-            elif item.nombre == objeto:
+            elif item.nombre.lower() == objeto:
                 self.agregar_inventario(item)
                 self.lugar_actual.quitar_objeto(item)
                 break
         else:
             print(f"⌘No hay {objeto} en este lugar")
+            print(" ")
             
     def calcular_ventaja(self, contrincante):
         """esta funcion devuelve si hay ventaja en el combate y devuelve true si hay ventaja y false si no hay ventaja y iguales si son iguales"""
