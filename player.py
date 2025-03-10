@@ -1,4 +1,5 @@
 import random
+from utils import *
 class player:   
     def __init__(self, nombre:str, lugar_actual, vida:float=10, habilidades:dict = {"atacar": 5, "defender": 5}, nivel_combate = 10):
         self.nombre = nombre
@@ -16,7 +17,8 @@ class player:
         print(f"❖ Habilidades: Ataque:{self.habilidades['atacar']} Defensa:{self.habilidades['defender']}")
      
     def mover_a(self, direccion):
-        "necesitara un parametro la cual es la direccion"
+        limpiar_consola()
+        """necesitara un parametro la cual es la direccion"""
         if direccion:
             if direccion in self.lugar_actual.conexiones:
                 nuevo_lugar = self.lugar_actual.conexiones[direccion]
@@ -28,15 +30,21 @@ class player:
             print("El jugador no esta en ningun lugar")
          
     def agregar_inventario(self, objeto):
+        """esta funcion agrega un objeto al inventario del jugador"""
+        limpiar_consola()
         for item in self.inventario:
             if item.nombre == objeto.nombre:
                 item.cantidad += objeto.cantidad
                 break
         else:
             self.inventario.append(objeto)
-        print(f"has tomado el {objeto.nombre} (Cantidad: {objeto.cantidad})")
+        print(f"⌘has tomado {objeto.nombre} (Cantidad: {objeto.cantidad})")
+        print(" ")
+        return True
        
-    def quitar_inventario(self, objeto):
+    def extraer_inventario(self, objeto):
+        """esta funcion elimina un objeto del inventario del jugador"""
+        limpiar_consola()
         for item in self.inventario:
             if item.nombre == objeto.nombre:
                 if item.cantidad > objeto.cantidad:
@@ -50,15 +58,35 @@ class player:
             print(f"No tienes {objeto.nombre} en tu inventario")
          
     def mostrar_inventario(self):
+        """esta funcion muestra el inventario del jugador"""
+        limpiar_consola()
         if self.inventario:
             print("Tienes:")
             for item in self.inventario:
-                if item.cantidad == 0:
-                    print(f"- {item.nombre}")
+                if item.cantidad == 1:
+                    print(f"ⵚ {item.nombre}")
                 else:
-                    print(f"- {item.nombre} > {item.cantidad}")
+                    print(f"ⵚ {item.nombre} x{item.cantidad}")
         else:
-            print("no tienes nada en tu inventario")
+            print("⌘no tienes nada en tu inventario")
+            
+    def descrip_objeto(self, objeto):
+        limpiar_consola()
+        objeto.describir()
+        
+    def tomar_objeto(self, objeto):
+        limpiar_consola()
+        for item in self.lugar_actual.objetos:
+            if objeto == "cofre":
+                print("⌘No puedes tomar un cofre")
+                print(" ")
+                return False
+            elif item.nombre == objeto:
+                self.agregar_inventario(item)
+                self.lugar_actual.quitar_objeto(item)
+                break
+        else:
+            print(f"⌘No hay {objeto} en este lugar")
             
     def calcular_ventaja(self, contrincante):
         """esta funcion devuelve si hay ventaja en el combate y devuelve true si hay ventaja y false si no hay ventaja y iguales si son iguales"""
