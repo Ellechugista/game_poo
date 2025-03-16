@@ -1,3 +1,4 @@
+from utils import *
 class objeto:
     def __init__(self, nombre, descripcion, cantidad:int=1,   efectos:dict={"ataque":0, "defensa":0, "vida":0}):
         self.nombre = nombre
@@ -30,17 +31,54 @@ class contenedor:
         print(" ")
         print(f"⌘{self.descripcion}")
 
-    def abrir(self):
-        """esta funcion imprime el contenido del contenedor"""
-        self.describir()
-        print(" ")
-        print(f"☺Contenido de {self.nombre}")
-        for item in self.contenido:
-            if item.cantidad == 1:
-                print(f"- {item.nombre}")
-            else:
-                print(f"- {item.nombre} (x{item.cantidad})")
-        print(" ")
+    def abrir(self, jugador):
+        """esta funcion imprime el contenido del contenedor y ver si quiere salir o no del panel del cofre para que agarre algo o lo deje"""
+        limpiar_consola()
+        while True:
+            #mostramos la info
+            self.describir()
+            print(" ")
+            print(f"☺Contenido de {self.nombre}")
+            for item in self.contenido:
+                if item.cantidad == 1:
+                    print(f"- {item.nombre}")
+                else:
+                    print(f"- {item.nombre} (x{item.cantidad})")
+            print(" ")
+            #aqui debera escribir que desea hacer con el contenido
+            comando = str(input("> ")).lower().split()
+            match comando[0]:
+                case "tomar":
+                    if len(comando) > 1:
+                        for item in self.contenido:
+                            if comando[1] == "cofre":
+                                limpiar_consola()
+                                print("⌘No puedes tomar un cofre")
+                                print(" ")
+                                continue
+                            elif item.nombre.lower() == comando[1]:
+                                jugador.agregar_inventario(item)
+                                self.extraer(item)
+                                
+                                limpiar_consola()
+                                print(f"⌘Has tomado {item.nombre}")
+                                print(" ")
+                                break
+                        else:
+                            limpiar_consola()
+                            print(f"⌘No hay {comando[1]} aqui")
+                            print(" ")
+                    else:
+                        limpiar_consola()
+                        print("⌘Debes especificar que quieres tomar")
+                        print(" ")
+                case "salir":
+                    limpiar_consola()
+                    break
+                case _:
+                    limpiar_consola()
+                    print("⌘Que es lo que quieres hacer?")
+                    print(" ")
 
     def agregar(self, objeto):
         """esta funcion agrega uno o varios objetos al contenedor, en caso de varios debe ser una lista"""

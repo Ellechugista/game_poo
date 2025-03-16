@@ -81,7 +81,6 @@ class player:
         for item in self.lugar_actual.objetos:
             if objeto == "cofre":
                 print("⌘No puedes tomar un cofre")
-                print(" ")
                 return False
             elif item.nombre.lower() == objeto:
                 self.agregar_inventario(item)
@@ -89,7 +88,6 @@ class player:
                 break
         else:
             print(f"⌘No hay {objeto} en este lugar")
-            print(" ")
             
     def calcular_ventaja(self, contrincante):
         """esta funcion devuelve si hay ventaja en el combate y devuelve true si hay ventaja y false si no hay ventaja y iguales si son iguales"""
