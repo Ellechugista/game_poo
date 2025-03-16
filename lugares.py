@@ -1,4 +1,5 @@
 from objects import *
+from personajes import *
 class lugar:  
     def __init__(self, nombre:str, descripcion:str):
         self.nombre = nombre
@@ -85,6 +86,8 @@ cofre_normal = cofre()
 cofre_normal.agregar([monedax10.clonar(), guantes_cuero.clonar()])
 casa.agregar_objeto(cofre_normal)
 casa.agregar_objeto(botas_cuero.clonar())
+#agregamos a los personajes
+casa.agregar_entidad(laura)
 
 
 

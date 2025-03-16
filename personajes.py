@@ -42,6 +42,10 @@ class entidad:
             case "repetido":
                 respuesta = random.choice(self.dialogos["repetido"])
                 print(f"{self.nombre} dice: {respuesta}")
+        """while True:
+            print(" ")
+            
+            comando = str(input("> ")).lower().split()"""
 
     # aqui van las rutinas de la entidad lo que hace, aun no se como hacerlo
     def rutina_activada(self, rutina):
@@ -49,8 +53,8 @@ class entidad:
 
     def presentacion(self):
         """esta funcion presenta la entidad, lo ideal es que se extienda esta clase deacuerdo a la raza o tipo de entidad"""
-        print(f"{self.nombre} es una entidad sin clase")
-        
+        print(f"✧{self.nombre} es una entidad sin clase")
+        print(f"✧{self.descripcion}")
     def calcular_ventaja(self, contrincante):
         """esta funcion devuelve si hay ventaja en el combate y devuelve true si hay ventaja y false si no hay ventaja y iguales si son iguales"""
         #cuando el nivel de combate del jugador es mayor al del contrincante
@@ -234,6 +238,10 @@ dialogos_ejemplos = {
     "enojado": enojado,
     "repetido": repetitivo
 }
+
+#aqui creamos a los personajes
+marcelito = humano("marcelito", dialogos_ejemplos, 100, "Un chico joven. muy reservado, cabello corto y lentes arcaicos, con fuerte sentido de moral y justicia.", nivel_combate=7, habilidades={"atacar":5,"defender":4})
+laura = humano("laura", dialogos_ejemplos, 100, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual.",nivel_combate=9,habilidades={"atacar":8,"defender":10})
 
 
 if __name__ == "__main__":

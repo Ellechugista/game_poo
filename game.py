@@ -27,6 +27,7 @@ class game:
                 case "ir":
                     limpiar_consola()
                     self.player.mover_a(comando[1])
+                    limpiar_consola()
                 case "tomar":
                     limpiar_consola()
                     self.player.tomar_objeto(comando[1])
@@ -47,18 +48,25 @@ class game:
                         print("⌘Debes espesificar que quieres abrir")
                         print(" ")
                 case "hablar":
-                    if lugar_actual.presentes:
-                        for p in lugar_actual.presentes:
-                            if p.nombre == comando[1]:
-                                p.hablar()
-                                break
+                    if len(comando) > 1:
+                        if lugar_actual.presentes:
+                            for p in lugar_actual.presentes:
+                                if p.nombre.lower() == comando[1]:
+                                    limpiar_consola()
+                                    p.hablar()
+                                    print(" ")
+                                    break
+                            else:
+                                limpiar_consola()
+                                print(f"⌘No hay nadie llamado {comando[1]}")
+                                print(" ")
                         else:
                             limpiar_consola()
-                            print(f"⌘No hay nadie llamado {comando[1]}")
+                            print("⌘No hay nadie con quien hablar")
                             print(" ")
                     else:
                         limpiar_consola()
-                        print("⌘No hay nadie con quien hablar")
+                        print("⌘Debes especificar con quien quieres hablar")
                         print(" ")
                 case "inventario":
                     limpiar_consola()
@@ -89,11 +97,16 @@ class game:
                 case "estadisticas":
                     limpiar_consola()
                     self.player.estadisticas()
+                    print(" ")
+                case "atacar":
+                    #aqui se maneja la batalla
+                    pass
                 case "salir":
                     break
                 case _:
                     limpiar_consola()
                     print("⌘Comando no valido")
+                    print(" ")
 
 if __name__ == "__main__":
     juego = game()
