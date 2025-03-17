@@ -21,10 +21,15 @@ class player:
         """necesitara un parametro la cual es la direccion"""
         if direccion:
             if direccion in self.lugar_actual.conexiones:
-                nuevo_lugar = self.lugar_actual.conexiones[direccion]
-                self.lugar_actual = nuevo_lugar
-                self.lugar_actual.presentar_lugar()
+                if self.lugar_actual.conexiones[direccion].bloqueado:
+                    limpiar_consola()
+                    print("⌘No puedes ir a este lugar")
+                    print(" ")
+                else:        
+                    nuevo_lugar = self.lugar_actual.conexiones[direccion]
+                    self.lugar_actual = nuevo_lugar
             else:
+                limpiar_consola()
                 print("No puedes ir en esa direccion")
                 print(" ")
         else:

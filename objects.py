@@ -72,6 +72,24 @@ class contenedor:
                         limpiar_consola()
                         print("⌘Debes especificar que quieres tomar")
                         print(" ")
+                case "dejar":
+                    if len(comando) > 1:
+                        for item in jugador.inventario:
+                            if item.nombre.lower() == comando[1]:
+                                self.agregar(item)
+                                jugador.extraer_inventario(item)
+                                limpiar_consola()
+                                print(f"⌘Has dejado {item.nombre}")
+                                print(" ")
+                                break
+                        else:
+                            limpiar_consola()
+                            print(f"⌘No tienes {comando[1]} en tu inventario")
+                            print(" ")
+                    else:
+                        limpiar_consola()
+                        print("⌘Debes especificar que quieres dejar")
+                        print(" ")
                 case "salir":
                     limpiar_consola()
                     break
@@ -116,11 +134,14 @@ class contenedor:
                 break
 #creamos la clase cofres
 class cofre(contenedor):
-    def __init__(self, nombre="Cofre", descripcion:str="un cofre de madera y chapa de metal gastado", contenido:list=[], cantidad:int=1):
+    def __init__(self, nombre="Cofre", descripcion:str="Un cofre de madera y chapa de metal gastado, muy comun", contenido:list=[], cantidad:int=1):
+        super().__init__(nombre, descripcion, contenido, cantidad)
+class cofre_madera(cofre):
+    def __init__(self, nombre="Cofre_madera", descripcion:str="Un cofre de madera antigua y refinada, algo gastada pero de un valor historico bastante grande", contenido:list=[], cantidad:int=1):
         super().__init__(nombre, descripcion, contenido, cantidad)
 #creamos la clase armario
 class armario(contenedor):
-    def __init__(self, nombre:str="Armario", descripcion:str="un armario que almacena prendas para la vida cotidiana", contenido:list=[], cantidad:int=1):
+    def __init__(self, nombre:str="Armario", descripcion:str="Un armario que almacena prendas para la vida cotidiana", contenido:list=[], cantidad:int=1):
         super().__init__(nombre, descripcion, contenido, cantidad)
         
 

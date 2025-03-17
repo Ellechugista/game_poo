@@ -25,9 +25,7 @@ class game:
             comando = str(input("> ")).lower().split()
             match comando[0]:
                 case "ir":
-                    limpiar_consola()
                     self.player.mover_a(comando[1])
-                    limpiar_consola()
                 case "tomar":
                     limpiar_consola()
                     self.player.tomar_objeto(comando[1])
