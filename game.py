@@ -1,6 +1,6 @@
 # archivo principal
 #esta es una prueba
-from lugares import casa 
+from lugares import *
 from personajes import *
 from player import *
 from batallas import *

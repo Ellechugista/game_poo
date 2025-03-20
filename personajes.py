@@ -26,6 +26,9 @@ class entidad:
       
     def hablar(self):
         """aqui el sujeto tendrá una lista de diccionarios qué tendrán textos que mostrará según el carácter de la entidad, y otro diccionario que tendrá las respuestas que el usuario puede darle"""
+        #se deberia descriir el sujeto la primera vez que habla 
+        print(f"✧{self.descripcion}")
+        print(" ")
         #aqui tenemos que calcular el animo de la entidad
         clave = ""
         if self.animo >= 50:

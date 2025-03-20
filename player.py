@@ -22,9 +22,14 @@ class player:
         if direccion:
             if direccion in self.lugar_actual.conexiones:
                 if self.lugar_actual.conexiones[direccion].bloqueado:
-                    limpiar_consola()
-                    print("⌘No puedes ir a este lugar")
-                    print(" ")
+                    if self.lugar_actual.conexiones[direccion].razon:
+                        limpiar_consola()
+                        print(f"⌘No puedes ir a este lugar porque: {self.lugar_actual.conexiones[direccion].razon}")
+                        print(" ")
+                    else:
+                        limpiar_consola()
+                        print("⌘No puedes ir a este lugar")
+                        print(" ")
                 else:        
                     nuevo_lugar = self.lugar_actual.conexiones[direccion]
                     self.lugar_actual = nuevo_lugar
