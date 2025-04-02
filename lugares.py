@@ -322,10 +322,6 @@ sidewalk.conectar_lugar("sur", penumbre_aventureux)
 
 
 
-
-
-
-
 if __name__ == "__main__":
     patio = lugar("Patio trasero", "un enorme porton abre un inmenso bosque verde con arboles")
 
