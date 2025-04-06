@@ -10,12 +10,29 @@ import os
 
 class game:
     def __init__(self):
-        self.player = player("Mariano", casa)
+        self.player = player("Mariano", casa, 10, habilidades = {"atacar": 8, "defender": 5})
         self.enemigos_derrotados = 0
+        self.registros_batallas = []
 
-    def limpiar_consola(self):
-        """Limpia la consola"""
-        os.system('cls' if os.name == 'nt' else 'clear')
+    def save_registro_batalla(self, batalla):
+        """guarda el registro de la batalla"""
+        print("⌘Guardando registro de batalla...")
+        print(" ")
+        self.registros_batallas.append(batalla)
+        print("⌘Batalla guardada")
+        print(" ")
+    
+    def mostrar_registros_batallas(self):
+        """muestra el registro de batallas"""
+        limpiar_consola()
+        print(" ")
+        print("⊢---------------------Registros de Batallas----------------------⊣")
+        if self.registros_batallas:
+            for batalla in self.registros_batallas:
+                batalla.informe_batalla()
+        else:
+            print("⌘No hay registros de batallas")
+            print(" ")
 
     def iniciar(self):
         #aqui se maneja el input del jugador prara ver que  accion quiere hacer dentro de cada escenario y se le muestra la informacion en desarrollo
@@ -93,12 +110,51 @@ class game:
                         print("⌘Debes especificar el objeto del que quieres informacion")  
                         print(" ")
                 case "estadisticas":
-                    limpiar_consola()
-                    self.player.estadisticas()
-                    print(" ")
+                    if len(comando) > 1:
+                        if lugar_actual.presentes:
+                            for p in lugar_actual.presentes:
+                                if comando[1] == p.nombre.lower():
+                                    limpiar_consola()
+                                    p.estadisticas()
+                                    print(" ")
+                                    break
+                            else:
+                                limpiar_consola()
+                                print(f"⌘No hay nadie llamado {comando[1]}")
+                                print(" ")
+                        else:
+                            limpiar_consola()
+                            print("⌘No hay nadie para ver sus estadisticas")
+                            print(" ")
+                    else:
+                        limpiar_consola()
+                        self.player.estadisticas()
+                        print(" ")
                 case "atacar":
                     #aqui se maneja la batalla
-                    pass
+                    if len(comando) > 1:
+                        if lugar_actual.presentes:
+                            for p in lugar_actual.presentes:
+                                if comando[1] == p.nombre.lower():
+                                    pelea = batalla(self.player, p)
+                                    pelea.iniciar()
+                                    self.save_registro_batalla(pelea)
+                                    self.enemigos_derrotados += 1
+                                    print(" ")
+                                else:
+                                    limpiar_consola()
+                                    print(f"⌘No hay nadie llamado {comando[1]}")
+                                    print(" ")
+                        else:
+                            limpiar_consola()
+                            print("⌘No hay nadie para atacar")
+                            print(" ")
+                    else:
+                        limpiar_consola()
+                        print("⌘Debes especificar con quien quieres pelear.")
+                        print(" ")
+                case "registros":
+                    self.mostrar_registros_batallas()
                 case "salir":
                     break
                 case _:

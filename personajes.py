@@ -1,9 +1,9 @@
 import random
-
+from utils import *
 # entidad otros seres personajes y demás 
 class entidad:
    
-    def __init__(self, nombre: str, dialogos, vida:float,descripcion:str=None, rutinas=None, nivel_combate=4, habilidades:dict = {"atacar": 5, "defender": 5}, animo=0):
+    def __init__(self, nombre: str, dialogos, vida:float,descripcion:str=None, rutinas=None, nivel_combate=4, habilidades:dict = {"atacar": 5, "defender": 5}, animo=50):
         self.nombre = nombre
         # los dialogos deben ser un diccionario como clave el tipo de diálogo y como valor un diccionario con las opciones de respuesta
         self.dialogos = dialogos
@@ -22,14 +22,11 @@ class entidad:
         print(f"🎔 Vida: {self.vida}")
         print(f"⍚ Nivel de combate: {self.nivel_combate}")
         print(f"❖ Habilidades: Ataque:{self.habilidades['atacar']} Defensa:{self.habilidades['defender']}")
+        print(f"✧ Animo: {self.calcular_animo()}")
         print("⊢---------------------------------------------⊣")
-      
-    def hablar(self):
-        """aqui el sujeto tendrá una lista de diccionarios qué tendrán textos que mostrará según el carácter de la entidad, y otro diccionario que tendrá las respuestas que el usuario puede darle"""
-        #se deberia descriir el sujeto la primera vez que habla 
-        print(f"✧{self.descripcion}")
-        print(" ")
-        #aqui tenemos que calcular el animo de la entidad
+        
+    def calcular_animo(self):
+      #aqui tenemos que calcular el animo de la entidad
         clave = ""
         if self.animo >= 50:
             clave = "normal"
@@ -39,6 +36,16 @@ class entidad:
             clave = "triste"
         elif self.animo < 30:
             clave = "enojado"
+        elif self.animo <= 0:
+            self.animo = 0
+        return clave
+    def hablar(self):
+        """aqui el sujeto tendrá una lista de diccionarios qué tendrán textos que mostrará según el carácter de la entidad, y otro diccionario que tendrá las respuestas que el usuario puede darle"""
+        #se deberia descriir el sujeto la primera vez que habla 
+        print(f"✧{self.descripcion}")
+        print(" ")
+        clave = self.calcular_animo()
+        #aqui se elige la respuesta dependiendo del animo de la entidad
             
         match clave:
             case "normal":
@@ -96,6 +103,10 @@ class entidad:
         # Validamos la ventaja según nivel de combate
         ventaja = self.calcular_ventaja(contrincante)
         print(ventaja)
+        #calculamos la diferencia de nivel entre rivales
+        diferencial_nivel = (self.nivel_combate - contrincante.nivel_combate)
+        if diferencial_nivel < 0:
+            diferencial_nivel = diferencial_nivel * -1
         #cuando el nivel de combate del jugador es mayor al del contrincante
         if ventaja == True:
             #validamos si el contrincante se esta defendiendo
@@ -104,10 +115,9 @@ class entidad:
             else:
                 defenza_contrincante = 0
             #sacamos la diferencia de nivel entre rivales y generamos ventaja
-            diferencial_nivel = self.nivel_combate - contrincante.nivel_combate
             daño_base = self.habilidades["atacar"] * diferencial_nivel
             daño_minimo = daño_base // 2
-            daño_final = random.randint(daño_minimo, daño_base) - defenza_contrincante
+            daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
@@ -125,13 +135,13 @@ class entidad:
             #sacamos la diferencia de nivel entre rivales y generamos desventaja
             daño_base = self.habilidades["atacar"] - diferencial_nivel
             daño_minimo = daño_base // 2
-            daño_final = (random.randint(daño_minimo, daño_base)-defenza_contrincante)
+            daño_final = (random.randint(int(daño_minimo), int(daño_base))-defenza_contrincante)
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
             #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘{self.nombre} ha causado {daño_final} de daño a {contrincante.nombre} (reducido por defenza enemiga)")
+            print(f"⌘{self.nombre} ha causado {daño_final} de daño a {contrincante.nombre}")
             return daño_final
         #cuando los niveles son iguales
         elif ventaja == "iguales":
@@ -160,26 +170,26 @@ class entidad:
 #estendemos la clase entidad para crear razas o tipos de entidades
 #humanos
 class humano(entidad):
-    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=5, habilidades = { "atacar": 5,"defender": 5 }, animo=0):
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=5, habilidades = { "atacar": 5,"defender": 5 }, animo=50):
         super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo)
     def presentacion(self):
         print(f"✧{self.nombre} es un humano, {self.descripcion}")
 #ELFOS  
 class elfo(entidad):
-    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=8, habilidades = { "atacar": 8,"defender": 15 }, animo=0):
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=8, habilidades = { "atacar": 8,"defender": 15 }, animo=50):
         super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo)
     def presentacion(self):
         print(f"✧{self.nombre} es un elfo, {self.descripcion}")
 #ORCOS
 class orco(entidad):
-    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=3, habilidades = { "atacar": 15,"defender": 12 }, animo=0):
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=3, habilidades = { "atacar": 15,"defender": 12 }, animo=50):
         super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo)
     def presentacion(self):
         print(f"✧{self.nombre} es un orco, {self.descripcion}")
         
 #DUENDES
 class duende(entidad):
-    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=2, habilidades = { "atacar": 2,"defender": 2 }, animo=0):
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=2, habilidades = { "atacar": 2,"defender": 2 }, animo=50):
         super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo)
     def presentacion(self):
         print(f"✧{self.nombre} es un duende, {self.descripcion}")
@@ -261,8 +271,9 @@ dialogos_ejemplos = {
 }
 
 #aqui creamos a los personajes
-marcelito = humano("marcelito", dialogos_ejemplos, 100, "Un chico joven. muy reservado, cabello corto y lentes arcaicos, con fuerte sentido de moral y justicia.", nivel_combate=7, habilidades={"atacar":5,"defender":4}, animo=50)
-laura = humano("laura", dialogos_ejemplos, 100, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual.",nivel_combate=9,habilidades={"atacar":8,"defender":10}, animo=50)
+marcelito = humano("Marcelito", dialogos_ejemplos, 100, "Un chico joven. muy reservado, cabello corto y lentes arcaicos, con fuerte sentido de moral y justicia.", nivel_combate=7, habilidades={"atacar":5,"defender":4}, animo=50)
+
+laura = humano("Laura", dialogos_ejemplos, 10, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual.",nivel_combate=9,habilidades={"atacar":8,"defender":10}, animo=50)
 
 
 if __name__ == "__main__":

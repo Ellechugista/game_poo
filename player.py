@@ -125,6 +125,11 @@ class player:
             return
         # Validamos la ventaja según nivel de combate
         ventaja = self.calcular_ventaja(contrincante)
+        #calculamos la diferencia de nivel entre rivales
+        diferencial_nivel = (self.nivel_combate - contrincante.nivel_combate)
+        if diferencial_nivel < 0:
+            diferencial_nivel = diferencial_nivel * -1
+            
         #cuando el nivel de combate del jugador es mayor al del contrincante
         if ventaja == True:
             #validamos si el contrincante se esta defendiendo
@@ -133,10 +138,9 @@ class player:
             else:
                 defenza_contrincante = 0
             #sacamos la diferencia de nivel entre rivales y generamos ventaja
-            diferencial_nivel = self.nivel_combate - contrincante.nivel_combate
             daño_base = self.habilidades["atacar"] * diferencial_nivel
             daño_minimo = daño_base // 2
-            daño_final = random.randint(daño_minimo, daño_base) - defenza_contrincante
+            daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
@@ -152,10 +156,9 @@ class player:
             else:
                 defenza_contrincante = 0
             #sacamos la diferencia de nivel entre rivales y generamos desventaja
-            diferencial_nivel = self.nivel_combate - contrincante.nivel_combate
             daño_base = self.habilidades["atacar"] - diferencial_nivel
             daño_minimo = daño_base // 2
-            daño_final = (random.randint(daño_minimo, daño_base)-defenza_contrincante)
+            daño_final = (random.randint(int(daño_minimo), int(daño_base))-defenza_contrincante)
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
@@ -183,7 +186,13 @@ class player:
         """esta funcion hace que el jugador se defienda cambie el booleano de defensa_activa a True pero al final de su turno se debe desactivar desde afuera"""
         self.defensa_activa = True
         print(f"{self.nombre} se defiende")
+    
+    def game_over(self):
+        """esta funcion hace que el jugador muera"""
+        print("⌘Has muerto")
         print(" ")
+        print("⌘Game Over")
+        return False
 
 
 
