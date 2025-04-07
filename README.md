@@ -71,26 +71,26 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
       daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
 ```
       
-3. efectuamos daño teniendo en cuenta si esta o no activada la defenza del enemigo, dado caso que la defenza este activa la defenza del contricante se calcula con la habilidad de defenza del contrincante al 70% y se resta al ataque final:
+2. efectuamos daño teniendo en cuenta si esta o no activada la defenza del enemigo, dado caso que la defenza este activa la defenza del contricante se calcula con la habilidad de defenza del contrincante al 70% y se resta al ataque final:
 ```
       defenza_contrincante = contrincante.habilidades["defender"]*0.7
 ```
 
-5. en el segundo caso es que este en desventaja el daño se calcula restando la diferencia de nivel, asi si hay mas difeencia de nivel mas desventaja tendra con respecto a sus habilidades de combate y defenza siguiendo las siguientes formula:
+3. en el segundo caso es que este en desventaja el daño se calcula restando la diferencia de nivel, asi si hay mas difeencia de nivel mas desventaja tendra con respecto a sus habilidades de combate y defenza siguiendo las siguientes formula:
 ```
             daño_base = self.habilidades["atacar"] - diferencial_nivel
             daño_minimo = daño_base // 2
             daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
 ```
    
-6. el daño final siempre sera un numero alazar entre un rango de la mitad de la habilidad de daño y la habilidad completa de daño, para el jugador y el NPC el daño se calcula igual.
+4. el daño final siempre sera un numero alazar entre un rango de la mitad de la habilidad de daño y la habilidad completa de daño, para el jugador y el NPC el daño se calcula igual.
 
 * defender: este comando activa el modo defenza del jugador y se reinicia una vez halla terminado una ronda de turnos por el contrincante y el jugador.
 
 ## MAPA 🧭
-![Mapa-Wordl](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
-
 _⚠️ Este mapa esta sujeto a cambios y correcciones deacuerdo a la historia en desarrollo._
+
+![Mapa-Wordl](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
 
 # Autores ✒️
 
