@@ -9,37 +9,37 @@ _Para ejecutar y probar el sistema, ejecute como raiz el archivo game.py junto a
 * [PYTHON 3.+](https://www.python.org/downloads/) - Python 3.13.2
 * Terminal Integrado con Python
 
-##COMANDOS BASICOS:
+## COMANDOS BASICOS
 
--ir: comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador
+  * ir: comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador
 ```
-                SYNTAXIS >ir "este".
+>ir "este".
 ```
--hablar: comando basico para hablar con los personajes dentro de la escena, estos dependiendo del estado de animo tendran diferentes comentarios predefinidos (normal, feliz, triste y enojado).
+  * hablar: comando basico para hablar con los personajes dentro de la escena, estos dependiendo del estado de animo tendran diferentes comentarios predefinidos (normal, feliz, triste y enojado).
 ```
-                SYNTAXIS >hablar "nombre del personaje con quien hablar"
+>hablar "nombre del personaje con quien hablar"
 ```
--tomar: comando basico para tomar objetos tirados dentro del escenario y luego seran añadidos al inventario del jugador, puedes tomar de todo, siempre y cuando no sea un almacenador o recipiente (cofres).
+  * tomar: comando basico para tomar objetos tirados dentro del escenario y luego seran añadidos al inventario del jugador, puedes tomar de todo, siempre y cuando no sea un almacenador o recipiente (cofres).
 ```
-                SYNTAXIS >tomar "nombre del objeto"
+>tomar "nombre del objeto"
 ```
--inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad, SYNTAXIS inventario #tener en cuenta agregar limite de objetos, basado en peso para cada objeto dentro del inventario.
+  * inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad, SYNTAXIS inventario #tener en cuenta agregar limite de objetos, basado en peso para cada objeto dentro del inventario.
 
--abrir: comando basico para abrir un recipiente o cofre, este comando muestra y lista el contenido dentro del recipiente, dentro de el puedes:
-        -tomar: comando basico para agregar el objeto a tu inventario.
-        -dejar: comando basico para dejar un objeto dentro del recipiente.
-        -salir: comando basico para salir del listado de objetos de un recipiente.
+  * abrir: comando basico para abrir un recipiente o cofre, este comando muestra y lista el contenido dentro del recipiente, dentro de el puedes:
+        * tomar: comando basico para agregar el objeto a tu inventario.
+        * dejar: comando basico para dejar un objeto dentro del recipiente.
+        * salir: comando basico para salir del listado de objetos de un recipiente.
 
--informacion: comando basico para mostrar la informacion y estadisticas de un objeto dentro de tu inventario.
+  * informacion: comando basico para mostrar la informacion y estadisticas de un objeto dentro de tu inventario.
                 SYNTAXIS >informacion "nombre de objeto"
 
--registros: comando basico para mostrar y listar los registros de combate, un pequeño histrial de lo acontecido.
+  * registros: comando basico para mostrar y listar los registros de combate, un pequeño histrial de lo acontecido.
 
-##COMANDOS EN ATAQUE:
+## COMANDOS EN ATAQUE
 
--atacar: comando basico para iniciar un combate contra un personaje, el combate funciona por turnos en dode se puede atacar y defender, usando como base las habilidades de lucha y la diferencia de nivel entre los contrincantes, al iniciar un combate entraras en un bucle en donde solo podras salir muestro o victorioso, ya que batirce a duelo contra alguien mas no da chance a intentarlo mas tarde.
+  * atacar: comando basico para iniciar un combate contra un personaje, el combate funciona por turnos en dode se puede atacar y defender, usando como base las habilidades de lucha y la diferencia de nivel entre los contrincantes, al iniciar un combate entraras en un bucle en donde solo podras salir muestro o victorioso, ya que batirce a duelo contra alguien mas no da chance a intentarlo mas tarde.
 ```
-                SYNTAXIS >atacar "nombre de la entidad a luchar"
+>atacar "nombre de la entidad a luchar"
 ```
 
 Una vez dentro podras ejecutar los siguientes comandos:
@@ -47,19 +47,25 @@ Una vez dentro podras ejecutar los siguientes comandos:
 -atacar: este comando tendra en cuenta el estado del enemigo si esta defendiendoze o no, para luego hacerle daño al contrincante, el sistema de daño se basa en lo siguiente:
 
 1. primero se calcula la ventaja de acurdo al nivel de pelea, en este hay tres estados mayor, menr o igual, en dado caso sea ventaja verdadera, el daño se calcula de la siguiente manera.
+```
       daño_base = self.habilidades["atacar"] * diferencial_nivel
       daño_minimo = daño_base // 2
       daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
+```
       
-2. efectuamos daño teniendo en cuenta si esta o no activada la defenza del enemigo, dado caso que la defenza este activa la defenza del contricante se calcula con la habilidad de defenza del contrincante al 70% y se resta al ataque final:
+3. efectuamos daño teniendo en cuenta si esta o no activada la defenza del enemigo, dado caso que la defenza este activa la defenza del contricante se calcula con la habilidad de defenza del contrincante al 70% y se resta al ataque final:
+```
       defenza_contrincante = contrincante.habilidades["defender"]*0.7
+```
 
-3. en el segundo caso es que este en desventaja el daño se calcula restando la diferencia de nivel, asi si hay mas difeencia de nivel mas desventaja tendra con respecto a sus habilidades de combate y defenza siguiendo las siguientes formula:
+5. en el segundo caso es que este en desventaja el daño se calcula restando la diferencia de nivel, asi si hay mas difeencia de nivel mas desventaja tendra con respecto a sus habilidades de combate y defenza siguiendo las siguientes formula:
+```
             daño_base = self.habilidades["atacar"] - diferencial_nivel
             daño_minimo = daño_base // 2
             daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
+```
    
-* el daño final siempre sera un numero alazar entre un rango de la mitad de la habilidad de daño y la habilidad completa de daño, para el jugador y el NPC el daño se calcula igual.
+6. el daño final siempre sera un numero alazar entre un rango de la mitad de la habilidad de daño y la habilidad completa de daño, para el jugador y el NPC el daño se calcula igual.
 
 
 
