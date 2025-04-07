@@ -26,6 +26,7 @@ _Para ejecutar y probar el sistema, ejecute como raiz el archivo game.py junto a
   * inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad, SYNTAXIS inventario #tener en cuenta agregar limite de objetos, basado en peso para cada objeto dentro del inventario.
 
   * abrir: comando basico para abrir un recipiente o cofre, este comando muestra y lista el contenido dentro del recipiente, dentro de el puedes:
+    
         * tomar: comando basico para agregar el objeto a tu inventario.
         * dejar: comando basico para dejar un objeto dentro del recipiente.
         * salir: comando basico para salir del listado de objetos de un recipiente.
