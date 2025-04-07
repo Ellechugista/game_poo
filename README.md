@@ -82,7 +82,7 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
 * defender: este comando activa el modo defenza del jugador y se reinicia una vez halla terminado una ronda de turnos por el contrincante y el jugador.
 
 ## MAPA 🧭
-![<img src="https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c" width=10>](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
+![Mapa-Wordl](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
 
 _⚠️ Este mapa esta sujeto a cambios y correcciones deacuerdo a la historia en desarrollo._
 
