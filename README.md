@@ -4,7 +4,11 @@
 
 _Aqui he ceado el sistema para la creacion y manipulacion de un mundo virtual, sin graficos, ya que mi gusto por el juego d emeza calobozos y dragones y su inmensa creatividad me inspiraron para afianzar los conceptos t practicas de la programacion orientada a objeto en python, a travez de un juego con estas caracteristicas._
 
-##Ejecuta y prueba el avance 🚀
+## Actualizaciones 📈
+
+* `0.1 vercion `: Esta es la vercion en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
+
+## Ejecuta y prueba el avance 🚀
 _Para ejecutar y probar el sistema, ejecute como raiz el archivo game.py junto a todas sus dependencias, dentro del escenario puede hacer muchas cosas de las cuales es mejor tener un manual de comandos a la mano._
 
 ## Pre-requisitos y Prueba 📋
