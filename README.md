@@ -1,9 +1,11 @@
+<em> GAME-POO </em>
+
 Aqui he ceado el sistema para la creacion y manipulacion de un mundo virtual, sin graficos, ya que mi gusto por el juego d emeza calobozos y dragones y su inmensa creatividad me inspiraron para afianzar los conceptos t practicas de la programacion orientada a objeto en python, a travez de un juego con estas caracteristicas.
 
 Para ejecutar y probar el sistema, ejecute como raiz el archivo game.py junto a todas sus dependencias, dentro del escenario puede hacer muchas cosas de las cuales es mejor tener un manual de comandos a la mano.
 
 COMANDOS BASICOS:
--ir:comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador SYNTAXIS ir "este".
+-ir:comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador <b>SYNTAXIS ir "este".</b>
 
 -hablar: comando basico para hablar con los personajes dentro de la escena, estos dependiendo del estado de animo tendran diferentes comentarios predefinidos (normal, feliz, triste y enojado), SYNTAXIS hablar "nombre del personaje con quien hablar"
 
