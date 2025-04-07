@@ -36,7 +36,10 @@ python game.py
 ```
 >tomar "nombre del objeto"
 ```
-  * inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad, SYNTAXIS inventario #tener en cuenta agregar limite de objetos, basado en peso para cada objeto dentro del inventario.
+  * inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad. #tener en cuenta agregar limite de objetos, basado en peso para cada objeto dentro del inventario.
+```
+>inventario 
+```
 
   * abrir: comando basico para abrir un recipiente o cofre, este comando muestra y lista el contenido dentro del recipiente, dentro de el puedes:
     
