@@ -158,7 +158,7 @@ class player:
             #sacamos la diferencia de nivel entre rivales y generamos desventaja
             daño_base = self.habilidades["atacar"] - diferencial_nivel
             daño_minimo = daño_base // 2
-            daño_final = (random.randint(int(daño_minimo), int(daño_base))-defenza_contrincante)
+            daño_final = random.randint(int(daño_minimo), int(daño_base))-defenza_contrincante
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
