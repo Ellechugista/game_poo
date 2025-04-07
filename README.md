@@ -27,11 +27,11 @@ COMANDOS EN ATAQUE:
 
 -atacar: comando basico para iniciar un combate contra un personaje, el combate funciona por turnos en dode se puede atacar y defender, usando como base las habilidades de lucha y la diferencia de nivel entre los contrincantes, al iniciar un combate entraras en un bucle en donde solo podras salir muestro o victorioso, ya que batirce a duelo contra alguien mas no da chance a intentarlo mas tarde, SYNTAXIS atacar "nombre de la entidad a luchar"
 
-*una vez dentro podras ejecutar los siguientes comandos:
+Una vez dentro podras ejecutar los siguientes comandos:
 
 -atacar: este comando tendra en cuenta el estado del enemigo si esta defendiendoze o no, para luego hacerle daño al contrincante, el sistema de daño se basa en lo siguiente:
 
-1.CALCULO DE VENTAJA: primero se calcula la ventaja de acurdo al nivel de pelea, en este hay tres estados mayor, menr o igual, en dado caso sea ventaja verdadera, el daño se calcula de la siguiente manera.
+1. primero se calcula la ventaja de acurdo al nivel de pelea, en este hay tres estados mayor, menr o igual, en dado caso sea ventaja verdadera, el daño se calcula de la siguiente manera.
       daño_base = self.habilidades["atacar"] * diferencial_nivel
       daño_minimo = daño_base // 2
       daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
