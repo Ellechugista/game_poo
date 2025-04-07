@@ -7,10 +7,14 @@ _Aqui he ceado el sistema para la creacion y manipulacion de un mundo virtual, s
 ##Ejecuta y prueba el avance 🚀
 _Para ejecutar y probar el sistema, ejecute como raiz el archivo game.py junto a todas sus dependencias, dentro del escenario puede hacer muchas cosas de las cuales es mejor tener un manual de comandos a la mano._
 
-### Pre-requisitos 📋
+## Pre-requisitos y Prueba 📋
 * [PYTHON 3.1+](https://www.python.org/downloads/) - Python 3.13.2
 * Terminal Integrado con Python
 
+_Descarga la version del proyecto junto a todas sus dependencias, luego ejecuta el archivo principal `game.py` en tu terminal de windows o en el depurador de Visual Estudio Code para que cargen los caracteres unicode que decoran el flujo del juego.
+```
+python game.py
+```
 ## COMANDOS BASICOS 🗒️
 
   * ir: comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador
