@@ -27,9 +27,9 @@ _Para ejecutar y probar el sistema, ejecute como raiz el archivo game.py junto a
 
   * abrir: comando basico para abrir un recipiente o cofre, este comando muestra y lista el contenido dentro del recipiente, dentro de el puedes:
     
-        * tomar: comando basico para agregar el objeto a tu inventario.
-        * dejar: comando basico para dejar un objeto dentro del recipiente.
-        * salir: comando basico para salir del listado de objetos de un recipiente.
+    - `tomar:` comando basico para agregar el objeto a tu inventario. -
+    - `dejar:` comando basico para dejar un objeto dentro del recipiente. -
+    - `salir:` comando basico para salir del listado de objetos de un recipiente. -
 
   * informacion: comando basico para mostrar la informacion y estadisticas de un objeto dentro de tu inventario.
                 SYNTAXIS >informacion "nombre de objeto"
