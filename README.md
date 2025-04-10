@@ -6,6 +6,8 @@ _Aqui he ceado el sistema para la creacion y manipulacion de un mundo virtual, s
 
 ## Actualizaciones 📈
 
+* `0.1.1 version Update` : Esta vercion añade una vercion temprana y poco eficiente de un sistema de guardado usando pickler de python, por un intento de mantener persistencia entre ejecuciones(espoiler no funciono).
+   
 * `0.1 version `: Esta es la vercion en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
 
 ## Ejecuta y prueba el avance 🚀
