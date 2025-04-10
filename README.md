@@ -6,16 +6,19 @@ _Aqui he ceado el sistema para la creacion y manipulacion de un mundo virtual, s
 
 ## Actualizaciones 📈
 
-* `0.1 vercion `: Esta es la vercion en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
+* `0.1 version `: Esta es la vercion en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
 
 ## Ejecuta y prueba el avance 🚀
-_Para ejecutar y probar el sistema, ejecute como raiz el archivo game.py junto a todas sus dependencias, dentro del escenario puede hacer muchas cosas de las cuales es mejor tener un manual de comandos a la mano._
+
+_Para ejecutar y probar el sistema, ejecute como raiz el archivo `game.py` junto a todas sus dependencias, dentro del escenario puede hacer muchas cosas de las cuales es mejor tener un manual de comandos a la mano._
+
+_Te invito a que explores al maximo el desarrollo de este mundo_
 
 ## Pre-requisitos y Prueba 📋
 * [PYTHON 3.1+](https://www.python.org/downloads/) - Python 3.13.2
 * Terminal Integrado con Python
 
-_Descarga la version del proyecto junto a todas sus dependencias, luego ejecuta el archivo principal `game.py` en tu terminal de windows o en el depurador de Visual Estudio Code para que cargen los caracteres unicode que decoran el flujo del juego.
+_Descarga la version del proyecto junto a todas sus dependencias, luego ejecuta el archivo principal `game.py` en tu terminal de windows o en el depurador de Visual Estudio Code para que cargen los caracteres unicode que decoran el flujo del juego._
 ```
 python game.py
 ```
@@ -33,7 +36,10 @@ python game.py
 ```
 >tomar "nombre del objeto"
 ```
-  * inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad, SYNTAXIS inventario #tener en cuenta agregar limite de objetos, basado en peso para cada objeto dentro del inventario.
+  * inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad. #tener en cuenta agregar limite de objetos, basado en peso para cada objeto dentro del inventario.
+```
+>inventario 
+```
 
   * abrir: comando basico para abrir un recipiente o cofre, este comando muestra y lista el contenido dentro del recipiente, dentro de el puedes:
     
@@ -65,26 +71,26 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
       daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
 ```
       
-3. efectuamos daño teniendo en cuenta si esta o no activada la defenza del enemigo, dado caso que la defenza este activa la defenza del contricante se calcula con la habilidad de defenza del contrincante al 70% y se resta al ataque final:
+2. efectuamos daño teniendo en cuenta si esta o no activada la defenza del enemigo, dado caso que la defenza este activa la defenza del contricante se calcula con la habilidad de defenza del contrincante al 70% y se resta al ataque final:
 ```
       defenza_contrincante = contrincante.habilidades["defender"]*0.7
 ```
 
-5. en el segundo caso es que este en desventaja el daño se calcula restando la diferencia de nivel, asi si hay mas difeencia de nivel mas desventaja tendra con respecto a sus habilidades de combate y defenza siguiendo las siguientes formula:
+3. en el segundo caso es que este en desventaja el daño se calcula restando la diferencia de nivel, asi si hay mas difeencia de nivel mas desventaja tendra con respecto a sus habilidades de combate y defenza siguiendo las siguientes formula:
 ```
             daño_base = self.habilidades["atacar"] - diferencial_nivel
             daño_minimo = daño_base // 2
             daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
 ```
    
-6. el daño final siempre sera un numero alazar entre un rango de la mitad de la habilidad de daño y la habilidad completa de daño, para el jugador y el NPC el daño se calcula igual.
+4. el daño final siempre sera un numero alazar entre un rango de la mitad de la habilidad de daño y la habilidad completa de daño, para el jugador y el NPC el daño se calcula igual.
 
 * defender: este comando activa el modo defenza del jugador y se reinicia una vez halla terminado una ronda de turnos por el contrincante y el jugador.
 
 ## MAPA 🧭
-![Mapa-Wordl](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
-
 _⚠️ Este mapa esta sujeto a cambios y correcciones deacuerdo a la historia en desarrollo._
+
+![Mapa-Wordl](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
 
 # Autores ✒️
 
