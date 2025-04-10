@@ -21,25 +21,25 @@ _Te invito a que explores al maximo el desarrollo de este mundo_
 * Terminal Integrado con Python
 
 _Descarga la version del proyecto junto a todas sus dependencias, luego ejecuta el archivo principal `game.py` en tu terminal de windows o en el depurador de Visual Estudio Code para que cargen los caracteres unicode que decoran el flujo del juego._
-```
+```shell
 python game.py
 ```
 ## COMANDOS BASICOS 🗒️
 
   * ir: comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador
-```
+```shell
 >ir "este".
 ```
   * hablar: comando basico para hablar con los personajes dentro de la escena, estos dependiendo del estado de animo tendran diferentes comentarios predefinidos (normal, feliz, triste y enojado).
-```
+```shell
 >hablar "nombre del personaje con quien hablar"
 ```
   * tomar: comando basico para tomar objetos tirados dentro del escenario y luego seran añadidos al inventario del jugador, puedes tomar de todo, siempre y cuando no sea un almacenador o recipiente (cofres).
-```
+```shell
 >tomar "nombre del objeto"
 ```
   * inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad. #tener en cuenta agregar limite de objetos, basado en peso para cada objeto dentro del inventario.
-```
+```shell
 >inventario 
 ```
 
@@ -50,7 +50,7 @@ python game.py
     - `salir:` comando basico para salir del listado de objetos de un recipiente. 
 
   * informacion: comando basico para mostrar la informacion y estadisticas de un objeto dentro de tu inventario.
-```
+```shell
 >informacion "nombre de objeto"
 ```
   * registros: comando basico para mostrar y listar los registros de combate, un pequeño histrial de lo acontecido.
@@ -58,7 +58,7 @@ python game.py
 ## COMANDOS EN ATAQUE ⚔️
 
   * atacar: comando basico para iniciar un combate contra un personaje, el combate funciona por turnos en dode se puede atacar y defender, usando como base las habilidades de lucha y la diferencia de nivel entre los contrincantes, al iniciar un combate entraras en un bucle en donde solo podras salir muestro o victorioso, ya que batirce a duelo contra alguien mas no da chance a intentarlo mas tarde.
-```
+```shell
 >atacar "nombre de la entidad a luchar"
 ```
 
@@ -67,19 +67,19 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
 * atacar: este comando tendra en cuenta el estado del enemigo si esta defendiendoze o no, para luego hacerle daño al contrincante, el sistema de daño se basa en lo siguiente:
 
 1. primero se calcula la ventaja de acurdo al nivel de pelea, en este hay tres estados mayor, menr o igual, en dado caso sea ventaja verdadera, el daño se calcula de la siguiente manera.
-```
+```python
       daño_base = self.habilidades["atacar"] * diferencial_nivel
       daño_minimo = daño_base // 2
       daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
 ```
       
 2. efectuamos daño teniendo en cuenta si esta o no activada la defenza del enemigo, dado caso que la defenza este activa la defenza del contricante se calcula con la habilidad de defenza del contrincante al 70% y se resta al ataque final:
-```
+```python
       defenza_contrincante = contrincante.habilidades["defender"]*0.7
 ```
 
 3. en el segundo caso es que este en desventaja el daño se calcula restando la diferencia de nivel, asi si hay mas difeencia de nivel mas desventaja tendra con respecto a sus habilidades de combate y defenza siguiendo las siguientes formula:
-```
+```python
             daño_base = self.habilidades["atacar"] - diferencial_nivel
             daño_minimo = daño_base // 2
             daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
