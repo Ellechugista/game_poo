@@ -2,7 +2,6 @@ import random
 from utils import *
 # entidad otros seres personajes y demás 
 class entidad:
-   
     def __init__(self, nombre: str, dialogos, vida:float,descripcion:str=None, rutinas=None, nivel_combate=4, habilidades:dict = {"atacar": 5, "defender": 5}, animo=50):
         self.nombre = nombre
         # los dialogos deben ser un diccionario como clave el tipo de diálogo y como valor un diccionario con las opciones de respuesta
@@ -14,6 +13,9 @@ class entidad:
         self.habilidades = habilidades
         self.nivel_combate = nivel_combate
         self.defensa_activa = False
+        
+        #registramos la entidad en el registro de entidades para acceder a ella desde el registro
+        RegistroEntidades.registrar(self)
         
     def estadisticas(self):
         print(" ")
@@ -276,9 +278,14 @@ marcelito = humano("Marcelito", dialogos_ejemplos, 100, "Un chico joven. muy res
 laura = humano("Laura", dialogos_ejemplos, 10, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual.",nivel_combate=9,habilidades={"atacar":8,"defender":10}, animo=50)
 
 
+
 if __name__ == "__main__":
     # aqui creamos la entidad
-    marcelito = humano("marcelito", dialogos_ejemplos, 100)
+    """marcelito = humano("marcelito", dialogos_ejemplos, 100)
     marcelito.presentacion()
-    marcelito.hablar("repetido")
+    marcelito.hablar("repetido")"""
+    
+    for p in entidad.todas_las_instancias:
+        print(f"- {p.nombre}: {p.descripcion}")
+        print(" ")
 

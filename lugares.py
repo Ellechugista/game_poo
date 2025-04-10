@@ -1,6 +1,7 @@
 from objects import *
 from personajes import *
 class lugar:  
+    todas_instancias = []#aqui creamos una variable que añada el objeto lugar dentro de si mismo para lograr almacenar los datos de todos los objetos creados a partir de la clase lugar
     def __init__(self, nombre:str, descripcion:str):
         self.nombre = nombre
         self.descripcion = descripcion
@@ -9,6 +10,10 @@ class lugar:
         self.conexiones = {}
         self.bloqueado = False
         self.razon = None
+        
+        #aqui agragalas instancias
+        lugar.todas_instancias.append(self)
+        
 
     def presentar_conexiones(self):
         """esto es para mostrar las conexiones disponibles del lugar"""
@@ -321,6 +326,7 @@ sidewalk.conectar_lugar("sur", penumbre_aventureux)
 
 
 
+info_complet = lugar.todas_instancias
 
 if __name__ == "__main__":
     patio = lugar("Patio trasero", "un enorme porton abre un inmenso bosque verde con arboles")
@@ -330,3 +336,7 @@ if __name__ == "__main__":
     patio.conectar_lugar("oeste", casa)
 
     casa.presentar_lugar()
+    print(" ")
+    for lugar in lugar.todas_instancias:
+        print(f"- {lugar.nombre}: {lugar.descripcion}")
+        print(" ")

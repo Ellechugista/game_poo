@@ -9,6 +9,7 @@ class player:
         self.lugar_actual = lugar_actual 
         self.nivel_combate = nivel_combate
         self.defensa_activa = False
+
         
     def estadisticas(self):
         print(f"☺ Nombre: {self.nombre}")
@@ -193,6 +194,8 @@ class player:
         print(" ")
         print("⌘Game Over")
         return False
+
+
 
 
 

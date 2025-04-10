@@ -3,3 +3,18 @@ def limpiar_consola():
     # Para Windows
     if os.name == 'nt':
         os.system('cls')
+
+#clase para registrar entidades, como personajes o enemigos, en el juego
+# Esta clase permite registrar personajes y acceder a ellos mediante su ID único.
+class RegistroEntidades:
+    _entidades = {}  # Diccionario para guardar personajes (como {"id_123": Pablo, "id_456": Mariano})
+
+    @classmethod
+    def registrar(cls, entidad):
+        # Añade el personaje al cuaderno con su ID único
+        cls._entidades[id(entidad)] = entidad
+
+    @classmethod
+    def obtener_todos(cls):
+        # Devuelve una lista de todos los personajes registrados
+        return list(cls._entidades.values())
