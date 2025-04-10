@@ -12,7 +12,7 @@ class RegistroEntidades:
     @classmethod
     def registrar(cls, entidad):
         # Añade el personaje al cuaderno con su ID único
-        cls._entidades[id(entidad)] = entidad
+        cls._entidades[entidad.nombre] = entidad
 
     @classmethod
     def obtener_todos(cls):

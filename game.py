@@ -30,7 +30,7 @@ class game:
         # Guardamos los datos del juego y las entidades
         datos_game = {
             "estado_game": self.__dict__,
-            "entidades": [(id(ent), ent.__dict__) for ent in RegistroEntidades.obtener_todos()]
+            "entidades": [(ent.nombre, ent.__dict__) for ent in RegistroEntidades.obtener_todos()] #esta linea magica hace muchas cosas raras, pero por cada entidad dentro del registro de entidades, va a crear una dupla de datos con el nombre d ela entidad y su diccionario de atributos, lo que guarda toda la info delos personajes
         }
         
         #nombre de archivo con la fecha y hora actual
@@ -80,15 +80,25 @@ class game:
                 datos = pickle.load(f)
                 
             # 1. Primero restauramos los personajes
-            for entidad_id, atributos in datos["entidades"]:
+            for entidad_nombre, atributos in datos["entidades"]:
                 # Buscamos si ya existe
-                if entidad_id in RegistroEntidades._entidades:
-                    entidad_existente = RegistroEntidades._entidades[entidad_id]
+                if entidad_nombre in RegistroEntidades._entidades:
+                    entidad_existente = RegistroEntidades._entidades[entidad_nombre]
                     entidad_existente.__dict__.update(atributos)  # Actualizamos sus atributos (vida, nombre, etc.)
                 else:
-                    # Si no existe (raro), lo creamos
-                    nueva_entidad = entidad(atributos["nombre"], atributos["vida"])
+                    # Si no existe (raro), lo creamos, no deberia pasar ya que el nombre es exacto he inigualable si suscede se podria duplicar el personaje :(
+                    nueva_entidad = entidad(
+            nombre=atributos["nombre"],
+            dialogos=atributos.get("dialogos", {}),
+            vida=atributos["vida"],
+            descripcion=atributos.get("descripcion"),
+            rutinas=atributos.get("rutinas"),
+            nivel_combate=atributos.get("nivel_combate", 4),
+            habilidades=atributos.get("habilidades", {"atacar": 5, "defender": 5}),
+            animo=atributos.get("animo", 50)
+        )
                     nueva_entidad.__dict__.update(atributos)
+            #AQUI DEBEMOS AÑADIR LA FUNCION DE CARGA PARA LOS LUGARES Y VALIDARLOS CON LOS OBJETOS YA QUE POR EL MOMENTO FUNCIONA CORRECTAMENTE PARA LOS PERSNOAJES DEL ESCENARIO ACTUAL Y LOS OBJETOS DEL ESCENARIO ACTUAL
             
              #2. Luego restauramos el juego
             self.__dict__.update(datos["estado_game"])
