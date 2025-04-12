@@ -7,6 +7,9 @@ _Aqui he ceado el sistema para la creacion y manipulacion de un mundo virtual, s
 ## Actualizaciones 📈
 
 * `0.1.1 version Update` : Esta vercion añade una vercion temprana y pero eficiente de un sistema de guardado usando pickler de python, por un intento de mantener persistencia entre ejecuciones, es funcional y parece versatil.
+
+  - Implementacion de menu principal, copas de darle a escojer al jugador si quiere iniciar una nueva partida, guardar, carcar o salir del juego implementando asi el sistemma de guardado.
+  - Sistema de lista para partidas guardadas dentro de la carpeta `saves` usando  `pickler`.
    
 * `0.1 version `: Esta es la vercion en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
 
@@ -25,6 +28,51 @@ _Descarga la version del proyecto junto a todas sus dependencias, luego ejecuta 
 python game.py
 ```
 ## COMANDOS BASICOS 🗒️
+
+* Menu:
+```shell
+⊢---------------------Menu Principal----------------------⊣
+⌘Bienvenido al juego de rol GAME-POO
+
+⌘Iniciar juego
+⌘Guardar juego
+⌘Cargar juego
+⌘Salir del juego
+⌘Volver
+----------------------------------------------------------⊣
+
+>
+```
+_Puedes seleccionar entre `Iniciar`, lo cual iniciara una partida nueva por defecto desde 0, `Guardar`, este comando guardara el estado de la partida actual con nombre de datos como por defecto pero puedo añadirce el nombre del archivo save si se escribe luego de llamar guardar en consola, `Cargar`, esto cargara un estado guardado en la carpeta saves, pero si no la hay crea la carpeta y mencionciona que no hay partidas guardadas, `Salir`, esto saldra de la ejecucion del juego._
+
+* Iniciar: pedira el nobre del jugador
+  
+```shell
+> iniciar
+
+⌘Cual sera el nombre del guerreo?
+> elechugista
+```
+
+* Guardar:
+
+```shell
+> guardar nombre_de_la_partida
+⌘Guardando datos...
+
+⌘Datos guardados
+```
+* Cargar: listara las partidas guardadas:
+
+```shell
+> cargar
+⌘Archivos de guardado disponibles:
+⌘2025-04-11_datos.pkl
+⌘2025-04-11_nombre_de_la_partida.pkl
+
+⌘Cual archivo quieres cargar? (sin la extencion .pkl)
+> 2025-04-11_nombre_de_la_partida
+```
 
   * ir: comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador
 ```shell
