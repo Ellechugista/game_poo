@@ -161,7 +161,7 @@ orbe = objeto("orbe", "un orbe de poder")
 #elementos de guerra
 espada = objeto("Espada", "Una espada de acero", efectos={"ataque":5})
 escudo = objeto("Escudo", "Un escudo de madera", efectos={"defensa":5})
-acha = objeto("Acha", "Un hacha de guerra", efectos={"ataque":8})
+hacha = objeto("Hacha", "Un hacha de guerra", efectos={"ataque":8})
 lanza = objeto("Lanza", "Una lanza de hierro", efectos={"ataque":6})
 
 #armaduras hierro

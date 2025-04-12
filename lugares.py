@@ -1,7 +1,8 @@
 from objects import *
 from personajes import *
+from utils import RegistroLugares
 class lugar:  
-    todas_instancias = []#aqui creamos una variable que añada el objeto lugar dentro de si mismo para lograr almacenar los datos de todos los objetos creados a partir de la clase lugar
+    
     def __init__(self, nombre:str, descripcion:str):
         self.nombre = nombre
         self.descripcion = descripcion
@@ -11,9 +12,7 @@ class lugar:
         self.bloqueado = False
         self.razon = None
         
-        #aqui agragalas instancias
-        lugar.todas_instancias.append(self)
-        
+        RegistroLugares.registrar(self)  # Registrar el lugar en el registro de lugares
 
     def presentar_conexiones(self):
         """esto es para mostrar las conexiones disponibles del lugar"""
@@ -113,9 +112,15 @@ casa.agregar_objeto(cofre_normal)
 
 casa.agregar_objeto(botas_cuero.clonar())
 
+cumbre_rocosa.agregar_objeto(hacha.clonar())
+
+valle_lidien.agregar_objeto(escudo.clonar())
+
 #agregamos a los personajes
 
 casa.agregar_entidad(laura)
+
+valle_lidien.agregar_entidad(marcelito)
 
 #--------------------rue Marques--------------
 
@@ -323,10 +328,6 @@ sidewalk.conectar_lugar("sur", penumbre_aventureux)
 
 #aqui debemos crear un laberinto para que el jugador tenga que saber con que direccion puede salir y avanzar el laberinto
 
-
-
-
-info_complet = lugar.todas_instancias
 
 if __name__ == "__main__":
     patio = lugar("Patio trasero", "un enorme porton abre un inmenso bosque verde con arboles")

@@ -18,3 +18,16 @@ class RegistroEntidades:
     def obtener_todos(cls):
         # Devuelve una lista de todos los personajes registrados
         return list(cls._entidades.values())
+
+class RegistroLugares:
+    _lugar = {}  # Diccionario para guardar personajes (como {"id_123": Pablo, "id_456": Mariano})
+
+    @classmethod
+    def registrar(cls, lugar):
+        # Añade el personaje al cuaderno con su ID único
+        cls._lugar[lugar.nombre] = lugar
+
+    @classmethod
+    def obtener_todos(cls):
+        # Devuelve una lista de todos los personajes registrados
+        return list(cls._lugar.values())

@@ -30,7 +30,8 @@ class game:
         # Guardamos los datos del juego y las entidades
         datos_game = {
             "estado_game": self.__dict__,
-            "entidades": [(ent.nombre, ent.__dict__) for ent in RegistroEntidades.obtener_todos()] #esta linea magica hace muchas cosas raras, pero por cada entidad dentro del registro de entidades, va a crear una dupla de datos con el nombre d ela entidad y su diccionario de atributos, lo que guarda toda la info delos personajes
+            "entidades": [(ent.nombre, ent.__dict__) for ent in RegistroEntidades.obtener_todos()], #esta linea magica hace muchas cosas raras, pero por cada entidad dentro del registro de entidades, va a crear una dupla de datos con el nombre d ela entidad y su diccionario de atributos, lo que guarda toda la info delos personajes
+            "lugares": [(lugar.nombre, lugar.__dict__) for lugar in RegistroLugares.obtener_todos()],
         }
         
         #nombre de archivo con la fecha y hora actual
@@ -58,6 +59,7 @@ class game:
         carpeta_saves = os.path.join(path, "saves")
         archivos = os.listdir(carpeta_saves)
         
+        #aqui se imprimen los archivos disponibless para cargar
         limpiar_consola()
         print("⌘Archivos de guardado disponibles:")
         for archivo in archivos:
@@ -66,6 +68,9 @@ class game:
         print(" ")
         print("⌘Cual archivo quieres cargar? (sin la extencion .pkl)")
         nombre_archivo = str(input("> ")).lower()
+        if nombre_archivo.endswith(".pkl"):
+            nombre_archivo = nombre_archivo[:-4]
+        
         archivo = os.path.join(carpeta_saves, nombre_archivo + ".pkl")
         if not os.path.isfile(archivo):
             print("⌘El archivo no existe.")
@@ -98,9 +103,26 @@ class game:
             animo=atributos.get("animo", 50)
         )
                     nueva_entidad.__dict__.update(atributos)
-            #AQUI DEBEMOS AÑADIR LA FUNCION DE CARGA PARA LOS LUGARES Y VALIDARLOS CON LOS OBJETOS YA QUE POR EL MOMENTO FUNCIONA CORRECTAMENTE PARA LOS PERSNOAJES DEL ESCENARIO ACTUAL Y LOS OBJETOS DEL ESCENARIO ACTUAL
-            
-             #2. Luego restauramos el juego
+            #2. Luego restauramos los lugares
+            for lugar_nombre, atributos in datos["lugares"]:
+                # Buscamos si ya existe
+                if lugar_nombre in RegistroLugares._lugar:
+                    lugar_existente = RegistroLugares._lugar[lugar_nombre]
+                    lugar_existente.__dict__.update(atributos)
+                else:
+                    #si existe que no deberia
+                    nuevo_lugar = lugar(
+                        nombre = atributos.get("nombre"),
+                        descripcion = atributos.get("descripcion"),
+                        presentes = atributos.get("presentes"),
+                        objetos = atributos.get("objetos"),
+                        conexiones = atributos.get("conexiones"),
+                        bloqueado = atributos.get("bloqueado"),
+                        razon = atributos.get("razon"),
+                    )
+                    nuevo_lugar.__dict__.update(atributos)
+                    
+             #3. Luego restauramos el juego
             self.__dict__.update(datos["estado_game"])
                             
             print("⌘Datos cargados correctamente.")
