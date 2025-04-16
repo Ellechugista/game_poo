@@ -6,17 +6,18 @@ _Aqui he ceado el sistema para la creacion y manipulacion de un mundo virtual, s
 
 ## Actualizaciones 📈
 
-* `0.1.2 Bugsfixed` : Esta vercion mejora bugs identificados dentro del flujo del codigo, tambien añade un sistema de gestion de pesos en el inventario del personaje:
-  - NEW: sistema de inventario con gestion de peso para objetos dentro del inventario del personaje. 
+* `0.1.2 Bugsfixed` : Esta version mejora bugs identificados dentro del flujo del codigo, tambien añade un sistema de gestion de pesos en el inventario del personaje:
+  - NEW: sistema de inventario con gestion de peso para objetos dentro del inventario del personaje.
+  - NEW: el sistema para añadir objetos a un lugar ha mejorado teniendo la posibilidad de añadir una lista de objetos o un objeto con el mismo metodo de la clase lugar, lo que ayuda a añadir muchos objetos dentro de un mismo metodo.
   - BUG: error al tomar varios objetos de la misma clase, anteriormente se sumaba la cantidad del objeto presente en el inventario y se añadia uno nuevo con cantidad 1 lo cual al mostrar inventario se mostraba el objeto X2 y objeto, lo cual duplicaba el objeto dentro del inventario.
   - BUG: error al decidir no dejar vivo al contrincante, crash in game
 
-* `0.1.1 version Update` : Esta vercion añade una vercion temprana y pero eficiente de un sistema de guardado usando pickler de python, por un intento de mantener persistencia entre ejecuciones, es funcional y parece versatil.
+* `0.1.1 version Update` : Esta version añade una vercion temprana y pero eficiente de un sistema de guardado usando pickler de python, por un intento de mantener persistencia entre ejecuciones, es funcional y parece versatil.
 
   - Implementacion de menu principal, copas de darle a escojer al jugador si quiere iniciar una nueva partida, guardar, carcar o salir del juego implementando asi el sistemma de guardado.
   - Sistema de lista para partidas guardadas dentro de la carpeta `saves` usando  `pickler`.
    
-* `0.1 version `: Esta es la vercion en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
+* `0.1 version `: Esta es la version en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
 
 ## Ejecuta y prueba el avance 🚀
 
