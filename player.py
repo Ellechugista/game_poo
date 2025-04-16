@@ -5,6 +5,8 @@ class player:
         self.nombre = nombre
         self.vida = vida
         self.inventario = []
+        self.peso_inventario = 0
+        self.limite_inventario = 20
         self.habilidades = habilidades
         self.lugar_actual = lugar_actual 
         self.nivel_combate = nivel_combate
@@ -45,15 +47,23 @@ class player:
     def agregar_inventario(self, objeto):
         """esta funcion agrega un objeto al inventario del jugador"""
         limpiar_consola()
-        for item in self.inventario:
-            if item.nombre == objeto.nombre:
-                item.cantidad += objeto.cantidad
-                break
+        peso = objeto.peso + self.peso_inventario
+        if  peso > self.limite_inventario:
+            print("⌘No puedes llevar mas objetos en tu inventario sobrepeso")
+            print(" ")
+            return False
         else:
-            self.inventario.append(objeto)
-        print(f"⌘has tomado {objeto.nombre} (Cantidad: {objeto.cantidad})")
-        print(" ")
-        return True
+            for item in self.inventario:
+                if item.nombre == objeto.nombre:
+                    item.cantidad += objeto.cantidad
+                    break
+            else:
+                self.inventario.append(objeto)
+                
+            self.peso_inventario += objeto.peso * objeto.cantidad
+            print(f"⌘has tomado {objeto.nombre} (Cantidad: {objeto.cantidad})")
+            print(" ")
+            return True
        
     def extraer_inventario(self, objeto):
         """esta funcion elimina un objeto del inventario del jugador"""
@@ -80,6 +90,7 @@ class player:
                     print(f"ⵚ {item.nombre}")
                 else:
                     print(f"ⵚ {item.nombre} x{item.cantidad}")
+            print(f"----------------------------------{self.peso_inventario}/{self.limite_inventario}")
         else:
             print("⌘no tienes nada en tu inventario")
             
@@ -94,9 +105,12 @@ class player:
                 print("⌘No puedes tomar un cofre")
                 return False
             elif item.nombre.lower() == objeto:
-                self.agregar_inventario(item)
-                self.lugar_actual.quitar_objeto(item)
-                break
+                    chek= self.agregar_inventario(item)
+                    if chek:
+                        self.lugar_actual.quitar_objeto(item)
+                        break
+                    else:
+                        break
         else:
             print(f"⌘No hay {objeto} en este lugar")
             

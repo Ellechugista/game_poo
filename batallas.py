@@ -24,6 +24,8 @@ class batalla:
             print(f"⌘Ganador: {self.ganador}")
             if self.vivo:
                 print("⌘El contrincante ha sido dejado vivo")
+            elif self.vivo == 0:
+                print("⌘Indeterminado")
             else:
                 print("⌘El contrincante ha sido destruido")
             print("⊢---------------------------------------------------⊣")
@@ -123,7 +125,19 @@ class batalla:
             print("⌘¿Deseas dejar vivo al contrincante? si/no")
             respuesta = str(input("> ")).lower().split()
             if respuesta[0] == "no":
-                self.contrincante.destruir()
+                lugar_actual = self.jugador.lugar_actual
+                if self.contrincante in lugar_actual.presentes:
+                    lugar_actual.quitar_entidad(self.contrincante)
+                    self.vivo = False
+                    limpiar_consola()
+                    print("⌘Culminas el sufrimiento de tu contrincante, deseandole una mejor vida en el mas alla")
+                    print(" ")
+                else:
+                    limpiar_consola()
+                    print("El contrincante ya no se encuntra en el lugar.")
+                    print(" ")   
+                    self.vivo = 0
+                                     
             elif respuesta[0] == "si":
                 self.vivo = True
                 print("⌘El contrincante se aleja gravemente herido")

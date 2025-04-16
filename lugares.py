@@ -17,19 +17,31 @@ class lugar:
     def presentar_conexiones(self):
         """esto es para mostrar las conexiones disponibles del lugar"""
         print("Puedes ir a:")
-        for direccion, lugar in self.conexiones.items():
+        #ordenamos las direcciones alfabeticamnte asi no cambiaran de orden
+        ordenado = {
+                    clave: valor for clave, valor in sorted(self.conexiones.items())
+                    }
+        for direccion, lugar in ordenado.items():
             print(f" ⵥ {direccion}: {lugar.nombre}")
 
     # objetos en el lugar
     def agregar_objeto(self, objeto):
         """esta funcion sirve para agregar un objeto al lugar, solo uno a la vez"""
-        for item in self.objetos:
-            if item.nombre == objeto.nombre:
-                item.cantidad += objeto.cantidad
-                return True
+        if isinstance(objeto, list):
+            for nuevo_item in objeto:
+                for item in self.objetos:
+                    if item.nombre == nuevo_item.nombre:
+                        item.cantidad += nuevo_item.cantidad
+                        break
+                else:
+                    self.objetos.append(nuevo_item)
         else:
-            self.objetos.append(objeto)
-            return True
+            for item in self.objetos:
+                if item.nombre == objeto.nombre:
+                    item.cantidad += objeto.cantidad
+                    break
+            else:
+                self.objetos.append(objeto)
 
     def quitar_objeto(self, objeto):
         if objeto in self.objetos:
@@ -112,9 +124,9 @@ casa.agregar_objeto(cofre_normal)
 
 casa.agregar_objeto(botas_cuero.clonar())
 
-cumbre_rocosa.agregar_objeto(hacha.clonar())
+cumbre_rocosa.agregar_objeto([hacha.clonar(), escudo.clonar()])
 
-valle_lidien.agregar_objeto(escudo.clonar())
+valle_lidien.agregar_objeto(hacha.clonar())
 
 #agregamos a los personajes
 

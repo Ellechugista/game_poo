@@ -1,13 +1,14 @@
 from utils import *
 class objeto:
-    def __init__(self, nombre, descripcion, cantidad:int=1,   efectos:dict={"ataque":0, "defensa":0, "vida":0}):
+    def __init__(self, nombre, descripcion, cantidad:int=1, peso:int=1, efectos:dict={"ataque":0, "defensa":0, "vida":0}):
         self.nombre = nombre
         self.descripcion = descripcion
         self.cantidad = cantidad
         self.efectos = efectos
+        self.peso = peso
     def clonar(self):
         """Crea una nueva instancia del objeto con los mismos atributos, lo ideal es crear varias instancias del objeto para hacerlo acumulable y que sea funcional en los inventarios"""
-        return objeto(self.nombre, self.descripcion, self.cantidad, self.efectos)
+        return objeto(self.nombre, self.descripcion, self.cantidad, self.peso, self.efectos)
 
     def describir(self):
         print(" ")
@@ -44,6 +45,8 @@ class contenedor:
                     print(f"- {item.nombre}")
                 else:
                     print(f"- {item.nombre} (x{item.cantidad})")
+            else:
+                print("⌘No hay nada aqui.")
             print(" ")
             #aqui debera escribir que desea hacer con el contenido
             comando = str(input("> ")).lower().split()
@@ -157,6 +160,7 @@ monedax5 = objeto("moneda", "una moneda de oro", 5)
 monedax2 = objeto("moneda", "una moneda de oro", 2)
 moneda = objeto("moneda", "una moneda de oro")
 orbe = objeto("orbe", "un orbe de poder")
+
 
 #elementos de guerra
 espada = objeto("Espada", "Una espada de acero", efectos={"ataque":5})

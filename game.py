@@ -178,7 +178,7 @@ class game:
         limpiar_consola()
         while True:
             print("⊢---------------------Menu Principal----------------------⊣")
-            print("⌘Bienvenido al juego de rol GAME-POO")
+            print("⌘Bienvenido al juego de role GAME-POO")
             print(" ")
             print("⌘Iniciar juego")
             print("⌘Guardar juego")
@@ -197,12 +197,12 @@ class game:
                 self.iniciar()
             elif comando[0] == "salir":
                 seguro = str(input("⌘Estas seguro que quieres salir? (si/no) ")).lower()
-                if seguro == "si":
+                if seguro == "si" or seguro == "s":
                     limpiar_consola()
                     print("⌘Gracias por jugar")
                     print(" ")
                     exit()
-                elif seguro == "no":
+                elif seguro == "no" or seguro == "n":
                     limpiar_consola()
                     continue
                 else:
