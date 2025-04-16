@@ -17,21 +17,19 @@ class batalla:
     def informe_batalla(self):
         """esta funcion imprime el informe de la batalla, luego de que ya se ha terminado"""
         if not self.batalla_injusta:
-            print(" ")
             print("⊢---------------------Informes----------------------⊣")
             print(f"⌘Batalla entre {self.jugador.nombre} y {self.contrincante.nombre}")
             print(f"⌘Turnos: {self.turno}")
             print(f"⌘Ganador: {self.ganador}")
             if self.vivo:
                 print("⌘El contrincante ha sido dejado vivo")
-            elif self.vivo == 0:
-                print("⌘Indeterminado")
-            else:
+            elif not self.vivo:
                 print("⌘El contrincante ha sido destruido")
+            else:
+                print("⌘Indeterminado")
             print("⊢---------------------------------------------------⊣")
             print(" ")
         else:
-            print(" ")
             print("⊢---------------------Informes----------------------⊣")
             print(f"⌘Batalla entre {self.jugador.nombre} y {self.contrincante.nombre}")
             print(f"⌘Turnos: {self.turno}")
@@ -135,7 +133,6 @@ class batalla:
                 else:
                     limpiar_consola()
                     print("El contrincante ya no se encuntra en el lugar.")
-                    print(" ")   
                     self.vivo = 0
                                      
             elif respuesta[0] == "si":

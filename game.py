@@ -167,6 +167,7 @@ class game:
         print(" ")
         print("⊢---------------------Registros de Batallas----------------------⊣")
         if self.registros_batallas:
+            print(" ")
             for batalla in self.registros_batallas:
                 batalla.informe_batalla()
         else:
