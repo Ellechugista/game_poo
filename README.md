@@ -160,6 +160,16 @@ _⚠️ Este mapa esta sujeto a cambios y correcciones deacuerdo a la historia e
 
 ## Actualizaciones 📈
 
+<details>
+  <summary>
+    <code><strong>0.1.1 version Update</strong></code>
+  </summary>
+  <ul>
+    <li>Implementacion de menu principal, copas de darle a escojer al jugador si quiere iniciar una nueva partida, guardar, carcar o salir del juego implementando asi el sistemma de guardado.</li>
+    <li>Sistema de lista para partidas guardadas dentro de la carpeta `saves` usando  `pickler`.</li>
+  </ul>
+</details>
+
 * `0.1.3 Bugsfixed` : Esta version mejora bugs identificados dentro del flujo del codigo, tambien añade un sistema de gestion de pesos en el inventario del personaje:
   - ``NEW``: sistema de inventario con gestion de peso para objetos dentro del inventario del personaje.
   - ``NEW``: el sistema para añadir objetos a un lugar ha mejorado teniendo la posibilidad de añadir una lista de objetos o un objeto con el mismo metodo de la clase lugar, lo que ayuda a añadir muchos objetos dentro de un mismo metodo.
