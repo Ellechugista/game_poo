@@ -1,14 +1,14 @@
 from utils import *
 class objeto:
-    def __init__(self, nombre, descripcion, cantidad:int=1, peso:int=1, efectos:dict={"ataque":0, "defensa":0, "vida":0}):
+    def __init__(self, nombre, descripcion, cantidad:int=1, peso:float=1, efectos:dict={"ataque":0, "defensa":0, "vida":0}):
         self.nombre = nombre
         self.descripcion = descripcion
         self.cantidad = cantidad
         self.efectos = efectos
-        self.peso = peso
+        self.peso = round(peso, 2)
     def clonar(self):
         """Crea una nueva instancia del objeto con los mismos atributos, lo ideal es crear varias instancias del objeto para hacerlo acumulable y que sea funcional en los inventarios"""
-        return objeto(self.nombre, self.descripcion, self.cantidad, self.peso, self.efectos)
+        return self.__class__(self.nombre, self.descripcion, self.cantidad, self.peso, self.efectos)
 
     def describir(self):
         print(" ")
@@ -17,9 +17,34 @@ class objeto:
         print(f"►Descripcion: {self.descripcion}")
         print(f"↨Efectos: {self.efectos}")
         print(f"Cantidad: {self.cantidad}")
+        print(f"Peso: {self.peso}")
         print("-------------------------------------------------")
         print(" ")
-
+        
+#clase para crear objetos consumibles
+class consumible(objeto):
+    def __init__(self, nombre, descripcion, cantidad:int=1, peso:float=1, efectos:dict={"ataque":0, "defensa":0, "vida":0}):
+        super().__init__(nombre, descripcion, cantidad, peso, efectos)
+        
+    def usar(self, jugador):
+        """esta funcion funciona para efectuar el efecto inmediato del objeto consumible, necesita una instancia d ela clase jugador"""
+        if jugador:
+            for efecto, valor in self.efectos.items():
+                if efecto == "vida":
+                    jugador.vida += valor
+                else:
+                    print("⌘No tiene efectos este objeto.")
+                    print(" ")
+                    break
+            else:
+                jugador.extraer_inventario(self)
+                print(f"⌘Has usado {self.nombre}")
+                print(" ")
+                
+                
+            
+            
+#clase encargada de los contenedores
 class contenedor:
     def __init__(self, nombre,descripcion:str="", contenido:list=[], cantidad:int=1):
         self.nombre = nombre
@@ -29,7 +54,6 @@ class contenedor:
 
     def describir(self):
         """esta funcion da una descripcion del contenedor"""
-        print(" ")
         print(f"⌘{self.descripcion}")
 
     def abrir(self, jugador):
@@ -40,13 +64,16 @@ class contenedor:
             self.describir()
             print(" ")
             print(f"☺Contenido de {self.nombre}")
-            for item in self.contenido:
-                if item.cantidad == 1:
-                    print(f"- {item.nombre}")
-                else:
-                    print(f"- {item.nombre} (x{item.cantidad})")
+            if self.contenido:
+                for item in self.contenido:
+                    if item.cantidad == 1:
+                        print(f"- {item.nombre}")
+                    else:
+                        print(f"- {item.nombre} (x{item.cantidad})")
             else:
                 print("⌘No hay nada aqui.")
+                print(" ")
+                
             print(" ")
             #aqui debera escribir que desea hacer con el contenido
             comando = str(input("> ")).lower().split()
@@ -83,7 +110,6 @@ class contenedor:
                                 jugador.extraer_inventario(item)
                                 limpiar_consola()
                                 print(f"⌘Has dejado {item.nombre}")
-                                print(" ")
                                 break
                         else:
                             limpiar_consola()
@@ -155,17 +181,17 @@ orbe_verde = objeto("Orbe verde", "objeto magico con modificador estadistico", e
 orbe_rojo = objeto("Orbe rojo", "objeto magico con modificador estadistico", efectos={"vida":-5, "ataque": 8, "defensa":2})
 baston_curativo = objeto("Baston_curativo", "Un baston de madera antiguo que rebosa de vida.", efectos={"vida":5})
 #objetos generales que son acumulables
-monedax10 = objeto("moneda", "una moneda de oro", 10)
-monedax5 = objeto("moneda", "una moneda de oro", 5)
-monedax2 = objeto("moneda", "una moneda de oro", 2)
-moneda = objeto("moneda", "una moneda de oro")
+monedax10 = objeto("moneda", "una moneda de oro", 10, peso=0.1)
+monedax5 = objeto("moneda", "una moneda de oro", 5, peso=0.5)
+monedax2 = objeto("moneda", "una moneda de oro", 2, peso=0.2)
+moneda = objeto("moneda", "una moneda de oro", peso=0.1)
 orbe = objeto("orbe", "un orbe de poder")
 
 
 #elementos de guerra
 espada = objeto("Espada", "Una espada de acero", efectos={"ataque":5})
 escudo = objeto("Escudo", "Un escudo de madera", efectos={"defensa":5})
-hacha = objeto("Hacha", "Un hacha de guerra", efectos={"ataque":8})
+hacha = objeto("Hacha", "Un hacha de guerra", efectos={"ataque":8}, peso=3)
 lanza = objeto("Lanza", "Una lanza de hierro", efectos={"ataque":6})
 
 #armaduras hierro
@@ -179,6 +205,10 @@ coraza_cuero = objeto("Coraza_cuero", "Una coraza de cuero", efectos={"defensa":
 botas_cuero = objeto("Botas_cuero", "Botas de cuero", efectos={"defensa":2})
 guantes_cuero = objeto("Guantes_cuero", "Guantes de cuero", efectos={"defensa":1})
 
+#consimibles de vida
+pocion_vida = consumible("Pocion_vida", "Una pocion de vida", efectos={"vida":20}, peso=1.5)
+manzana = consumible("Manzana", "Una manzana fresca", efectos={"vida":5}, peso=0.5)
+zanahoria = consumible("Zanahoria", "Una zanahoria fresca", efectos={"vida":3}, peso=0.2)
 
 
 
@@ -188,13 +218,5 @@ if __name__ == "__main__":
     monedax2 = objeto("moneda", "una moneda de oro", 2)
     moneda = objeto("moneda", "una moneda de oro")
     orbe = objeto("orbe", "un orbe de poder")
-    cofre = contenedor("cofre", "un cofre de madera")
-    cofre.agregar([monedax10.clonar(),orbe.clonar()])
-    cofre.abrir()
-    cofre.agregar([monedax10.clonar(), orbe.clonar()])
-    cofre.abrir()
-    cofre.extraer(monedax10)
-    cofre.abrir()
-    cofre.extraer(monedax10)
-    cofre.abrir()
+    print(isinstance(manzana, consumible))
 

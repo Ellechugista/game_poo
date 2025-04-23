@@ -118,13 +118,13 @@ valle_lidien.conectar_lugar("oeste", casa)
 
 cofre_normal = cofre()
 
-cofre_normal.agregar([monedax10.clonar(), guantes_cuero.clonar()])
+cofre_normal.agregar([monedax10.clonar(), guantes_cuero.clonar(), manzana.clonar()])
 
 casa.agregar_objeto(cofre_normal)
 
 casa.agregar_objeto(botas_cuero.clonar())
 
-cumbre_rocosa.agregar_objeto([hacha.clonar(), escudo.clonar()])
+cumbre_rocosa.agregar_objeto([hacha.clonar(), escudo.clonar(), pocion_vida.clonar()])
 
 valle_lidien.agregar_objeto(hacha.clonar())
 

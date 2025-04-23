@@ -297,7 +297,7 @@ class game:
                     if len(comando) > 1:
                         if self.player.inventario:
                             for item in self.player.inventario:
-                                print(item.nombre.lower())
+                                #print(item.nombre.lower())
                                 if item.nombre.lower() == comando[1].strip():
                                     self.player.descrip_objeto(item)
                                     print(" ")

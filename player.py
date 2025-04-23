@@ -1,4 +1,5 @@
 import random
+from objects import consumible
 from utils import *
 class player:   
     def __init__(self, nombre:str, lugar_actual, vida:float=10, habilidades:dict = {"atacar": 5, "defender": 5}, nivel_combate = 10):
@@ -72,8 +73,10 @@ class player:
             if item.nombre == objeto.nombre:
                 if item.cantidad > objeto.cantidad:
                     item.cantidad -= objeto.cantidad
+                    self.peso_inventario -= objeto.peso * objeto.cantidad
                 elif item.cantidad == objeto.cantidad:
                     self.inventario.remove(item)
+                    self.peso_inventario -= objeto.peso * objeto.cantidad
                 else:
                     print(f"No tienes suficiente cantidad de {objeto.nombre} en tu inventario")
                 break
@@ -83,16 +86,87 @@ class player:
     def mostrar_inventario(self):
         """esta funcion muestra el inventario del jugador"""
         limpiar_consola()
-        if self.inventario:
-            print("Tienes:")
-            for item in self.inventario:
-                if item.cantidad == 1:
-                    print(f"ⵚ {item.nombre}")
-                else:
-                    print(f"ⵚ {item.nombre} x{item.cantidad}")
-            print(f"----------------------------------{self.peso_inventario}/{self.limite_inventario}")
-        else:
-            print("⌘no tienes nada en tu inventario")
+        while True:
+            if self.inventario:
+                print("Tienes:")
+                for item in self.inventario:
+                    if item.cantidad == 1:
+                        print(f"ⵚ {item.nombre}")
+                    else:
+                        print(f"ⵚ {item.nombre} x{item.cantidad}")
+                print(f"----------------------------------{self.peso_inventario}/{self.limite_inventario}")
+            else:
+                print("⌘no tienes nada en tu inventario")
+                break
+            
+            comando = str(input("> ")).lower().split()
+            match comando[0]:
+                case "usar":
+                    limpiar_consola()
+                    if len(comando) > 1:
+                        objeto = comando[1].lower().strip()
+                        print (objeto)
+                        for item in self.inventario:
+                            if item.nombre.lower() == objeto:
+                                if isinstance(item, consumible):
+                                    item.usar(self)
+                                    break
+                                else:
+                                    print(f"⌘No puedes usar {objeto}, no es un consumible")
+                                    print(" ")
+                                    break       
+                        else:
+                            print(f"⌘No tienes {objeto} en tu inventario")
+                            print(" ")  
+                    else:
+                        print("⌘No has especificado el objeto a usar")
+                        print(" ")
+                case "info":
+                    limpiar_consola()
+                    if len(comando) > 1:
+                        if self.inventario:
+                            for item in self.inventario:
+                                #print(item.nombre.lower())
+                                if item.nombre.lower() == comando[1].strip():
+                                    self.descrip_objeto(item)
+                                    break
+                            else:
+                                limpiar_consola()
+                                print(f"⌘No tienes {comando[1]} en tu inventario")
+                                print(" ")
+                        else:
+                            limpiar_consola()
+                            print("⌘No tienes nada en tu inventario")  
+                            print(" ")
+                    else:
+                        limpiar_consola()
+                        print("⌘Debes especificar el objeto del que quieres informacion")  
+                        print(" ")
+                case "tirar":
+                    limpiar_consola()
+                    if len(comando) > 1:
+                        objeto = comando[1].lower()
+                        for item in self.inventario:
+                            if item.nombre.lower() == objeto:
+                                self.extraer_inventario(item)
+                                self.lugar_actual.agregar_objeto(item)
+                                print(f"⌘Has tirado {objeto}")
+                                print(" ")
+                                break
+                        else:
+                            print(f"⌘No tienes {objeto} en tu inventario")
+                            print(" ")
+                    else:
+                        print("⌘No has especificado el objeto a tirar")
+                        print(" ")
+                case "salir":
+                    limpiar_consola()
+                    break
+                case _:
+                    limpiar_consola()
+                    print("⌘Comando no valido")
+                    print(" ")
+
             
     def descrip_objeto(self, objeto):
         limpiar_consola()
