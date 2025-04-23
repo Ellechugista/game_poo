@@ -144,40 +144,51 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
 
 3. en el segundo caso es que este en desventaja el daño se calcula restando la diferencia de nivel, asi si hay mas difeencia de nivel mas desventaja tendra con respecto a sus habilidades de combate y defenza siguiendo las siguientes formula:
 ```python
-            daño_base = self.habilidades["atacar"] - diferencial_nivel
-            daño_minimo = daño_base // 2
-            daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
+            base_damage = self.skills["attack"] - level_differential
+            dégâts_minimum = dégâts_de_base // 2
+            final_damage = random.randint(int(minimum_damage), int(base_damage)) - opponent_defense
 ```
    
-4. el daño final siempre sera un numero alazar entre un rango de la mitad de la habilidad de daño y la habilidad completa de daño, para el jugador y el NPC el daño se calcula igual.
+4. Les dégâts finaux seront toujours un nombre aléatoire compris entre la moitié des dégâts de compétence et les dégâts de compétence complets, pour le joueur et le PNJ, les dégâts sont calculés de la même manière.
 
-* defender: este comando activa el modo defenza del jugador y se reinicia una vez halla terminado una ronda de turnos por el contrincante y el jugador.
+* défendre : Cette commande active le mode défense du joueur et se réinitialise une fois qu'un tour de tours de l'adversaire et du joueur est terminé.
 
-## MAPA 🧭
-_⚠️ Este mapa esta sujeto a cambios y correcciones deacuerdo a la historia en desarrollo._
+## CARTE 🧭
+_⚠️ Cette carte est sujette à des changements et des corrections en fonction de l'évolution de l'histoire._
 
-![Mapa-Wordl](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
+![Carte du monde](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
 
-## Actualizaciones 📈
+## Mises à jour 📈
 
-<details>
-  <summary>
-    <code><strong>0.1.1 version Update</strong></code>
+<détails>
+  <résumé>
+    <code><strong>Bogues 0.1.2 corrigés</strong></code>
   </summary>
   <ul>
-    <li>Implementacion de menu principal, copas de darle a escojer al jugador si quiere iniciar una nueva partida, guardar, carcar o salir del juego implementando asi el sistemma de guardado.</li>
-    <li>Sistema de lista para partidas guardadas dentro de la carpeta `saves` usando  `pickler`.</li>
+   <li>Cette version améliore les bugs identifiés dans le flux de code et ajoute également un système de gestion du poids à l'inventaire des personnages.</li>
+    <li><b>NOUVEAU</b> : Système d'inventaire avec gestion du poids des objets dans l'inventaire du personnage.</li>
+   <li></li>
   </ul>
-</details>
+</détails>
 
-* `0.1.3 Bugsfixed` : Esta version mejora bugs identificados dentro del flujo del codigo, tambien añade un sistema de gestion de pesos en el inventario del personaje:
-  - ``NEW``: sistema de inventario con gestion de peso para objetos dentro del inventario del personaje.
-  - ``NEW``: el sistema para añadir objetos a un lugar ha mejorado teniendo la posibilidad de añadir una lista de objetos o un objeto con el mismo metodo de la clase lugar, lo que ayuda a añadir muchos objetos dentro de un mismo metodo.
-  - ``NEW``: se implemento sistema de seleccion y gestion del inventario, ahora puedes soltar o usar los objetos dentro de tu inventario, tambien se añadio la posivilidad de poder ver la informacion de los objetos dentro del inventario, para asi poder usar objetos consumibles que cambian las estadisticas del jugador (nueva clase Consumibles).
-  - ``BUG``: error al tomar varios objetos de la misma clase, anteriormente se sumaba la cantidad del objeto presente en el inventario y se añadia uno nuevo con cantidad 1 lo cual al mostrar inventario se mostraba el objeto X2 y objeto, lo cual duplicaba el objeto dentro del inventario.
-  - ``BUG``: error al decidir no dejar vivo al contrincante, crash in game.
-  - ``BUG``: al implementar un nuevo sistema para mostrar y gestionar el inventario se solucionaron muchos errores dentro de las logicas que añaden objetos al inventario del jugador y que removian objetos, tambien, si mejoro la forma en que s emuestra la informacion del os objetos añadiendo el peso que tienen con valores flotantes
+<détails>
+  <résumé>
+    <code><strong>Mise à jour de la version 0.1.1</strong></code>
+  </summary>
+  <ul>
+    <li>Implémentation du menu principal, permettant au joueur de choisir de démarrer une nouvelle partie, de sauvegarder, de charger ou de quitter le jeu, mettant ainsi en œuvre le système de sauvegarde.</li>
+    <li>Système de liste pour les parties sauvegardées dans le dossier « saves » à l'aide de « pickler ».</li>
+  </ul>
+</détails>
 
+* `0.1.3 Bugsfixed` : Cette version améliore les bugs identifiés dans le flux de code, ajoute également un système de gestion du poids dans l'inventaire des personnages :
+  - « NOUVEAU » : Système d'inventaire avec gestion du poids des objets dans l'inventaire du personnage.
+  - ``NOUVEAU``: Le système d'ajout d'objets à un lieu a été amélioré, vous permettant d'ajouter une liste d'objets ou un objet avec la même méthode de la classe lieu, ce qui vous aide à ajouter de nombreux objets au sein de la même méthode.
+  - ``NOUVEAU``: Système de sélection et de gestion d'inventaire implémenté, vous pouvez désormais déposer ou utiliser des objets dans votre inventaire, ajout également de la possibilité d'afficher des informations sur les objets dans l'inventaire, afin de pouvoir utiliser des objets consommables qui modifient les statistiques du joueur (nouvelle classe Consommables).
+  - ``BUG``: erreur lors de la prise de plusieurs objets de la même classe, auparavant la quantité de l'objet présent dans l'inventaire était ajoutée et une nouvelle était ajoutée avec la quantité 1, ce qui lors de l'affichage de l'inventaire l'objet X2 était affiché et objet, ce qui dupliquait l'objet dans l'inventaire.
+  - ``BUG`` : erreur lors de la décision de ne pas laisser l'adversaire en vie, crash dans le jeu.
+  - ``BUG``: En implémentant un nouveau système d'affichage et de gestion de l'inventaire, de nombreuses erreurs ont été corrigées dans la logique qui ajoute des objets à l'inventaire du joueur et qui supprime des objets. De plus, la manière dont les informations des objets sont affichées a été améliorée en ajoutant le poids qu'ils ont avec des valeurs flottantes.
+ 
 * `0.1.1 version Update` : Esta version añade una vercion temprana y pero eficiente de un sistema de guardado usando pickler de python, por un intento de mantener persistencia entre ejecuciones, es funcional y parece versatil.
 
   - Implementacion de menu principal, copas de darle a escojer al jugador si quiere iniciar una nueva partida, guardar, carcar o salir del juego implementando asi el sistemma de guardado.
