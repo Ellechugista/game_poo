@@ -94,23 +94,48 @@ _Puedes seleccionar entre `Iniciar`, lo cual iniciara una partida nueva por defe
 ```shell
 >tomar "nombre del objeto"
 ```
-  * inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad. #tener en cuenta agregar limite de objetos, basado en peso para cada objeto dentro del inventario.
+  * inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad, tambien mostrara su limite de peso para el jugador y dentro de el puedes hacer mas cosas:
 ```shell
->inventario 
+>inventario
+Tienes:
+ⵚ moneda x10
+ⵚ Manzana
+----------------------------------1.5/20
+>
 ```
+   - `tirar` comando basico para soltar o quitar un objeto del inventario, con esto lo tiraras y lo dejaras en el lugar actual.
+   - `usar` comando basico para aplicar los efectos de un objeto CONSUMIBLE
+   - `informacion` tambien puedes mostrar la informacion directamente dentro del inventario funciona igual que informacion en plena ejecucion principal.
 
   * abrir: comando basico para abrir un recipiente o cofre, este comando muestra y lista el contenido dentro del recipiente, dentro de el puedes:
     
     - `tomar:` comando basico para agregar el objeto a tu inventario. 
     - `dejar:` comando basico para dejar un objeto dentro del recipiente. 
-    - `salir:` comando basico para salir del listado de objetos de un recipiente. 
+    - `salir:` comando basico para salir del listado de objetos de un recipiente.
+    - `inventario:` este comando mostrara el meno de inventario con sus propias ejecuciones.
 
   * informacion: comando basico para mostrar la informacion y estadisticas de un objeto dentro de tu inventario.
 ```shell
 >informacion "nombre de objeto"
 ```
   * registros: comando basico para mostrar y listar los registros de combate, un pequeño histrial de lo acontecido.
+```shell
+⊢---------------------Registros de Batallas----------------------⊣
 
+⊢---------------------Informes----------------------⊣
+⌘Batalla entre Mariano y Laura
+⌘Turnos: 2
+⌘Ganador: Mariano
+⌘El contrincante ha sido destruido
+⊢---------------------------------------------------⊣
+
+⊢---------------------Informes----------------------⊣
+⌘Batalla entre Mariano y Marcelito
+⌘Turnos: 6
+⌘Ganador: Mariano
+⌘El contrincante ha sido dejado vivo
+⊢---------------------------------------------------⊣
+```
 ## COMANDOS EN ATAQUE ⚔️
 
   * atacar: comando basico para iniciar un combate contra un personaje, el combate funciona por turnos en dode se puede atacar y defender, usando como base las habilidades de lucha y la diferencia de nivel entre los contrincantes, al iniciar un combate entraras en un bucle en donde solo podras salir muestro o victorioso, ya que batirce a duelo contra alguien mas no da chance a intentarlo mas tarde.
