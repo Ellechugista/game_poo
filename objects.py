@@ -119,6 +119,9 @@ class contenedor:
                         limpiar_consola()
                         print("⌘Debes especificar que quieres dejar")
                         print(" ")
+                case "inventario":
+                    limpiar_consola()
+                    jugador.mostrar_inventario() 
                 case "salir":
                     limpiar_consola()
                     break

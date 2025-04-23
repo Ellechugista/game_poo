@@ -371,6 +371,6 @@ class game:
 
 if __name__ == "__main__":
     juego = game()
-    juego.menu()
-    #juego.iniciar()
+    #juego.menu()
+    juego.iniciar()
 

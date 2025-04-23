@@ -4,13 +4,13 @@ from utils import *
 class player:   
     def __init__(self, nombre:str, lugar_actual, vida:float=10, habilidades:dict = {"atacar": 5, "defender": 5}, nivel_combate = 10):
         self.nombre = nombre
-        self.vida = vida
+        self.vida = round(vida, 1)
         self.inventario = []
         self.peso_inventario = 0
         self.limite_inventario = 20
         self.habilidades = habilidades
         self.lugar_actual = lugar_actual 
-        self.nivel_combate = nivel_combate
+        self.nivel_combate = round(nivel_combate, 2)
         self.defensa_activa = False
 
         
@@ -121,7 +121,7 @@ class player:
                     else:
                         print("⌘No has especificado el objeto a usar")
                         print(" ")
-                case "info":
+                case "informacion":
                     limpiar_consola()
                     if len(comando) > 1:
                         if self.inventario:

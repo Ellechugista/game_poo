@@ -13,6 +13,7 @@ class batalla:
         self.vivo = None
         self.batalla_injusta = None
         self.turno = 0
+        self.xp = None
         
     def informe_batalla(self):
         """esta funcion imprime el informe de la batalla, luego de que ya se ha terminado"""
@@ -21,6 +22,7 @@ class batalla:
             print(f"⌘Batalla entre {self.jugador.nombre} y {self.contrincante.nombre}")
             print(f"⌘Turnos: {self.turno}")
             print(f"⌘Ganador: {self.ganador}")
+            print(f"⌘Puntos de experiencia ganados: {self.xp}")
             if self.vivo:
                 print("⌘El contrincante ha sido dejado vivo")
             elif not self.vivo:
@@ -138,8 +140,11 @@ class batalla:
             elif respuesta[0] == "si":
                 self.vivo = True
                 print("⌘El contrincante se aleja gravemente herido")
+                
             puntos = (self.turno + self.jugador.vida) * 0.2
+            puntos = round(puntos, 2)
             self.jugador.nivel_combate += puntos
+            self.xp = puntos
             print(" ")
             print(f"⌘Has ganado {puntos} puntos de experiencia")
         # cuando validar_ganador sea false osea perdio el jugador
