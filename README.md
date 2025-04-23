@@ -4,23 +4,6 @@
 
 _Aqui he ceado el sistema para la creacion y manipulacion de un mundo virtual, sin graficos, ya que mi gusto por el juego d emeza calobozos y dragones y su inmensa creatividad me inspiraron para afianzar los conceptos t practicas de la programacion orientada a objeto en python, a travez de un juego con estas caracteristicas._
 
-## Actualizaciones 📈
-
-* `0.1.3 Bugsfixed` : Esta version mejora bugs identificados dentro del flujo del codigo, tambien añade un sistema de gestion de pesos en el inventario del personaje:
-  - ``NEW``: sistema de inventario con gestion de peso para objetos dentro del inventario del personaje.
-  - ``NEW``: el sistema para añadir objetos a un lugar ha mejorado teniendo la posibilidad de añadir una lista de objetos o un objeto con el mismo metodo de la clase lugar, lo que ayuda a añadir muchos objetos dentro de un mismo metodo.
-  - ``NEW``: se implemento sistema de seleccion y gestion del inventario, ahora puedes soltar o usar los objetos dentro de tu inventario, tambien se añadio la posivilidad de poder ver la informacion de los objetos dentro del inventario, para asi poder usar objetos consumibles que cambian las estadisticas del jugador (nueva clase Consumibles).
-  - ``BUG``: error al tomar varios objetos de la misma clase, anteriormente se sumaba la cantidad del objeto presente en el inventario y se añadia uno nuevo con cantidad 1 lo cual al mostrar inventario se mostraba el objeto X2 y objeto, lo cual duplicaba el objeto dentro del inventario.
-  - ``BUG``: error al decidir no dejar vivo al contrincante, crash in game.
-  - ``BUG``: al implementar un nuevo sistema para mostrar y gestionar el inventario se solucionaron muchos errores dentro de las logicas que añaden objetos al inventario del jugador y que removian objetos, tambien, si mejoro la forma en que s emuestra la informacion del os objetos añadiendo el peso que tienen con valores flotantes
-
-* `0.1.1 version Update` : Esta version añade una vercion temprana y pero eficiente de un sistema de guardado usando pickler de python, por un intento de mantener persistencia entre ejecuciones, es funcional y parece versatil.
-
-  - Implementacion de menu principal, copas de darle a escojer al jugador si quiere iniciar una nueva partida, guardar, carcar o salir del juego implementando asi el sistemma de guardado.
-  - Sistema de lista para partidas guardadas dentro de la carpeta `saves` usando  `pickler`.
-   
-* `0.1 version `: Esta es la version en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
-
 ## Ejecuta y prueba el avance 🚀
 
 _Para ejecutar y probar el sistema, ejecute como raiz el archivo `game.py` junto a todas sus dependencias, dentro del escenario puede hacer muchas cosas de las cuales es mejor tener un manual de comandos a la mano._
@@ -174,6 +157,24 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
 _⚠️ Este mapa esta sujeto a cambios y correcciones deacuerdo a la historia en desarrollo._
 
 ![Mapa-Wordl](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
+
+## Actualizaciones 📈
+
+* `0.1.3 Bugsfixed` : Esta version mejora bugs identificados dentro del flujo del codigo, tambien añade un sistema de gestion de pesos en el inventario del personaje:
+  - ``NEW``: sistema de inventario con gestion de peso para objetos dentro del inventario del personaje.
+  - ``NEW``: el sistema para añadir objetos a un lugar ha mejorado teniendo la posibilidad de añadir una lista de objetos o un objeto con el mismo metodo de la clase lugar, lo que ayuda a añadir muchos objetos dentro de un mismo metodo.
+  - ``NEW``: se implemento sistema de seleccion y gestion del inventario, ahora puedes soltar o usar los objetos dentro de tu inventario, tambien se añadio la posivilidad de poder ver la informacion de los objetos dentro del inventario, para asi poder usar objetos consumibles que cambian las estadisticas del jugador (nueva clase Consumibles).
+  - ``BUG``: error al tomar varios objetos de la misma clase, anteriormente se sumaba la cantidad del objeto presente en el inventario y se añadia uno nuevo con cantidad 1 lo cual al mostrar inventario se mostraba el objeto X2 y objeto, lo cual duplicaba el objeto dentro del inventario.
+  - ``BUG``: error al decidir no dejar vivo al contrincante, crash in game.
+  - ``BUG``: al implementar un nuevo sistema para mostrar y gestionar el inventario se solucionaron muchos errores dentro de las logicas que añaden objetos al inventario del jugador y que removian objetos, tambien, si mejoro la forma en que s emuestra la informacion del os objetos añadiendo el peso que tienen con valores flotantes
+
+* `0.1.1 version Update` : Esta version añade una vercion temprana y pero eficiente de un sistema de guardado usando pickler de python, por un intento de mantener persistencia entre ejecuciones, es funcional y parece versatil.
+
+  - Implementacion de menu principal, copas de darle a escojer al jugador si quiere iniciar una nueva partida, guardar, carcar o salir del juego implementando asi el sistemma de guardado.
+  - Sistema de lista para partidas guardadas dentro de la carpeta `saves` usando  `pickler`.
+   
+* `0.1 version `: Esta es la version en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
+
 
 # Autores ✒️
 
