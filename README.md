@@ -6,11 +6,13 @@ _Aqui he ceado el sistema para la creacion y manipulacion de un mundo virtual, s
 
 ## Actualizaciones 📈
 
-* `0.1.2 Bugsfixed` : Esta version mejora bugs identificados dentro del flujo del codigo, tambien añade un sistema de gestion de pesos en el inventario del personaje:
-  - NEW: sistema de inventario con gestion de peso para objetos dentro del inventario del personaje.
-  - NEW: el sistema para añadir objetos a un lugar ha mejorado teniendo la posibilidad de añadir una lista de objetos o un objeto con el mismo metodo de la clase lugar, lo que ayuda a añadir muchos objetos dentro de un mismo metodo.
-  - BUG: error al tomar varios objetos de la misma clase, anteriormente se sumaba la cantidad del objeto presente en el inventario y se añadia uno nuevo con cantidad 1 lo cual al mostrar inventario se mostraba el objeto X2 y objeto, lo cual duplicaba el objeto dentro del inventario.
-  - BUG: error al decidir no dejar vivo al contrincante, crash in game
+* `0.1.3 Bugsfixed` : Esta version mejora bugs identificados dentro del flujo del codigo, tambien añade un sistema de gestion de pesos en el inventario del personaje:
+  - ``NEW``: sistema de inventario con gestion de peso para objetos dentro del inventario del personaje.
+  - ``NEW``: el sistema para añadir objetos a un lugar ha mejorado teniendo la posibilidad de añadir una lista de objetos o un objeto con el mismo metodo de la clase lugar, lo que ayuda a añadir muchos objetos dentro de un mismo metodo.
+  - ``NEW``: se implemento sistema de seleccion y gestion del inventario, ahora puedes soltar o usar los objetos dentro de tu inventario, tambien se añadio la posivilidad de poder ver la informacion de los objetos dentro del inventario, para asi poder usar objetos consumibles que cambian las estadisticas del jugador (nueva clase Consumibles).
+  - ``BUG``: error al tomar varios objetos de la misma clase, anteriormente se sumaba la cantidad del objeto presente en el inventario y se añadia uno nuevo con cantidad 1 lo cual al mostrar inventario se mostraba el objeto X2 y objeto, lo cual duplicaba el objeto dentro del inventario.
+  - ``BUG``: error al decidir no dejar vivo al contrincante, crash in game.
+  - ``BUG``: al implementar un nuevo sistema para mostrar y gestionar el inventario se solucionaron muchos errores dentro de las logicas que añaden objetos al inventario del jugador y que removian objetos, tambien, si mejoro la forma en que s emuestra la informacion del os objetos añadiendo el peso que tienen con valores flotantes
 
 * `0.1.1 version Update` : Esta version añade una vercion temprana y pero eficiente de un sistema de guardado usando pickler de python, por un intento de mantener persistencia entre ejecuciones, es funcional y parece versatil.
 
