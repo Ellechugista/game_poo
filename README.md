@@ -153,12 +153,12 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
 
 * défendre : Cette commande active le mode défense du joueur et se réinitialise une fois qu'un tour de tours de l'adversaire et du joueur est terminé.
 
-## CARTE 🧭
+## MAPA 🧭
 _⚠️ Cette carte est sujette à des changements et des corrections en fonction de l'évolution de l'histoire._
 
 ![Carte du monde](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
 
-## Mises à jour 📈
+## Actualizaciones 📈
 
 <details>
   <summary>
