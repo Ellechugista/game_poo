@@ -88,6 +88,8 @@ Tienes:
 ```
    - `tirar` comando basico para soltar o quitar un objeto del inventario, con esto lo tiraras y lo dejaras en el lugar actual.
    - `usar` comando basico para aplicar los efectos de un objeto CONSUMIBLE
+   - `equipar` comando basico que permite equipar un objeto de la clase VESTIMENTA y surte sus efectos en las estadisticas del jugador
+   - `desequipar` comando para hacer lo contrario a equipar y devuelve el objeto al inventario
    - `informacion` tambien puedes mostrar la informacion directamente dentro del inventario funciona igual que informacion en plena ejecucion principal.
 
   * abrir: comando basico para abrir un recipiente o cofre, este comando muestra y lista el contenido dentro del recipiente, dentro de el puedes:
