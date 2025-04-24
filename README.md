@@ -11,7 +11,7 @@ _Para ejecutar y probar el sistema, ejecute como raiz el archivo `game.py` junto
 _Te invito a que explores al maximo el desarrollo de este mundo_
 
 ## Pre-requisitos y Prueba 📋
-* [PYTHON 3.1+](https://www.python.org/downloads/) - Python 3.13.2
+* [PYTHON 3.7+](https://www.python.org/downloads/) - Python 3.13.2
 * Terminal Integrado con Python
 
 _Descarga la version del proyecto junto a todas sus dependencias, luego ejecuta el archivo principal `game.py` en tu terminal de windows o en el depurador de Visual Estudio Code para que cargen los caracteres unicode que decoran el flujo del juego._
@@ -149,16 +149,33 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
             final_damage = random.randint(int(minimum_damage), int(base_damage)) - opponent_defense
 ```
    
-4. Les dégâts finaux seront toujours un nombre aléatoire compris entre la moitié des dégâts de compétence et les dégâts de compétence complets, pour le joueur et le PNJ, les dégâts sont calculés de la même manière.
+4. El daño final siempre será un número aleatorio entre la mitad del daño de la habilidad y el daño completo de la habilidad; tanto para el jugador como para el NPC, el daño se calcula de la misma manera.
 
-* défendre : Cette commande active le mode défense du joueur et se réinitialise une fois qu'un tour de tours de l'adversaire et du joueur est terminé.
+* defender: este comando activa el modo de defensa del jugador y se reinicia una vez finalizada una ronda de los turnos del oponente y del jugador.
 
 ## MAPA 🧭
-_⚠️ Cette carte est sujette à des changements et des corrections en fonction de l'évolution de l'histoire._
+_⚠️ Este mapa está sujeto a cambios y correcciones a medida que avanza la historia.._
 
 ![Carte du monde](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
 
 ## Actualizaciones 📈
+
+<details>
+  <summary>
+    <code><strong>0.1.4 inventory update</strong></code>
+  </summary>
+  <ul>
+   <li> <b>NEW</b>: Se implementó inventario aparte de los objetos equipados para el personaje compartiendo el peso del inventario general.</li>
+   <br>
+   <li><b>NEW</b>: Sistema de equipamiento, ya puede el jugador equipar los objetos derivados de la nueva clase vestimenta (creacion de la clase Vestimenta), causando efecto sobre las estadisticas del personaje.</li>
+   <br>
+   <li><b>NEW</b>: se cambio como se declaraban los objetos como espadas y escudos a vestimentas, usando la clase vestimenta, la cual tambien añade una nueva variable la cual es el tipo, y asi si el jugador intenta equipar dos vestimentas del mismo tipo no le dejara ya que no s epyueden equipar dos botas al mismo tiempo.</li>
+   <br>
+   <li><b>BUG</b>: se reparo un bug que al momento de intentar tomar un objeto dentro de un cofre si tenias el inventario lleno no te permitia tomarlo y lo eliminaba del cofre lo que hacia inaccesible ese objeto, se reparo validando que la funcion encargada de añadir al inventario validara el peso y respondiera correctamente si se completaba el proceso.</li>
+   
+  </ul>
+   <br>
+</details>
 
 <details>
   <summary>
