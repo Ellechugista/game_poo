@@ -4,23 +4,6 @@
 
 _Aqui he ceado el sistema para la creacion y manipulacion de un mundo virtual, sin graficos, ya que mi gusto por el juego d emeza calobozos y dragones y su inmensa creatividad me inspiraron para afianzar los conceptos t practicas de la programacion orientada a objeto en python, a travez de un juego con estas caracteristicas._
 
-## Actualizaciones 📈
-
-* `0.1.3 Bugsfixed` : Esta version mejora bugs identificados dentro del flujo del codigo, tambien añade un sistema de gestion de pesos en el inventario del personaje:
-  - ``NEW``: sistema de inventario con gestion de peso para objetos dentro del inventario del personaje.
-  - ``NEW``: el sistema para añadir objetos a un lugar ha mejorado teniendo la posibilidad de añadir una lista de objetos o un objeto con el mismo metodo de la clase lugar, lo que ayuda a añadir muchos objetos dentro de un mismo metodo.
-  - ``NEW``: se implemento sistema de seleccion y gestion del inventario, ahora puedes soltar o usar los objetos dentro de tu inventario, tambien se añadio la posivilidad de poder ver la informacion de los objetos dentro del inventario, para asi poder usar objetos consumibles que cambian las estadisticas del jugador (nueva clase Consumibles).
-  - ``BUG``: error al tomar varios objetos de la misma clase, anteriormente se sumaba la cantidad del objeto presente en el inventario y se añadia uno nuevo con cantidad 1 lo cual al mostrar inventario se mostraba el objeto X2 y objeto, lo cual duplicaba el objeto dentro del inventario.
-  - ``BUG``: error al decidir no dejar vivo al contrincante, crash in game.
-  - ``BUG``: al implementar un nuevo sistema para mostrar y gestionar el inventario se solucionaron muchos errores dentro de las logicas que añaden objetos al inventario del jugador y que removian objetos, tambien, si mejoro la forma en que s emuestra la informacion del os objetos añadiendo el peso que tienen con valores flotantes
-
-* `0.1.1 version Update` : Esta version añade una vercion temprana y pero eficiente de un sistema de guardado usando pickler de python, por un intento de mantener persistencia entre ejecuciones, es funcional y parece versatil.
-
-  - Implementacion de menu principal, copas de darle a escojer al jugador si quiere iniciar una nueva partida, guardar, carcar o salir del juego implementando asi el sistemma de guardado.
-  - Sistema de lista para partidas guardadas dentro de la carpeta `saves` usando  `pickler`.
-   
-* `0.1 version `: Esta es la version en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
-
 ## Ejecuta y prueba el avance 🚀
 
 _Para ejecutar y probar el sistema, ejecute como raiz el archivo `game.py` junto a todas sus dependencias, dentro del escenario puede hacer muchas cosas de las cuales es mejor tener un manual de comandos a la mano._
@@ -28,7 +11,7 @@ _Para ejecutar y probar el sistema, ejecute como raiz el archivo `game.py` junto
 _Te invito a que explores al maximo el desarrollo de este mundo_
 
 ## Pre-requisitos y Prueba 📋
-* [PYTHON 3.1+](https://www.python.org/downloads/) - Python 3.13.2
+* [PYTHON 3.7+](https://www.python.org/downloads/) - Python 3.13.2
 * Terminal Integrado con Python
 
 _Descarga la version del proyecto junto a todas sus dependencias, luego ejecuta el archivo principal `game.py` en tu terminal de windows o en el depurador de Visual Estudio Code para que cargen los caracteres unicode que decoran el flujo del juego._
@@ -161,19 +144,74 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
 
 3. en el segundo caso es que este en desventaja el daño se calcula restando la diferencia de nivel, asi si hay mas difeencia de nivel mas desventaja tendra con respecto a sus habilidades de combate y defenza siguiendo las siguientes formula:
 ```python
-            daño_base = self.habilidades["atacar"] - diferencial_nivel
-            daño_minimo = daño_base // 2
-            daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
+            base_damage = self.skills["attack"] - level_differential
+            dégâts_minimum = dégâts_de_base // 2
+            final_damage = random.randint(int(minimum_damage), int(base_damage)) - opponent_defense
 ```
    
-4. el daño final siempre sera un numero alazar entre un rango de la mitad de la habilidad de daño y la habilidad completa de daño, para el jugador y el NPC el daño se calcula igual.
+4. El daño final siempre será un número aleatorio entre la mitad del daño de la habilidad y el daño completo de la habilidad; tanto para el jugador como para el NPC, el daño se calcula de la misma manera.
 
-* defender: este comando activa el modo defenza del jugador y se reinicia una vez halla terminado una ronda de turnos por el contrincante y el jugador.
+* defender: este comando activa el modo de defensa del jugador y se reinicia una vez finalizada una ronda de los turnos del oponente y del jugador.
 
 ## MAPA 🧭
-_⚠️ Este mapa esta sujeto a cambios y correcciones deacuerdo a la historia en desarrollo._
+_⚠️ Este mapa está sujeto a cambios y correcciones a medida que avanza la historia.._
 
-![Mapa-Wordl](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
+![Carte du monde](https://github.com/user-attachments/assets/95c7bddc-ec3c-4a8e-800d-a97454dfbf9c)
+
+## Actualizaciones 📈
+
+<details>
+  <summary>
+    <code><strong>0.1.4 inventory update</strong></code>
+  </summary>
+  <ul>
+   <li> <b>NEW</b>: Se implementó inventario aparte de los objetos equipados para el personaje compartiendo el peso del inventario general.</li>
+   <br>
+   <li><b>NEW</b>: Sistema de equipamiento, ya puede el jugador equipar los objetos derivados de la nueva clase vestimenta (creacion de la clase Vestimenta), causando efecto sobre las estadisticas del personaje.</li>
+   <br>
+   <li><b>NEW</b>: se cambio como se declaraban los objetos como espadas y escudos a vestimentas, usando la clase vestimenta, la cual tambien añade una nueva variable la cual es el tipo, y asi si el jugador intenta equipar dos vestimentas del mismo tipo no le dejara ya que no s epyueden equipar dos botas al mismo tiempo.</li>
+   <br>
+   <li><b>BUG</b>: se reparo un bug que al momento de intentar tomar un objeto dentro de un cofre si tenias el inventario lleno no te permitia tomarlo y lo eliminaba del cofre lo que hacia inaccesible ese objeto, se reparo validando que la funcion encargada de añadir al inventario validara el peso y respondiera correctamente si se completaba el proceso.</li>
+   
+  </ul>
+   <br>
+</details>
+
+<details>
+  <summary>
+    <code><strong> 0.1.3 bugs fixed</strong></code>
+  </summary>
+  <ul>
+   <li>Esta versión mejora errores identificados en el flujo de código y también agrega un sistema de administración de peso al inventario del personaje.</li>
+   <br>
+   <li><b>NEW</b>: Sistema de inventario con gestión del peso de los artículos en el inventario del personaje.</li>
+   <br>
+   <li><b>NEW</b>: Se ha mejorado el sistema para agregar objetos a una ubicación, permitiendo agregar una lista de objetos o un objeto con el mismo método de la clase de ubicación, lo que ayuda a agregar muchos objetos dentro del mismo método.</li>
+   <br>
+   <li><b>NEW</b>: Se implementó un sistema de selección y gestión de inventario, ahora puedes soltar o usar elementos en tu inventario, también se agregó la capacidad de mostrar información sobre los elementos en el inventario, para que puedas usar elementos consumibles que modifican las estadísticas del jugador (nueva clase de Consumibles).</li>
+   <br>
+   <li><b>BUG</b>: Error al tomar varios articulos de la misma clase, anteriormente se sumaba la cantidad del articulo presente en el inventario y se agregaba uno nuevo con cantidad 1, lo cual al mostrar el inventario se mostraba el articulo X2 y articulo, lo cual duplicaba el articulo en el inventario.</li>
+   <br>
+   <li><b>BUG</b>: Error al decidir no dejar vivo al oponente, crash in game.</li>
+   <br>
+   <li><b>BUG</b>: Al implementar un nuevo sistema de gestión y visualización de inventario, se han corregido muchos errores en la lógica que agrega elementos al inventario del jugador y elimina elementos. Además, se ha mejorado la forma en que se muestra la información de los objetos añadiendo el peso que tienen con valores flotantes.</li>
+  </ul>
+</details>
+
+<details>
+  <summary>
+    <code><strong>0.1.1 update</strong></code>
+  </summary>
+  <ul>
+   <li> <b>NEW</b>: Se implementó el menú principal, permitiendo al jugador elegir iniciar un nuevo juego, guardar, cargar o salir del juego, implementando así el sistema de guardado.</li>
+   <br>
+   <li><b>NEW</b>: Sistema de lista de juegos guardados en la carpeta "saves" usando "pickler".</li>
+   <br>
+  </ul>
+</details>
+   
+* `0.1 version `: Esta es la version en la que comienzo a documentar el proceso de creacion en una etapa algo desarrollada del proyecto. 
+
 
 # Autores ✒️
 
