@@ -26,8 +26,14 @@ class entidad:
         print(f"❖ Habilidades: Ataque:{self.habilidades['atacar']} Defensa:{self.habilidades['defender']}")
         print(f"✧ Animo: {self.calcular_animo()}")
         print("⊢---------------------------------------------⊣")
+        self.presentacion()
+        print(" ")
         
     def calcular_animo(self):
+        """aqui calculamos el animo de la entidad, y lo devolvemos como un string para que el jugador sepa como se siente
+        si el animo es mayor a 50 la entidad se siente normal, si es mayor a 70 feliz, si es menor a 50 triste, si es menor a 30 enojado y si es menor o igual a 0 el animo se pone en 0
+        """
+        
       #aqui tenemos que calcular el animo de la entidad
         clave = ""
         if self.animo >= 50:
@@ -273,9 +279,16 @@ dialogos_ejemplos = {
 }
 
 #aqui creamos a los personajes
+#humanos de valle lidien
+petriscax = humano("Petriscax", dialogos_ejemplos, 100, "Un anciano de vastante edad, cabello y barba larga y blanca su cara refleja una vida llena de vivencias y penurias que quedan marcadas en el tiempo.", nivel_combate=5, habilidades={"atacar":5,"defender":5}, animo=50)
+
 marcelito = humano("Marcelito", dialogos_ejemplos, 100, "Un chico joven. muy reservado, cabello corto y lentes arcaicos, con fuerte sentido de moral y justicia.", nivel_combate=7, habilidades={"atacar":5,"defender":4}, animo=50)
 
-laura = humano("Laura", dialogos_ejemplos, 10, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual.",nivel_combate=9,habilidades={"atacar":8,"defender":10}, animo=50)
+laura = humano("Laura", dialogos_ejemplos, 100, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual, en las tardes trabaja en la herreria de su tio.",nivel_combate=9,habilidades={"atacar":8,"defender":10}, animo=50)
+
+madre = humano("Madre", dialogos_ejemplos, 100, "Esta mujer es tu madre, una persona gastada pero con porte inquebrantable que ha llevado una vida dificil pero con mucho amor, pues tu su hijo es su mas grande logro, lee algunas veces y se impresiona con la simplesa de la vida.")
+
+matrifutchka = duende("Mtrifutchka", dialogos_ejemplos, 80, "Este sujeto, es curioso y misterioso, se arrincona a una esquina del lugar donde menos pega a luz, parece herido, pero no permite hablar, una vibra oscura irradia de el", nivel_combate=15, habilidades={"atacar": 10, "defender": 8}, animo=25)
 
 
 

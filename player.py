@@ -1,11 +1,12 @@
 import random
-from objects import consumible
+from objects import consumible, vestimenta
 from utils import *
 class player:   
     def __init__(self, nombre:str, lugar_actual, vida:float=10, habilidades:dict = {"atacar": 5, "defender": 5}, nivel_combate = 10):
         self.nombre = nombre
         self.vida = round(vida, 1)
         self.inventario = []
+        self.vestimentas = []
         self.peso_inventario = 0
         self.limite_inventario = 20
         self.habilidades = habilidades
@@ -57,7 +58,7 @@ class player:
             for item in self.inventario:
                 if item.nombre == objeto.nombre:
                     item.cantidad += objeto.cantidad
-                    break
+                    return True
             else:
                 self.inventario.append(objeto)
                 
@@ -84,10 +85,10 @@ class player:
             print(f"No tienes {objeto.nombre} en tu inventario")
          
     def mostrar_inventario(self):
-        """esta funcion muestra el inventario del jugador"""
+        """esta funcion muestra el inventario del jugador y permite hacer mucho mass"""
         limpiar_consola()
         while True:
-            if self.inventario:
+            if self.inventario or self.vestimentas:
                 print("Tienes:")
                 for item in self.inventario:
                     if item.cantidad == 1:
@@ -95,12 +96,70 @@ class player:
                     else:
                         print(f"ⵚ {item.nombre} x{item.cantidad}")
                 print(f"----------------------------------{self.peso_inventario}/{self.limite_inventario}")
+                
+                if self.vestimentas:
+                    print(" ")
+                    print("Tienes equipado:")
+                    for item in self.vestimentas:
+                        if item.tipo == "casco":
+                            print(f"⛑ {item.nombre}")
+                        elif item.tipo == "coraza":
+                            print(f"🧥 {item.nombre}")
+                        elif item.tipo == "guantes":
+                            print(f"🧤 {item.nombre}")
+                        elif item.tipo == "botas":
+                            print(f"🥾 {item.nombre}")
+                        elif item.tipo == "pantalones":
+                            print(f"👖 {item.nombre}")
+                        elif item.tipo == "mochila":
+                            print(f"🎒 {item.nombre}")
+                        elif item.tipo == "arma":
+                            print(f"🗡 {item.nombre}")
+                        elif item.tipo == "escudo":
+                            print(f"🛡 {item.nombre}")
+                        else:
+                            print(f"🥼 {item.nombre}")
+                else:
+                    print(" ")
+                    print("⌘no tienes nada equipado")
             else:
                 print("⌘no tienes nada en tu inventario")
                 break
             
+            
             comando = str(input("> ")).lower().split()
             match comando[0]:
+                case "equipar":
+                    limpiar_consola()
+                    if len(comando) > 1:
+                        objeto = comando[1].lower().strip()
+                        for item in self.inventario:
+                            if item.nombre.lower() == objeto:
+                                if isinstance(item, vestimenta):
+                                    item.vestir(self)
+                                    break
+                        else:
+                            print(f"⌘No tienes {objeto} en tu inventario")
+                            print(" ")  
+                    else:
+                        print("⌘No has especificado el objeto a equipar")
+                        print(" ")
+                
+                case "desequipar":
+                    limpiar_consola()
+                    if len(comando) > 1:
+                        objeto = comando[1].lower().strip()
+                        for item in self.vestimentas:
+                            if item.nombre.lower() == objeto:
+                                item.desequipar(self)
+                                break
+                        else:
+                            print(f"⌘No tienes {objeto} en tu inventario")
+                            print(" ")  
+                    else:
+                        print("⌘No has especificado el objeto a equipar")
+                        print(" ")
+                
                 case "usar":
                     limpiar_consola()
                     if len(comando) > 1:
@@ -167,6 +226,34 @@ class player:
                     print("⌘Comando no valido")
                     print(" ")
 
+    def agregar_vestimenta(self, objeto):
+        """esta funcion agrega un objeto al inventario del jugador sin aplicar sus efectos"""
+        limpiar_consola()
+        for item in self.vestimentas:
+            if item.tipo == objeto.tipo:
+                print("⌘No puedes llevar dos veces la misma vestimenta")
+                print(" ")
+                return False  
+        else:
+            #aqui funciona todo correctamente y se agrega el objeto al inventario
+            self.vestimentas.append(objeto)
+            self.peso_inventario += objeto.peso * objeto.cantidad
+            return True
+            #no se actualiza el peso porque ya esta actualizado en la funcion de agregar_inventario pero cmomo se estrae del inventario se resta el peso 
+
+    def extraer_vestimenta(self, objeto):
+        """esta funcion elimina un objeto del inventario del jugador"""
+        limpiar_consola()
+        for item in self.vestimentas:
+            if item.nombre == objeto.nombre:
+                self.vestimentas.remove(objeto)
+                self.peso_inventario -= objeto.peso * objeto.cantidad
+                return True
+        else:
+            #aqui funciona todo correctamente y se agrega el objeto al inventario
+            print("⌘No tienes esa vestimenta equipada")
+            print(" ")
+            return False  
             
     def descrip_objeto(self, objeto):
         limpiar_consola()

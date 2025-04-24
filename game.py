@@ -193,7 +193,7 @@ class game:
                 print(" ")
                 print("⌘Cual sera el nombre del guerreo?")
                 nombre = str(input("> ")).lower()
-                self.player = player(nombre, casa, 10, habilidades = {"atacar": 8, "defender": 8})
+                self.player = player(nombre, casa, 100, habilidades = {"atacar": 8, "defender": 8}, nivel_combate=10)
                 limpiar_consola()
                 self.iniciar()
             elif comando[0] == "salir":
@@ -371,6 +371,6 @@ class game:
 
 if __name__ == "__main__":
     juego = game()
-    #juego.menu()
-    juego.iniciar()
+    juego.menu()
+    #juego.iniciar()
 

@@ -118,11 +118,11 @@ valle_lidien.conectar_lugar("oeste", casa)
 
 cofre_normal = cofre()
 
-cofre_normal.agregar([monedax10.clonar(), guantes_cuero.clonar(), manzana.clonar()])
+cofre_normal.agregar([monedax10.clonar(), guantes_cuero.clonar(), manzana.clonar(), casco_cuero.clonar(), coraza_cuero.clonar(), pantalones_cuero.clonar(), botas_cuero.clonar(), pocion_vida.clonar()])
 
 casa.agregar_objeto(cofre_normal)
 
-casa.agregar_objeto(botas_cuero.clonar())
+casa.agregar_objeto(botas.clonar())
 
 cumbre_rocosa.agregar_objeto([hacha.clonar(), escudo.clonar(), pocion_vida.clonar()])
 
@@ -133,6 +133,10 @@ valle_lidien.agregar_objeto(hacha.clonar())
 casa.agregar_entidad(laura)
 
 valle_lidien.agregar_entidad(marcelito)
+
+valle_lidien.agregar_entidad(petriscax)
+
+cumbre_rocosa.agregar_entidad(matrifutchka)
 
 #--------------------rue Marques--------------
 
