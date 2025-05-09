@@ -80,6 +80,7 @@ class batalla:
             print(f"{self.contrincante.nombre} esta incapacitado para el combate.")
             print(" ")
             return
+        
         # cuando validar ganador sea "ninguno"
         while batalla_acabada == "ninguno":
             print("-------------------BATALLA-------------------")
@@ -106,7 +107,7 @@ class batalla:
             eleccion = random.choice(["atacar", "defender"])
             print(" ")
             print("⍾Turno del enemigo")
-
+            
             if eleccion == "atacar":
                 self.contrincante.atacar(self.jugador)
             else:
@@ -141,7 +142,7 @@ class batalla:
                 self.vivo = True
                 print("⌘El contrincante se aleja gravemente herido")
                 
-            puntos = (self.turno + self.jugador.vida) * 0.2
+            puntos = ((self.turno*0.25) + (self.jugador.vida)*0.50) * 0.20
             puntos = round(puntos, 2)
             self.jugador.nivel_combate += puntos
             self.xp = puntos
@@ -158,8 +159,8 @@ class batalla:
 
 # test
 if __name__ == "__main__":
-    lechuga = player("El Lechugista", casa,habilidades={"atacar": 10, "defender": 5},nivel_combate=10, vida=10)
-    pablo = humano("pablo", dialogos_ejemplos, vida=10, nivel_combate=10)
+    lechuga = player("El Lechugista", casa,habilidades={"atacar": 10, "defender": 10},nivel_combate=18, vida=100)
+    pablo = humano("pablo", dialogos_ejemplos, vida=100, nivel_combate=20, habilidades={"atacar": 10, "defender": 10})
     print(" ")
     batalla_1 = batalla(lechuga, pablo)
     batalla_1.iniciar()

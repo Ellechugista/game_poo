@@ -10,7 +10,7 @@ import pickle
 #clase madre donde el flujo del juego se desarrolla, aqui se manejan los objetos y el flujo del juego
 class game:
     def __init__(self):
-        self.player = player("Mariano", casa, 10, habilidades = {"atacar": 8, "defender": 5})
+        self.player = player("Mariano", casa, 10, habilidades = {"atacar": 10, "defender": 10})
         self.enemigos_derrotados = 0
         self.registros_batallas = []
         
@@ -193,7 +193,7 @@ class game:
                 print(" ")
                 print("⌘Cual sera el nombre del guerreo?")
                 nombre = str(input("> ")).lower()
-                self.player = player(nombre, casa, 100, habilidades = {"atacar": 8, "defender": 8}, nivel_combate=10)
+                self.player = player(nombre, casa, 100, habilidades = {"atacar": 10, "defender": 10}, nivel_combate=10)
                 limpiar_consola()
                 self.iniciar()
             elif comando[0] == "salir":

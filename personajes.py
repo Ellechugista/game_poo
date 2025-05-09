@@ -84,6 +84,7 @@ class entidad:
         """esta funcion presenta la entidad, lo ideal es que se extienda esta clase deacuerdo a la raza o tipo de entidad"""
         print(f"✧{self.nombre} es una entidad sin clase")
         print(f"✧{self.descripcion}")
+    
     def calcular_ventaja(self, contrincante):
         """esta funcion devuelve si hay ventaja en el combate y devuelve true si hay ventaja y false si no hay ventaja y iguales si son iguales"""
         #cuando el nivel de combate del jugador es mayor al del contrincante
@@ -110,63 +111,122 @@ class entidad:
             return
         # Validamos la ventaja según nivel de combate
         ventaja = self.calcular_ventaja(contrincante)
-        print(ventaja)
         #calculamos la diferencia de nivel entre rivales
         diferencial_nivel = (self.nivel_combate - contrincante.nivel_combate)
         if diferencial_nivel < 0:
             diferencial_nivel = diferencial_nivel * -1
+            
         #cuando el nivel de combate del jugador es mayor al del contrincante
         if ventaja == True:
             #validamos si el contrincante se esta defendiendo
             if contrincante.defensa_activa:
-                defenza_contrincante = contrincante.habilidades["defender"]*0.7
+                #defenza total
+                defenza_contrincante = contrincante.habilidades["defender"] * 1.5
             else:
-                defenza_contrincante = 0
-            #sacamos la diferencia de nivel entre rivales y generamos ventaja
-            daño_base = self.habilidades["atacar"] * diferencial_nivel
+                #la mitad de la defenza si no se cubre
+                defenza_contrincante = contrincante.habilidades["defender"]
+                
+            #probabilidad de ataque en bace a nivel y deefensa
+            probabilidad_ataque = diferencial_nivel - defenza_contrincante
+            #aqui comprobamos que la probabilidad no sea negativa
+            if probabilidad_ataque < 30:
+                probabilidad_ataque = 0.30
+            else:
+                probabilidad_ataque = probabilidad_ataque/100
+                
+            probabilidad_ataque = probabilidad_ataque * 1.25
+            
+            #validamos si ataca o no probabilidad de ataque
+            ataca = self.ataque_probabilidad(probabilidad_ataque)
+            if ataca == False:
+                print(f"⌘{self.nombre} ha fallado el ataque")
+                return
+
+            #calculo de daño
+            daño_base = self.habilidades["atacar"]
             daño_minimo = daño_base // 2
-            daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
+            daño_final = random.randint(int(daño_minimo), int(daño_base))
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
             #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘{self.nombre} ha causado {daño_final} de daño a {contrincante.nombre}")
-            return daño_final
+            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
+
         #cuando el nivel de combate del contrincante es mayor al del jugador
         elif ventaja == False:
             #validamos si el contrincante se esta defendiendo
             if contrincante.defensa_activa:
-                defenza_contrincante = contrincante.habilidades["defender"]*0.7
+                #defenza total
+                defenza_contrincante = contrincante.habilidades["defender"] * 1.5
             else:
-                defenza_contrincante = 0
-            #sacamos la diferencia de nivel entre rivales y generamos desventaja
-            daño_base = self.habilidades["atacar"] - diferencial_nivel
+                #la mitad de la defenza si no se cubre
+                defenza_contrincante = contrincante.habilidades["defender"]
+                
+            #probabilidad de ataque en base a nivel de de ataque y deefensa
+            probabilidad_ataque = diferencial_nivel - defenza_contrincante
+            #aqui comprobamos que la probabilidad no sea negativa
+            if probabilidad_ataque < 25:
+                probabilidad_ataque = 0.25
+            else:
+                probabilidad_ataque = probabilidad_ataque/100
+            
+            #validamos si ataca o no probabilidad de ataque
+            ataca = self.ataque_probabilidad(probabilidad_ataque)
+            if ataca == False:
+                print(f"⌘{self.nombre} ha fallado el ataque")
+                return
+
+            #calculo de daño
+            daño_base = self.habilidades["atacar"]
             daño_minimo = daño_base // 2
-            daño_final = (random.randint(int(daño_minimo), int(daño_base))-defenza_contrincante)
+            daño_final = random.randint(int(daño_minimo), int(daño_base))
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
             #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘{self.nombre} ha causado {daño_final} de daño a {contrincante.nombre}")
-            return daño_final
+            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
+
         #cuando los niveles son iguales
         elif ventaja == "iguales":
             #validamos si el contrincante se esta defendiendo
             if contrincante.defensa_activa:
-                defenza_contrincante = contrincante.habilidades["defender"]*0.7
+                #defenza total
+                defenza_contrincante = contrincante.habilidades["defender"] * 1.5
             else:
-                defenza_contrincante = 0
-            daño_minimo = self.habilidades["atacar"] // 2
-            daño_final = random.randint(daño_minimo, self.habilidades["atacar"]) - defenza_contrincante
+                #la mitad de la defenza si no se cubre
+                defenza_contrincante = contrincante.habilidades["defender"]
+                
+            #probabilidad de ataque en base a nivel de de ataque y deefensa
+            probabilidad_ataque = self.habilidades["atacar"] - defenza_contrincante
+            #aqui comprobamos que la probabilidad no sea negativa
+            if probabilidad_ataque < 30:
+                probabilidad_ataque = 0.30
+            else:
+                probabilidad_ataque = probabilidad_ataque/100
+            
+            #validamos si ataca o no probabilidad de ataque
+            ataca = self.ataque_probabilidad(probabilidad_ataque)
+            if ataca == False:
+                print(f"⌘{self.nombre} ha fallado el ataque")
+                return
+
+            #calculo de daño
+            daño_base = self.habilidades["atacar"]
+            daño_minimo = daño_base // 2
+            daño_final = random.randint(int(daño_minimo), int(daño_base))
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
+            #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘{self.nombre} ha causado {daño_final} de daño a {contrincante.nombre}")
-            return daño_final
-        
+            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
+
+    def ataque_probabilidad(self, probabilidad:float):
+        """esta funcion calcula la probabilidad de ataque y devuelve True o False"""
+        return random.random() < probabilidad
+    
     def defender(self):
         """esta funcion hace que el jugador se defienda cambie el booleano de defensa_activa a True pero al final de su turno se debe desactivar desde afuera"""
         self.defensa_activa = True
@@ -280,15 +340,15 @@ dialogos_ejemplos = {
 
 #aqui creamos a los personajes
 #humanos de valle lidien
-petriscax = humano("Petriscax", dialogos_ejemplos, 100, "Un anciano de vastante edad, cabello y barba larga y blanca su cara refleja una vida llena de vivencias y penurias que quedan marcadas en el tiempo.", nivel_combate=5, habilidades={"atacar":5,"defender":5}, animo=50)
+petriscax = humano("Petriscax", dialogos_ejemplos, 100, "Un anciano de vastante edad, cabello y barba larga y blanca su cara refleja una vida llena de vivencias y penurias que quedan marcadas en el tiempo.", nivel_combate=29, habilidades={"atacar":20,"defender":25}, animo=50)
 
-marcelito = humano("Marcelito", dialogos_ejemplos, 100, "Un chico joven. muy reservado, cabello corto y lentes arcaicos, con fuerte sentido de moral y justicia.", nivel_combate=7, habilidades={"atacar":5,"defender":4}, animo=50)
+marcelito = humano("Marcelito", dialogos_ejemplos, 100, "Un chico joven. muy reservado, cabello corto y lentes arcaicos, con fuerte sentido de moral y justicia.", nivel_combate=11, habilidades={"atacar":18,"defender":15}, animo=50)
 
-laura = humano("Laura", dialogos_ejemplos, 100, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual, en las tardes trabaja en la herreria de su tio.",nivel_combate=9,habilidades={"atacar":8,"defender":10}, animo=50)
+laura = humano("Laura", dialogos_ejemplos, 100, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual, en las tardes trabaja en la herreria de su tio.",nivel_combate=9,habilidades={"atacar":14,"defender":10}, animo=50)
 
 madre = humano("Madre", dialogos_ejemplos, 100, "Esta mujer es tu madre, una persona gastada pero con porte inquebrantable que ha llevado una vida dificil pero con mucho amor, pues tu su hijo es su mas grande logro, lee algunas veces y se impresiona con la simplesa de la vida.")
 
-matrifutchka = duende("Mtrifutchka", dialogos_ejemplos, 80, "Este sujeto, es curioso y misterioso, se arrincona a una esquina del lugar donde menos pega a luz, parece herido, pero no permite hablar, una vibra oscura irradia de el", nivel_combate=15, habilidades={"atacar": 10, "defender": 8}, animo=25)
+matrifutchka = duende("Mtrifutchka", dialogos_ejemplos, 80, "Este sujeto, es curioso y misterioso, se arrincona a una esquina del lugar donde menos pega a luz, parece herido, pero no permite hablar, una vibra oscura irradia de el", nivel_combate=35, habilidades={"atacar": 34, "defender": 22}, animo=25)
 
 
 

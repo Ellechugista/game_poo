@@ -310,13 +310,32 @@ class player:
         if ventaja == True:
             #validamos si el contrincante se esta defendiendo
             if contrincante.defensa_activa:
-                defenza_contrincante = contrincante.habilidades["defender"]*0.7
+                #defenza total
+                defenza_contrincante = contrincante.habilidades["defender"] * 1.5
             else:
-                defenza_contrincante = 0
-            #sacamos la diferencia de nivel entre rivales y generamos ventaja
-            daño_base = self.habilidades["atacar"] * diferencial_nivel
+                #la mitad de la defenza si no se cubre
+                defenza_contrincante = contrincante.habilidades["defender"]
+                
+            #probabilidad de ataque en bace a nivel y deefensa
+            probabilidad_ataque = diferencial_nivel - defenza_contrincante
+            #aqui comprobamos que la probabilidad no sea negativa
+            if probabilidad_ataque < 30:
+                probabilidad_ataque = 0.30
+            else:
+                probabilidad_ataque = probabilidad_ataque/100
+                
+            probabilidad_ataque = probabilidad_ataque * 1.25
+            
+            #validamos si ataca o no probabilidad de ataque
+            ataca = self.ataque_probabilidad(probabilidad_ataque)
+            if ataca == False:
+                print(f"⌘{self.nombre} ha fallado el ataque")
+                return
+
+            #calculo de daño
+            daño_base = self.habilidades["atacar"]
             daño_minimo = daño_base // 2
-            daño_final = random.randint(int(daño_minimo), int(daño_base)) - defenza_contrincante
+            daño_final = random.randint(int(daño_minimo), int(daño_base))
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
@@ -328,35 +347,76 @@ class player:
         elif ventaja == False:
             #validamos si el contrincante se esta defendiendo
             if contrincante.defensa_activa:
-                defenza_contrincante = contrincante.habilidades["defender"]*0.7
+                #defenza total
+                defenza_contrincante = contrincante.habilidades["defender"] * 1.5
             else:
-                defenza_contrincante = 0
-            #sacamos la diferencia de nivel entre rivales y generamos desventaja
-            daño_base = self.habilidades["atacar"] - diferencial_nivel
+                #la mitad de la defenza si no se cubre
+                defenza_contrincante = contrincante.habilidades["defender"]
+                
+            #probabilidad de ataque en base a nivel de de ataque y deefensa
+            probabilidad_ataque = diferencial_nivel - defenza_contrincante
+            #aqui comprobamos que la probabilidad no sea negativa
+            if probabilidad_ataque < 25:
+                probabilidad_ataque = 0.25
+            else:
+                probabilidad_ataque = probabilidad_ataque/100
+            
+            #validamos si ataca o no probabilidad de ataque
+            ataca = self.ataque_probabilidad(probabilidad_ataque)
+            if ataca == False:
+                print(f"⌘{self.nombre} ha fallado el ataque")
+                return
+
+            #calculo de daño
+            daño_base = self.habilidades["atacar"]
             daño_minimo = daño_base // 2
-            daño_final = random.randint(int(daño_minimo), int(daño_base))-defenza_contrincante
+            daño_final = random.randint(int(daño_minimo), int(daño_base))
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
             #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre} (reducido por defenza enemiga)")
+            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
 
         #cuando los niveles son iguales
         elif ventaja == "iguales":
             #validamos si el contrincante se esta defendiendo
             if contrincante.defensa_activa:
-                defenza_contrincante = contrincante.habilidades["defender"]*0.7
+                #defenza total
+                defenza_contrincante = contrincante.habilidades["defender"] * 1.5
             else:
-                defenza_contrincante = 0
-            daño_minimo = self.habilidades["atacar"] // 2
-            daño_final = random.randint(daño_minimo, self.habilidades["atacar"]) - defenza_contrincante
+                #la mitad de la defenza si no se cubre
+                defenza_contrincante = contrincante.habilidades["defender"]
+                
+            #probabilidad de ataque en base a nivel de de ataque y deefensa
+            probabilidad_ataque = self.habilidades["atacar"] - defenza_contrincante
+            #aqui comprobamos que la probabilidad no sea negativa
+            if probabilidad_ataque < 30:
+                probabilidad_ataque = 0.30
+            else:
+                probabilidad_ataque = probabilidad_ataque/100
+            
+            #validamos si ataca o no probabilidad de ataque
+            ataca = self.ataque_probabilidad(probabilidad_ataque)
+            if ataca == False:
+                print(f"⌘{self.nombre} ha fallado el ataque")
+                return
+
+            #calculo de daño
+            daño_base = self.habilidades["atacar"]
+            daño_minimo = daño_base // 2
+            daño_final = random.randint(int(daño_minimo), int(daño_base))
             #aqui comprobamos que el daño no sea negativo
             if daño_final < 0:
                 daño_final = 0
+            #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
             print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
 
+    @classmethod
+    def ataque_probabilidad(self, probabilidad:float):
+        """esta funcion calcula la probabilidad de ataque y devuelve True o False"""
+        return random.random() < probabilidad
 
     def defender(self):
         """esta funcion hace que el jugador se defienda cambie el booleano de defensa_activa a True pero al final de su turno se debe desactivar desde afuera"""
