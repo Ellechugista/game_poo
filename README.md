@@ -164,6 +164,16 @@ _⚠️ Este mapa está sujeto a cambios y correcciones a medida que avanza la h
 
 <details>
   <summary>
+    <code><strong>0.1.5 batallas update</strong></code>
+  </summary>
+  <ul>
+   <li> <b>NEW</b>: Se renovo y reestructuro el sistema de combate de batalla haciendolo menos predecible y utilizando probabilidades en base a las estadisticas de los contrincantes.</li> 
+  </ul>
+   <br>
+</details>
+
+<details>
+  <summary>
     <code><strong>0.1.4 inventory update</strong></code>
   </summary>
   <ul>
