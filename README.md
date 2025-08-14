@@ -65,11 +65,11 @@ _Puedes seleccionar entre `Iniciar`, lo cual iniciara una partida nueva por defe
 > 2025-04-11_nombre_de_la_partida
 ```
 
-  * ir: comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador
+  * `ir`: comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador
 ```shell
 >ir "este".
 ```
-  * hablar: comando basico para hablar con los personajes dentro de la escena, estos dependiendo del estado de animo tendran diferentes comentarios predefinidos (normal, feliz, triste y enojado).
+  * `hablar`: comando basico para hablar con los personajes dentro de la escena, estos dependiendo del estado de animo tendran diferentes comentarios predefinidos (normal, feliz, triste y enojado).
 ```shell
 >hablar "nombre del personaje con quien hablar"
 ```
@@ -77,7 +77,7 @@ _Puedes seleccionar entre `Iniciar`, lo cual iniciara una partida nueva por defe
 ```shell
 >tomar "nombre del objeto"
 ```
-  * inventario: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad, tambien mostrara su limite de peso para el jugador y dentro de el puedes hacer mas cosas:
+  * `inventario`: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad, tambien mostrara su limite de peso para el jugador y dentro de el puedes hacer mas cosas:
 ```shell
 >inventario
 Tienes:
@@ -99,11 +99,11 @@ Tienes:
     - `salir:` comando basico para salir del listado de objetos de un recipiente.
     - `inventario:` este comando mostrara el meno de inventario con sus propias ejecuciones.
 
-  * informacion: comando basico para mostrar la informacion y estadisticas de un objeto dentro de tu inventario.
+  * `informacion`: comando basico para mostrar la informacion y estadisticas de un objeto dentro de tu inventario.
 ```shell
 >informacion "nombre de objeto"
 ```
-  * registros: comando basico para mostrar y listar los registros de combate, un pequeño histrial de lo acontecido.
+  * `registros`: comando basico para mostrar y listar los registros de combate, un pequeño histrial de lo acontecido.
 ```shell
 ⊢---------------------Registros de Batallas----------------------⊣
 
@@ -123,14 +123,14 @@ Tienes:
 ```
 ## COMANDOS EN ATAQUE ⚔️
 
-  * atacar: comando basico para iniciar un combate contra un personaje, el combate funciona por turnos en dode se puede atacar y defender, usando como base las habilidades de lucha y la diferencia de nivel entre los contrincantes, al iniciar un combate entraras en un bucle en donde solo podras salir muestro o victorioso, ya que batirce a duelo contra alguien mas no da chance a intentarlo mas tarde.
+  * `atacar`: comando basico para iniciar un combate contra un personaje, el combate funciona por turnos en dode se puede atacar y defender, usando como base las habilidades de lucha y la diferencia de nivel entre los contrincantes, al iniciar un combate entraras en un bucle en donde solo podras salir muestro o victorioso, ya que batirce a duelo contra alguien mas no da chance a intentarlo mas tarde.
 ```shell
 >atacar "nombre de la entidad a luchar"
 ```
 
 _Una vez dentro podras ejecutar los siguientes comandos:_
 
-* atacar: este comando tendra en cuenta el estado del enemigo si esta defendiendoze o no, para luego hacerle daño al contrincante, el sistema de daño se basa en lo siguiente:
+* `atacar`: este comando tendra en cuenta el estado del enemigo si esta defendiendoze o no, para luego hacerle daño al contrincante, el sistema de daño se basa en lo siguiente:
 
 1. primero se calcula la ventaja de acurdo al nivel de pelea, en este hay tres estados mayor, menr o igual, en dado caso sea ventaja verdadera, el daño se calcula de la siguiente manera.
 ```python
@@ -153,7 +153,7 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
    
 4. El daño final siempre será un número aleatorio entre la mitad del daño de la habilidad y el daño completo de la habilidad; tanto para el jugador como para el NPC, el daño se calcula de la misma manera.
 
-* defender: este comando activa el modo de defensa del jugador y se reinicia una vez finalizada una ronda de los turnos del oponente y del jugador.
+* `defender`: este comando activa el modo de defensa del jugador y se reinicia una vez finalizada una ronda de los turnos del oponente y del jugador.
 
 ## MAPA 🧭
 _⚠️ Este mapa está sujeto a cambios y correcciones a medida que avanza la historia.._
