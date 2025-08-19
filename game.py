@@ -438,6 +438,6 @@ juego = Game()
       
 if __name__ == "__main__":
 
-    #juego.menu()
-    juego.iniciar()
+    juego.menu()
+    #juego.iniciar()
 
