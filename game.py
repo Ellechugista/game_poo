@@ -1,16 +1,18 @@
+# -*- coding: utf-8 -*-
 # archivo principal
 from lugares import *
 from personajes import *
 from player import *
 from batallas import *
 from utils import *
+from misiones import *
 import time
 import pickle
 
 #clase madre donde el flujo del juego se desarrolla, aqui se manejan los objetos y el flujo del juego
-class game:
+class Game:
     def __init__(self):
-        self.player = player("Mariano", casa, 10, habilidades = {"atacar": 10, "defender": 10})
+        self.player = player("Mariano", casa, 100, habilidades = {"atacar": 100, "defender": 100}, control_juego=self)
         self.enemigos_derrotados = 0
         self.registros_batallas = []
         
@@ -70,6 +72,17 @@ class game:
         nombre_archivo = str(input("> ")).lower()
         if nombre_archivo.endswith(".pkl"):
             nombre_archivo = nombre_archivo[:-4]
+        
+        #si decidio eliminarlo de la carpeta
+        if nombre_archivo.startswith("del"):
+            nombre_archivo = nombre_archivo[3:]
+            #procedemos a eliminar
+            limpiar_consola()
+            os.remove(os.path.join(carpeta_saves, nombre_archivo + ".pkl"))
+            print(f"⌘Partida {nombre_archivo} CORRECTAMENTE")
+            print("")
+            return False
+            
         
         archivo = os.path.join(carpeta_saves, nombre_archivo + ".pkl")
         if not os.path.isfile(archivo):
@@ -178,6 +191,14 @@ class game:
         #menu principal
         limpiar_consola()
         while True:
+            print(r"""+==========================================================================+
+|     ██████╗  █████╗ ███╗   ███╗███████╗    ██████╗  ██████╗  ██████╗     |
+|    ██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔══██╗██╔═══██╗██╔═══██╗    |
+|    ██║  ███╗███████║██╔████╔██║█████╗█████╗██████╔╝██║   ██║██║   ██║    |
+|    ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝╚════╝██╔═══╝ ██║   ██║██║   ██║    |
+|    ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ██║     ╚██████╔╝╚██████╔╝    |
+|     ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝    ╚═╝      ╚═════╝  ╚═════╝     |
++==========================================================================+""")
             print("⊢---------------------Menu Principal----------------------⊣")
             print("⌘Bienvenido al juego de role GAME-POO")
             print(" ")
@@ -193,7 +214,7 @@ class game:
                 print(" ")
                 print("⌘Cual sera el nombre del guerreo?")
                 nombre = str(input("> ")).lower()
-                self.player = player(nombre, casa, 100, habilidades = {"atacar": 10, "defender": 10}, nivel_combate=10)
+                self.player = player(nombre, casa, 100, habilidades = {"atacar": 10, "defender": 10}, nivel_combate=10, control_juego=self)
                 limpiar_consola()
                 self.iniciar()
             elif comando[0] == "salir":
@@ -245,6 +266,13 @@ class game:
             lugar_actual = self.player.lugar_actual
             lugar_actual.presentar_lugar()
             comando = str(input("> ")).lower().split()
+            #validamos que comando no sea none
+            if not comando:
+                limpiar_consola()
+                print("⌘Escoje una accion valida.")
+                print("")
+                continue
+                
             match comando[0]:
                 case "ir":
                     self.player.mover_a(comando[1])
@@ -273,7 +301,7 @@ class game:
                             for p in lugar_actual.presentes:
                                 if p.nombre.lower() == comando[1]:
                                     limpiar_consola()
-                                    p.hablar()
+                                    p.hablar(self.player)
                                     print(" ")
                                     break
                             else:
@@ -294,7 +322,21 @@ class game:
                     print(" ")
                 case "informacion":
                     limpiar_consola()
-                    if len(comando) > 1:
+                    if len(comando) > 2:    
+                        if self.player.registro_misiones and comando[1] == "mision":
+                                id = comando[2]
+                                for m in self.player.registro_misiones:
+                                    if str(m.id) == id:
+                                        m.describir_mision()
+                                    else:
+                                        print(f"⌘No existe mision {id} activa.")
+                                        break
+                        else:
+                            print("⌘No has iniciado misiones.")
+                            print("")
+                            continue
+                        
+                    elif len(comando) > 1:
                         if self.player.inventario:
                             for item in self.player.inventario:
                                 #print(item.nombre.lower())
@@ -306,10 +348,12 @@ class game:
                                 limpiar_consola()
                                 print(f"⌘No tienes {comando[1]} en tu inventario")
                                 print(" ")
+                                continue
                         else:
                             limpiar_consola()
                             print("⌘No tienes nada en tu inventario")  
                             print(" ")
+                            continue
                     else:
                         limpiar_consola()
                         print("⌘Debes especificar el objeto del que quieres informacion")  
@@ -358,6 +402,9 @@ class game:
                         limpiar_consola()
                         print("⌘Debes especificar con quien quieres pelear.")
                         print(" ")
+                case "misiones":
+                    self.player.mostrar_misiones()
+                    print(" ")
                 case "registros":
                     self.mostrar_registros_batallas()
                 case "menu":
@@ -369,8 +416,28 @@ class game:
                     print("⌘Comando no valido")
                     print(" ")
 
+    def game_over(self):
+        limpiar_consola()
+        print(r"""
+ ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ 
+██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗
+██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║██║   ██║█████╗  ██████╔╝
+██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║   ██║██║   ██║██╔══╝  ██╔══██╗
+╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝╚██████╔╝███████╗██║  ██║
+ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝
+""")
+        self.player.estadisticas()
+        print("")
+        print(f"{self.player.nombre} ha fallecido en batalla, como un heroe, ladron, bricon de puesntes, guardia fiel a la prole, o simplemente olgasaneando entre los pueblos del basto reino de Elrond.")
+        print("")
+        print("ahora solo queda volver a esa gran y maravillosa aventura a la que llamamos vida tu y yo, y bueno espero tu tengas mas que yo, os deseo lo mejor.")
+        input("_se despide ellechugista ;)")
+        exit()
+
+juego = Game()
+      
 if __name__ == "__main__":
-    juego = game()
-    juego.menu()
-    #juego.iniciar()
+
+    #juego.menu()
+    juego.iniciar()
 

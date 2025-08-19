@@ -120,7 +120,7 @@ cofre_normal = cofre()
 
 cofre_normal.agregar([monedax10.clonar(), guantes_cuero.clonar(), manzana.clonar(), casco_cuero.clonar(), coraza_cuero.clonar(), pantalones_cuero.clonar(), botas_cuero.clonar(), pocion_vida.clonar()])
 
-casa.agregar_objeto(cofre_normal)
+casa.agregar_objeto([cofre_normal, manzana.clonar(), manzana.clonar()])
 
 casa.agregar_objeto(botas.clonar())
 
@@ -135,6 +135,8 @@ casa.agregar_entidad(laura)
 valle_lidien.agregar_entidad(marcelito)
 
 valle_lidien.agregar_entidad(petriscax)
+
+valle_lidien.agregar_entidad(rufian)
 
 cumbre_rocosa.agregar_entidad(matrifutchka)
 

@@ -1,7 +1,2 @@
-__pycache__/batallas.cpython-312.pyc
-__pycache__/lugares.cpython-312.pyc
-__pycache__/objects.cpython-312.pyc
-__pycache__/personajes.cpython-312.pyc
-__pycache__/player.cpython-312.pyc
-__pycache__/utils.cpython-312.pyc
+__pycache__/*.*
 saves/*.pkl

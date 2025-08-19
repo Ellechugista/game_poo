@@ -1,5 +1,6 @@
 import random
 from utils import *
+from objects import *
 # entidad otros seres personajes y demás 
 class entidad:
     def __init__(self, nombre: str, dialogos, vida:float,descripcion:str=None, rutinas=None, nivel_combate=4, habilidades:dict = {"atacar": 5, "defender": 5}, animo=50):
@@ -13,6 +14,19 @@ class entidad:
         self.habilidades = habilidades
         self.nivel_combate = nivel_combate
         self.defensa_activa = False
+        
+        #estado para verificar si esta vivo o muerto (relacion con misiones)
+        self.estado = "vivo"
+        
+        #seccion de misiones 
+        self.misiones_objetivo = []
+        self.misiones_a_dar = []
+        
+        #estos dialogos otra mision son dialogos dento de la miscion que dan info pero desde otros personaje sno solo el personaje que las da
+        self.dialogos_otra_mision = []
+        
+        #inventario del personaje sin limites de peso
+        self.inventario = []
         
         #registramos la entidad en el registro de entidades para acceder a ella desde el registro
         RegistroEntidades.registrar(self)
@@ -47,34 +61,191 @@ class entidad:
         elif self.animo <= 0:
             self.animo = 0
         return clave
-    def hablar(self):
+    
+    def hablar(self, jugador):
         """aqui el sujeto tendrá una lista de diccionarios qué tendrán textos que mostrará según el carácter de la entidad, y otro diccionario que tendrá las respuestas que el usuario puede darle"""
-        #se deberia descriir el sujeto la primera vez que habla 
-        print(f"✧{self.descripcion}")
-        print(" ")
-        clave = self.calcular_animo()
-        #aqui se elige la respuesta dependiendo del animo de la entidad
-            
-        match clave:
-            case "normal":
-                respuesta = random.choice(self.dialogos["normal"])
-                print(f"{self.nombre}: {respuesta}")
-            case "feliz":
-                respuesta = random.choice(self.dialogos["content"])
-                print(f"{self.nombre}: {respuesta}")
-            case "triste":
-                respuesta = random.choice(self.dialogos["triste"])
-                print(f"{self.nombre}: {respuesta}")
-            case "enojado":
-                respuesta = random.choice(self.dialogos["enojado"])
-                print(f"{self.nombre}: {respuesta}")
-            case "repetido":
-                respuesta = random.choice(self.dialogos["repetido"])
-                print(f"{self.nombre}: {respuesta}")
-        """while True:
+        
+        if self.misiones_a_dar:
+            for m in self.misiones_a_dar:
+                if m.estado == "inactivo":
+                    m.dialogos_iniciar(jugador)
+                    break
+                elif m.estado == "activo":
+                    resultado = m.validar_objeto_inventario(jugador)
+                    print(resultado)
+                    print(all(resultado))
+                    input("pausa")
+                    if resultado == None or not all(resultado):
+                        m.dialogos_proceso()
+                        limpiar_consola()
+                        break
+                    elif resultado and all(resultado):
+                        m.completar_mision(jugador, tipo="exito")
+                        break
+                elif m.estado == "completado" or m.estado == "fallido":
+                    self.misiones_a_dar.remove(m)
+            return        
+                    
+        #esto da los dialogos opcionales si la mision esta activa
+        if self.dialogos_otra_mision:
+            for m in self.dialogos_otra_mision:
+                if m.estado == "activo":
+                    dialogos_otros = m.dialogos["info"]
+                    for d in dialogos_otros:
+                        #print(d)
+                        if self in d:
+                            #print(d[self])
+                            #inicia proceso de dialogo
+                            for anunciado in d[self]:
+                                for info, respuestas in anunciado.items():
+                                    while True:
+                                        limpiar_consola()
+                                        print(f"{self.nombre}: {info}")
+                                        print("")
+                                        print("Respuestas:")
+                                        for i, r in enumerate(respuestas):
+                                            print(f"{i+1}. {r}")
+                                        try:
+                                            #esperar seleccion del jugador
+                                            print(" ")
+                                            seleccion = int(input("> ")) - 1
+                                            if seleccion < 0 or seleccion >= len(respuestas):
+                                                limpiar_consola()
+                                                print("⌘Selección inválida. Intenta de nuevo.")
+                                                print(" ")
+                                                continue
+                                            elif seleccion == 0:
+                                                return
+                                            #añadimos lo que dijo el sujeto a los registros de la mision
+                                            m.añadir_registro(f"{self.nombre}: {info}")
+                                        except ValueError:
+                                            limpiar_consola()
+                                            print("⌘Entrada inválida. Por favor, ingresa un número.")
+                                            print(" ")
+                                            continue
+                                        break
+                        #esto rompe el for del que itera por cada dialogo en los dialogos otros
+                        #break
+
+                elif m.estado == "completado" or m.estado == "fallido":
+                    self.eliminar_dialogos_otra_mision(m)
+            limpiar_consola()
+        
+        else:    
+            clave = self.calcular_animo()
+            #aqui se elige la respuesta dependiendo del animo de la entidad
+                
+            match clave:
+                case "normal":
+                    respuesta = random.choice(self.dialogos["normal"])
+                    print(f"{self.nombre}: {respuesta}")
+                case "feliz":
+                    respuesta = random.choice(self.dialogos["content"])
+                    print(f"{self.nombre}: {respuesta}")
+                case "triste":
+                    respuesta = random.choice(self.dialogos["triste"])
+                    print(f"{self.nombre}: {respuesta}")
+                case "enojado":
+                    respuesta = random.choice(self.dialogos["enojado"])
+                    print(f"{self.nombre}: {respuesta}")
+                case "repetido":
+                    respuesta = random.choice(self.dialogos["repetido"])
+                    print(f"{self.nombre}: {respuesta}")
+                                
+                    
+    def agregar_dialogos_otra_mision(self, mision):
+        self.dialogos_otra_mision.append(mision)
+    
+    def eliminar_dialogos_otra_mision(self, mision):
+        self.dialogos_otra_mision.remove(mision)      
+                    
+    def luteador(self, jugador):
+        """esta funcion genera un loop donde el jugador decide que tomar de los objetos que tenia el personaje en su inventarios"""
+        
+        while True:
+            #mostramos la info
+            print(f"☺Contenido de {self.nombre} (jubilado):")
+            if self.inventario:
+                for item in self.inventario:
+                    if item.cantidad == 1:
+                        print(f"- {item.nombre}")
+                    else:
+                        print(f"- {item.nombre} (x{item.cantidad})")
+            else:
+                print("⌘No hay nada aqui.")
+                print(" ")
+                break
+                
             print(" ")
-            
-            comando = str(input("> ")).lower().split()"""
+            #aqui debera escribir que desea hacer con el contenido
+            comando = str(input("> ")).lower().split()
+            match comando[0]:
+                case "tomar":
+                    if len(comando) > 1:
+                        for item in self.inventario:
+                            if comando[1] == "cofre":
+                                limpiar_consola()
+                                print("⌘No puedes tomar un cofre")
+                                print(" ")
+                                continue
+                            elif item.nombre.lower() == comando[1]:
+                                if jugador.agregar_inventario(item):
+                                    self.extraer_inventario(item)
+                                    limpiar_consola()
+                                    print(f"⌘Has tomado {item.nombre}")
+                                    print(" ")
+                                    break
+                                else:
+                                    break
+                        else:
+                            limpiar_consola()
+                            print(f"⌘No hay {comando[1]} aqui")
+                            print(" ")
+                            continue
+                    else:
+                        limpiar_consola()
+                        print("⌘Debes especificar que quieres tomar")
+                        print(" ")
+                        continue
+                case "dejar":
+                    if len(comando) > 1:
+                        for item in jugador.inventario:
+                            if item.nombre.lower() == comando[1]:
+                                self.agregar_inventario(item)
+                                jugador.extraer_inventario(item)
+                                limpiar_consola()
+                                print(f"⌘Has dejado {item.nombre}")
+                                break
+                        else:
+                            limpiar_consola()
+                            print(f"⌘No tienes {comando[1]} en tu inventario")
+                            print(" ")
+                            continue
+                    else:
+                        limpiar_consola()
+                        print("⌘Debes especificar que quieres dejar")
+                        print(" ")
+                        continue
+                case "inventario":
+                    limpiar_consola()
+                    jugador.mostrar_inventario()
+                    continue
+                case "salir":
+                    limpiar_consola()
+                    break
+                case _:
+                    limpiar_consola()
+                    print("⌘Que es lo que quieres hacer?")
+                    print(" ")
+                    continue
+
+    def soltar_azar(self):
+        probabilidad =0.4
+        if not self.inventario:
+            return
+        
+        seleccionados = [item for item in self.inventario if random.random() < probabilidad]
+        return seleccionados
 
     # aqui van las rutinas de la entidad lo que hace, aun no se como hacerlo
     def rutina_activada(self, rutina):
@@ -232,8 +403,39 @@ class entidad:
         self.defensa_activa = True
         print(f"{self.nombre} se defiende")
         print(" ")
-        
-        
+    
+    def agregar_inventario(self, objeto):
+        if isinstance(objeto, list):
+            for nuevo_item in objeto:
+                for item in self.inventario:
+                    if item.nombre == nuevo_item.nombre:
+                        item.cantidad += nuevo_item.cantidad
+                        break
+                else:
+                    self.inventario.append(nuevo_item)
+        else:
+            for item in self.inventario:
+                if item.nombre == objeto.nombre:
+                    item.cantidad += objeto.cantidad
+                    break
+            else:
+                self.inventario.append(objeto)
+       
+    def extraer_inventario(self, objeto):
+        limpiar_consola()
+        for item in self.inventario:
+            if item.nombre == objeto.nombre:
+                if item.cantidad > objeto.cantidad:
+                    item.cantidad -= objeto.cantidad
+                elif item.cantidad == objeto.cantidad:
+                    self.inventario.remove(item)
+                else:
+                    print(f"No tienes suficiente cantidad de {objeto.nombre} en tu inventario")
+                break
+        else:
+            print(f"No tienes {objeto.nombre} en tu inventario")
+            
+    
 # -----------ENTIDADESSSSSSS----------------------------------------------
 #estendemos la clase entidad para crear razas o tipos de entidades
 #humanos
@@ -346,9 +548,13 @@ marcelito = humano("Marcelito", dialogos_ejemplos, 100, "Un chico joven. muy res
 
 laura = humano("Laura", dialogos_ejemplos, 100, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual, en las tardes trabaja en la herreria de su tio.",nivel_combate=9,habilidades={"atacar":14,"defender":10}, animo=50)
 
+laura.agregar_inventario([monedax10, monedax10, monedax10, escudo])
+
 madre = humano("Madre", dialogos_ejemplos, 100, "Esta mujer es tu madre, una persona gastada pero con porte inquebrantable que ha llevado una vida dificil pero con mucho amor, pues tu su hijo es su mas grande logro, lee algunas veces y se impresiona con la simplesa de la vida.")
 
 matrifutchka = duende("Mtrifutchka", dialogos_ejemplos, 80, "Este sujeto, es curioso y misterioso, se arrincona a una esquina del lugar donde menos pega a luz, parece herido, pero no permite hablar, una vibra oscura irradia de el", nivel_combate=35, habilidades={"atacar": 34, "defender": 22}, animo=25)
+
+rufian = orco("melchorro", dialogos_ejemplos, 130, "A prendas rasgadas y maltratades este sujeto irradia un mal augurio, pues la vida no fue sutil con el, su cuerpo lleno de sicatrices y heridas lo demuestran, a de ser un gerrero fijo", nivel_combate=20, habilidades={"atacar": 20, "defender": 23}, animo=10)
 
 
 
@@ -357,8 +563,5 @@ if __name__ == "__main__":
     """marcelito = humano("marcelito", dialogos_ejemplos, 100)
     marcelito.presentacion()
     marcelito.hablar("repetido")"""
-    
-    for p in entidad.todas_las_instancias:
-        print(f"- {p.nombre}: {p.descripcion}")
-        print(" ")
+
 

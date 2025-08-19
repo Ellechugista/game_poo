@@ -146,6 +146,8 @@ class contenedor:
                                     print(f"⌘Has tomado {item.nombre}")
                                     print(" ")
                                     break
+                                else:
+                                    break
                         else:
                             limpiar_consola()
                             print(f"⌘No hay {comando[1]} aqui")
@@ -221,10 +223,11 @@ class contenedor:
             
     def llenar(self, objeto, calidad:str=["malo", "normal", "bueno", "excelente"]):
         """esta funcion llenara el cofre de manera alazar deacuerdo a su calidad"""
-        malo_list = [espada, escudo, hacha, lanza, casco, coraza, botas, guantes]
-        normal_list = [casco_cuero, coraza_cuero, botas_cuero, guantes_cuero]
-        bueno_list = [orbe_verde, orbe_rojo, baston_curativo]
-        excelente_list = [monedax10, monedax5, monedax2, moneda, orbe]
+        pass
+        #malo_list = [espada, escudo, hacha, lanza, casco, coraza, botas, guantes]
+        #normal_list = [casco_cuero, coraza_cuero, botas_cuero, guantes_cuero]
+        #bueno_list = [orbe_verde, orbe_rojo, baston_curativo]
+        #excelente_list = [monedax10, monedax5, monedax2, moneda, orbe]
         
         match calidad:
             case "malo":
@@ -259,7 +262,11 @@ orbe = objeto("orbe", "un orbe de poder")
 
 
 #elementos de guerra
-espada = vestimenta("Espada", "Una espada de acero","arma", efectos={"ataque":5}, peso=2)
+espada_madera = vestimenta("Espada_madera", "Una espada de madera, un arma solida de defenza precaria","arma", efectos={"ataque":3}, peso=2)
+espada_metal = vestimenta("Espada_metal", "Una espada de metal gastado, un arma simple de defenza precaria","arma", efectos={"ataque":5}, peso=3)
+espada_acero = vestimenta("Espada_acero", "Una espada de acero filosa y de calidad normla, muy comun en soldados y guardias","arma", efectos={"ataque":7}, peso=7)
+espada_ebano = vestimenta("Espada_ebanoo", "Una espada de Ebano muy rara y tipica de la segunda era, con un filo espectacular, pero peso extremo","arma", efectos={"ataque":13}, peso=10)
+
 escudo = vestimenta("Escudo", "Un escudo de madera","escudo", efectos={"defensa":10}, peso=4)
 hacha = vestimenta("Hacha", "Un hacha de guerra","arma", efectos={"ataque":8}, peso=3)
 lanza = vestimenta("Lanza", "Una lanza de hierro","arma", efectos={"ataque":6}, peso=2.5)

@@ -123,24 +123,47 @@ class batalla:
             limpiar_consola()
             print("⌘Has ganado la batalla")
             print(" ")
-            print("⌘¿Deseas dejar vivo al contrincante? si/no")
-            respuesta = str(input("> ")).lower().split()
-            if respuesta[0] == "no":
-                lugar_actual = self.jugador.lugar_actual
-                if self.contrincante in lugar_actual.presentes:
-                    lugar_actual.quitar_entidad(self.contrincante)
-                    self.vivo = False
-                    limpiar_consola()
-                    print("⌘Culminas el sufrimiento de tu contrincante, deseandole una mejor vida en el mas alla")
-                    print(" ")
+            
+            #bucle de respuesta
+            while True:
+                print("⌘¿Deseas dejar vivo al contrincante? si/no")
+                respuesta = str(input("> ")).lower().split()
+                if respuesta[0] == "no":
+                    lugar_actual = self.jugador.lugar_actual
+                    if self.contrincante in lugar_actual.presentes:
+                        lugar_actual.quitar_entidad(self.contrincante)
+                        self.vivo = False
+                        limpiar_consola()
+                        print("⌘Culminas el sufrimiento de tu contrincante, deseandole una mejor vida en el mas alla")
+                        print(" ")
+                    else:
+                        limpiar_consola()
+                        print("El contrincante ya no se encuntra en el lugar.")
+                        self.vivo = 0
+                    
+                    #ahora como el sujeto murio debe dropearnos su pequeño inventario
+                    self.contrincante.luteador(self.jugador)
+                    break
+                                        
+                elif respuesta[0] == "si":
+                    self.vivo = True
+                    
+                    #aqui si hay una probabilidad de que el contrincante suelte un item de su inventario
+                    recompensas = self.contrincante.soltar_azar()
+                    if recompensas or not recompensas == None:
+                        for item in recompensas:
+                            print(f"⌘{self.contrincante.nombre} ha dejado caer {item.nombre}.")
+                            print("")
+                        
+                        self.jugador.lugar_actual.agregar_objeto(recompensas) 
+                    
+                    print("⌘El contrincante se aleja gravemente herido")
+                    break
                 else:
                     limpiar_consola()
-                    print("El contrincante ya no se encuntra en el lugar.")
-                    self.vivo = 0
-                                     
-            elif respuesta[0] == "si":
-                self.vivo = True
-                print("⌘El contrincante se aleja gravemente herido")
+                    print("⌘Digita una opcion vlida")
+                    print("")
+                    continue
                 
             puntos = ((self.turno*0.25) + (self.jugador.vida)*0.50) * 0.20
             puntos = round(puntos, 2)

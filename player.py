@@ -2,7 +2,7 @@ import random
 from objects import consumible, vestimenta
 from utils import *
 class player:   
-    def __init__(self, nombre:str, lugar_actual, vida:float=10, habilidades:dict = {"atacar": 5, "defender": 5}, nivel_combate = 10):
+    def __init__(self, nombre:str, lugar_actual, vida:float=100, habilidades:dict = {"atacar": 5, "defender": 5}, nivel_combate = 10, control_juego= None):
         self.nombre = nombre
         self.vida = round(vida, 1)
         self.inventario = []
@@ -13,9 +13,31 @@ class player:
         self.lugar_actual = lugar_actual 
         self.nivel_combate = round(nivel_combate, 2)
         self.defensa_activa = False
+        self.control_juego = control_juego
+        
+        #seccion de misiones
+        self.registro_misiones = []
 
+
+    #misiones
+    def agregar_mision(self, mision):
+        """esta funcion agrega una mision al jugador como activa"""
+        self.registro_misiones.append(mision)
+        
+    def mostrar_misiones(self):
+        limpiar_consola()
+        if self.registro_misiones:
+            print("="*20)
+            for mision in self.registro_misiones:
+                if mision.estado == "activo":
+                    print(f"#{mision.id} - {mision.nombre} [Mision activa]")
+                else:
+                    print(f"#{mision.id} - {mision.nombre} [Mision pasada]")
+        else:
+            print("⌘No tienes misiones activas")
         
     def estadisticas(self):
+        print(f"{"-"*10}ESTADISTICAS{"-"*10}")
         print(f"☺ Nombre: {self.nombre}")
         print(f"🎔 Vida: {self.vida}")
         print(f"⍚ Nivel de combate: {self.nivel_combate}")
@@ -58,7 +80,7 @@ class player:
             for item in self.inventario:
                 if item.nombre == objeto.nombre:
                     item.cantidad += objeto.cantidad
-                    return True
+                    break
             else:
                 self.inventario.append(objeto)
                 
@@ -75,11 +97,15 @@ class player:
                 if item.cantidad > objeto.cantidad:
                     item.cantidad -= objeto.cantidad
                     self.peso_inventario -= objeto.peso * objeto.cantidad
+
                 elif item.cantidad == objeto.cantidad:
                     self.inventario.remove(item)
                     self.peso_inventario -= objeto.peso * objeto.cantidad
-                else:
-                    print(f"No tienes suficiente cantidad de {objeto.nombre} en tu inventario")
+
+                elif item.cantidad < objeto.cantidad:
+                    self.inventario.remove(item)
+                    self.peso_inventario -= objeto.peso * objeto.cantidad
+                    
                 break
         else:
             print(f"No tienes {objeto.nombre} en tu inventario")
@@ -269,12 +295,14 @@ class player:
                     chek= self.agregar_inventario(item)
                     if chek:
                         self.lugar_actual.quitar_objeto(item)
-                        break
+                        return
                     else:
-                        break
+                        return
         else:
-            print(f"⌘No hay {objeto} en este lugar")
-            
+            print(f"⌘No hay {objeto} aqui.")
+            print("")
+        
+        
     def calcular_ventaja(self, contrincante):
         """esta funcion devuelve si hay ventaja en el combate y devuelve true si hay ventaja y false si no hay ventaja y iguales si son iguales"""
         #cuando el nivel de combate del jugador es mayor al del contrincante
@@ -425,10 +453,22 @@ class player:
     
     def game_over(self):
         """esta funcion hace que el jugador muera"""
-        print("⌘Has muerto")
+        print(r"""
+▓█████▄ ▓█████ ▄▄▄      ▓█████▄ 
+▒██▀ ██▌▓█   ▀▒████▄    ▒██▀ ██▌
+░██   █▌▒███  ▒██  ▀█▄  ░██   █▌
+░▓█▄   ▌▒▓█  ▄░██▄▄▄▄██ ░▓█▄   ▌
+░▒████▓ ░▒████▒▓█   ▓██▒░▒████▓ 
+ ▒▒▓  ▒ ░░ ▒░ ░▒▒   ▓▒█░ ▒▒▓  ▒ 
+ ░ ▒  ▒  ░ ░  ░ ▒   ▒▒ ░ ░ ▒  ▒ 
+ ░ ░  ░    ░    ░   ▒    ░ ░  ░ 
+   ░       ░  ░     ░  ░   ░    
+ ░                       ░      
+""")
         print(" ")
         print("⌘Game Over")
-        return False
+        input("_")
+        self.control_juego.game_over()
 
 
 
