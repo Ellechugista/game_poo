@@ -57,7 +57,7 @@ _Puedes seleccionar entre `Iniciar`, lo cual iniciara una partida nueva por defe
 ⌘Datos guardados
 ```
 * `Cargar`: listara las partidas guardadas:
-
+tambien puede usar la palabra clave `del"nombre de la partida.pkg"`, para eliminar la partida guardada y manejar un mejor control.
 ```shell
 > cargar
 ⌘Archivos de guardado disponibles:
