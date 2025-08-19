@@ -218,12 +218,19 @@ _⚠️ Este mapa está sujeto a cambios y correcciones a medida que avanza la h
   </summary>
   <ul>
    <li> <b>NEW</b>: Se implemento sistema de misiones a partir de una nueva clase mision(), esta clase tiene muchas funciones pero actualmente las misiones que realiza son solo de traer un objeto y presentarlo al NPC que da la mision, tambien se ha añadido sistema de recompensas por mision</li> 
+    <br>
    <li> <b>NEW</b>: las clases personajes() y player(), para mustrar y gestionar la informacion que se muestra aserca de las misiones, y para la clase de personajes se modifico casi por completo el metodo hablar(), para implementar 3 estados de los cuale ya hablo en la seccion d einteracion de este documento </li>
+    <br>
    <li> <b>NEW</b>: Ahora al momento de decidir si dejar vivo o no a un contrincante esta la posibilidad si lo dejas vivo de un 30% de que el personaje droppee uno o varios objetos que tenga en su inventario para obtener recompensa, o si lo aniquilas podras looterlo y acceder a su inventario y tomar o dejar objetos en su cadaver</li>
+    <br>
    <li> <b>NEW</b>: Ya puedes eliminar las partidas guardadas anteriormente con la palabra clave del seguido del nombre de la partida guardada en la seccion de cargar partida</li>
+    <br>
    <li> <b>NEW</b>: Ya hay seccion de game over y fin del juego en la parte final con un rediseño general de menus</li>
+    <br>
    <li> <b>BUG</b>: correccion al momento de no digitar nada en el menu abrir cofre, crash in game</li>
+    <br>
    <li> <b>BUG</b>: correccion al momento de añadir un objeto al inventario de un personaje, no permitia listas y multiplicaba cantidades</li> 
+    <br>
    <li> <b>BUG</b>: correccion de bugs logicos generales a lo largo de todo el codigo ninguno critico</li> 
   </ul>
    <br>
