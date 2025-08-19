@@ -18,7 +18,10 @@ _Descarga la version del proyecto junto a todas sus dependencias, luego ejecuta 
 ```shell
 python game.py
 ```
-## COMANDOS BASICOS 🗒️
+## COMANDOS
+el sistema funciona digitando manuelmente palabras clave para su interaccion dentro de cada situacion y ecenario podras hacer siertos comandos para interactuar entre si
+
+### COMANDOS BASICOS 🗒️
 
 * Menu:
 ```shell
@@ -36,7 +39,7 @@ python game.py
 ```
 _Puedes seleccionar entre `Iniciar`, lo cual iniciara una partida nueva por defecto desde 0, `Guardar`, este comando guardara el estado de la partida actual con nombre de datos como por defecto pero puedo añadirce el nombre del archivo save si se escribe luego de llamar guardar en consola, `Cargar`, esto cargara un estado guardado en la carpeta saves, pero si no la hay crea la carpeta y mencionciona que no hay partidas guardadas, `Salir`, esto saldra de la ejecucion del juego._
 
-* Iniciar: pedira el nobre del jugador
+* `Iniciar`: pedira el nobre del jugador
   
 ```shell
 > iniciar
@@ -45,7 +48,7 @@ _Puedes seleccionar entre `Iniciar`, lo cual iniciara una partida nueva por defe
 > elechugista
 ```
 
-* Guardar:
+* `Guardar`:
 
 ```shell
 > guardar nombre_de_la_partida
@@ -65,19 +68,19 @@ _Puedes seleccionar entre `Iniciar`, lo cual iniciara una partida nueva por defe
 > 2025-04-11_nombre_de_la_partida
 ```
 
-  * `ir`: comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador
+* `ir`: comando basico para cambiar el lugar actual en el que se encuentra el personaje dentro del mundo, debe ser una direccion disponible o acorde a la que se muestra en el navegador
 ```shell
 >ir "este".
 ```
-  * `hablar`: comando basico para hablar con los personajes dentro de la escena, estos dependiendo del estado de animo tendran diferentes comentarios predefinidos (normal, feliz, triste y enojado).
+* `hablar`: comando basico para hablar con los personajes dentro de la escena, estos dependiendo del estado de animo tendran diferentes comentarios predefinidos (normal, feliz, triste y enojado).
 ```shell
 >hablar "nombre del personaje con quien hablar"
 ```
-  * tomar: comando basico para tomar objetos tirados dentro del escenario y luego seran añadidos al inventario del jugador, puedes tomar de todo, siempre y cuando no sea un almacenador o recipiente (cofres).
+* `tomar`: comando basico para tomar objetos tirados dentro del escenario y luego seran añadidos al inventario del jugador, puedes tomar de todo, siempre y cuando no sea un almacenador o recipiente (cofres).
 ```shell
 >tomar "nombre del objeto"
 ```
-  * `inventario`: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad, tambien mostrara su limite de peso para el jugador y dentro de el puedes hacer mas cosas:
+* `inventario`: comando basico para mostrar el contenido del inventario del jugador dentro de un escenario, este enlistara los objetos y su cantidad, tambien mostrara su limite de peso para el jugador y dentro de el puedes hacer mas cosas:
 ```shell
 >inventario
 Tienes:
@@ -86,24 +89,24 @@ Tienes:
 ----------------------------------1.5/20
 >
 ```
-   - `tirar` comando basico para soltar o quitar un objeto del inventario, con esto lo tiraras y lo dejaras en el lugar actual.
-   - `usar` comando basico para aplicar los efectos de un objeto CONSUMIBLE
-   - `equipar` comando basico que permite equipar un objeto de la clase VESTIMENTA y surte sus efectos en las estadisticas del jugador
-   - `desequipar` comando para hacer lo contrario a equipar y devuelve el objeto al inventario
-   - `informacion` tambien puedes mostrar la informacion directamente dentro del inventario funciona igual que informacion en plena ejecucion principal.
+  * `tirar` comando basico para soltar o quitar un objeto del inventario, con esto lo tiraras y lo dejaras en el lugar actual.
+  * `usar` comando basico para aplicar los efectos de un objeto CONSUMIBLE
+  * `equipar` comando basico que permite equipar un objeto de la clase VESTIMENTA y surte sus efectos en las estadisticas del jugador
+  * `desequipar` comando para hacer lo contrario a equipar y devuelve el objeto al inventario
+  * `informacion` tambien puedes mostrar la informacion directamente dentro del inventario funciona igual que informacion en plena ejecucion principal.
 
-  * abrir: comando basico para abrir un recipiente o cofre, este comando muestra y lista el contenido dentro del recipiente, dentro de el puedes:
-    
-    - `tomar:` comando basico para agregar el objeto a tu inventario. 
-    - `dejar:` comando basico para dejar un objeto dentro del recipiente. 
-    - `salir:` comando basico para salir del listado de objetos de un recipiente.
-    - `inventario:` este comando mostrara el meno de inventario con sus propias ejecuciones.
+* `abrir` : comando basico para abrir un recipiente o cofre, este comando muestra y lista el contenido dentro del recipiente, dentro de el puedes:
+    - `tomar` comando basico para agregar el objeto a tu inventario. 
+    - `dejar` comando basico para dejar un objeto dentro del recipiente. 
+    - `salir` comando basico para salir del listado de objetos de un recipiente.
+    - `inventario` este comando mostrara el meno de inventario con sus propias ejecuciones.
 
-  * `informacion`: comando basico para mostrar la informacion y estadisticas de un objeto dentro de tu inventario.
+* `informacion`: comando basico para mostrar la informacion y estadisticas de un objeto dentro de tu inventario.
 ```shell
 >informacion "nombre de objeto"
+>informacion mision (ID mision)
 ```
-  * `registros`: comando basico para mostrar y listar los registros de combate, un pequeño histrial de lo acontecido.
+* `registros`: comando basico para mostrar y listar los registros de combate, un pequeño histrial de lo acontecido.
 ```shell
 ⊢---------------------Registros de Batallas----------------------⊣
 
@@ -121,9 +124,26 @@ Tienes:
 ⌘El contrincante ha sido dejado vivo
 ⊢---------------------------------------------------⊣
 ```
-## COMANDOS EN ATAQUE ⚔️
 
-  * `atacar`: comando basico para iniciar un combate contra un personaje, el combate funciona por turnos en dode se puede atacar y defender, usando como base las habilidades de lucha y la diferencia de nivel entre los contrincantes, al iniciar un combate entraras en un bucle en donde solo podras salir muestro o victorioso, ya que batirce a duelo contra alguien mas no da chance a intentarlo mas tarde.
+* `estadisticas`: esta funcion imprime toda la informacion de las estadisticas del jugador incluyendo vida y habilidades
+```shell
+----------ESTADISTICAS----------
+☺ Nombre: Mariano
+🎔 Vida: 10
+⍚ Nivel de combate: 10
+❖ Habilidades: Ataque:10 Defensa:10
+```
+ * `estadisticas + (nombre)`: esto imprimira las estadisticas de un personaje presente en la escena
+
+* `misiones`: esto te da toda la informacion de las misiones asignadas al jugador completadas y no cmpletadas
+```shell
+====================
+#1 - dias laborados [Mision activa]
+```
+
+### COMANDOS EN ATAQUE ⚔️
+
+* `atacar`: comando basico para iniciar un combate contra un personaje, el combate funciona por turnos en dode se puede atacar y defender, usando como base las habilidades de lucha y la diferencia de nivel entre los contrincantes, al iniciar un combate entraras en un bucle en donde solo podras salir muestro o victorioso, ya que batirce a duelo contra alguien mas no da chance a intentarlo mas tarde.
 ```shell
 >atacar "nombre de la entidad a luchar"
 ```
@@ -154,6 +174,35 @@ _Una vez dentro podras ejecutar los siguientes comandos:_
 4. El daño final siempre será un número aleatorio entre la mitad del daño de la habilidad y el daño completo de la habilidad; tanto para el jugador como para el NPC, el daño se calcula de la misma manera.
 
 * `defender`: este comando activa el modo de defensa del jugador y se reinicia una vez finalizada una ronda de los turnos del oponente y del jugador.
+
+### COMANDO DE INTERACCION 🧝‍♂️
+
+Hay tres flujos posibles dentro de este escenario luego de dar el comando `hablar`.
+
+1. el primero es cuando el personaje no tiene misiones para dar o las misiones que le dan a ese personaje otros dialogos no estan activas, el simplemente dara al azar un dialogo deacuerdo a su estado de animo.
+```bash
+Petriscax: Hoy no tengo emociones fuertes.
+```
+
+2. el segundo es cuando el personaje activa una de las misiones que tiene para dar y suelta los dialogos respectivos
+```bash
+Laura: Ey si tu ven
+
+Respuestas:
+1. que pasa?, enojada?
+2. como va la situa
+3. me largo de aqui
+```
+
+3. el tersero se limita a 3 estados durnte mision que son exactamente iguales y si otro personaje tiene asignada una mision activa donde hay dialogos de el debera decirlos asi no tenga misiones para dar dandole complicidad segundaria a una mision dada por otro personaje
+```bash
+Marcelito: Carajo, en esta vida nadie piensa en los demas...
+
+Respuestas:
+1. ...
+2. ¿que sucede?
+3. disculpe, estoy buscando unos fulanos que debieron pasar corriendo por aqui, ¿lo ha visto?
+```
 
 ## MAPA 🧭
 _⚠️ Este mapa está sujeto a cambios y correcciones a medida que avanza la historia.._
