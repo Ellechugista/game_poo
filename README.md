@@ -214,6 +214,25 @@ _⚠️ Este mapa está sujeto a cambios y correcciones a medida que avanza la h
 ## Actualizaciones 📈
 <details>
   <summary>
+    <code><strong>0.1.7 GUI</strong></code>
+  </summary>
+  <ul>
+   <li> <b>NEW</b>: Se implemento sistema grafico con  [RICH](https://rich.readthedocs.io/en/stable/index.html)</li> 
+    <br>
+   <li> <b>NEW</b>: Se cambio la logica de respuestas de todos las funciones y clases para que se adaptaran al sistema de GUI</li>
+    <br>
+   <li> <b>NEW</b>: Diseño en todos los sistemas, lucha, hablar, inventario, registros, estadisticas.</li>
+    <br>
+   <li> <b>BUG</b>: Correccion al momento de no digitar nada en el menu abrir el luteador luego de una pelea, crash in game</li>
+    <br>
+   <li> <b>BUG</b>: Logica mejorada en el sistema de pelea.</li> 
+  </ul>
+   <br>
+</details>
+
+
+<details>
+  <summary>
     <code><strong>0.1.6 Misiones update</strong></code>
   </summary>
   <ul>
