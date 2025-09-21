@@ -76,7 +76,7 @@ tambien puede usar la palabra clave `del"nombre de la partida.pkg"`, para elimin
 ```shell
 >hablar "nombre del personaje con quien hablar"
 ```
-* `tomar`: comando basico para tomar objetos tirados dentro del escenario y luego seran añadidos al inventario del jugador, puedes tomar de todo, siempre y cuando no sea un almacenador o recipiente (cofres).
+* `tomar`: comando basico para tomar objetos tirados dentro del escenario y luego seran añadidos al inventario del jugador, puedes tomar de todo, siempre y cuando no sea un almacenador o recipiente (cofres), en cuanto a estos ultimos ahora ya puedes tomar todo el contenido del cofre hasta donde el limite de peso te alcance a tu inventario con `tomar *`.
 ```shell
 >tomar "nombre del objeto"
 ```

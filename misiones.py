@@ -57,7 +57,7 @@ class Mision:
         print(f"[Misión '{self.nombre}' iniciada.]")
         print("")
         
-    def dialogos_iniciar(self, jugador:player):
+    def dialogos_iniciar(self, jugador:player, view:Layout):
         """esta funcion inicia la secuencia de dialogos y respuestas para iniciar o aceptar una mision"""
         limpiar_consola()
         dialogos_iniciar = self.dialogos["iniciar"]
@@ -66,30 +66,43 @@ class Mision:
             for key, value in d.items():
                 limpiar_consola()
                 while True:
-                    print(f"{self.personaje_asigna.nombre}: {key}")
-                    print(" ")
-                    print("Respuestas:")
-                    #imprimir las respuestas
+                    view["conten"]["dialogos"]["dialogo"].update(Panel(f"[dark_orange3]{self.personaje_asigna.nombre}[/][bright_black]: {key}[/]", style="dodger_blue1", title="Dialogo de Entidad"))
+                    
+                    #respuestassssss
+                    text_respuestas=""
+                    text_respuestas += "Respuestas:\n"
+                    #añadimos las respuestas
                     for i, respuesta in enumerate(value):
-                        print(f"{i+1}. {respuesta}")
+                        text_respuestas += f"[green]{i+1}.[/][white] {respuesta}[/]\n"
+                    
+                    #añadimos la info como panel al layout
+                    view["conten"]["dialogos"]["respuestas"].update(Panel(Text.from_markup(text_respuestas), style="dodger_blue2"))
+                    #actualizamos vista
+                    view["conten"]["dialogos"]["respuestas"].visible = True
+                    
+                    #centrador
+                    centra = Layout(Panel(view, style="bright_black"))
+                    
+                    #imprimimos layout 
+                    consola.print(centra)
                     try:
                         #añadimos lo que dijo el sujeto a los registros de la mision
                         self.añadir_registro(f"{self.personaje_asigna.nombre}: {key}")
-                        #esperar seleccion del jugador
-                        print(" ")
-                        seleccion = int(input("> ")) - 1
+                        #esperar seleccion del jugador y reiniciamos response
+                        view["response"].visible = False
+                        seleccion = int(input("➥ ")) - 1
                         if seleccion < 0 or seleccion >= len(value):
-                            limpiar_consola()
-                            print("⌘Selección inválida. Intenta de nuevo.")
-                            print(" ")
+                            view["response"].update(Panel("⌘ Selección inválida. Intenta de nuevo.", style="alert"))
+                            #actualizamos response
+                            view["response"].visible = True
                             continue
                         elif seleccion == 0:
                             return
                         
                     except ValueError:
-                        limpiar_consola()
-                        print("⌘Entrada inválida. Por favor, ingresa un número.")
-                        print(" ")
+                        view["response"].update(Panel("⌘ Entrada inválida. Por favor, ingresa un número.", style="alert"))
+                        #actualizamos response
+                        view["response"].visible = True
                         continue
                     break
 
@@ -98,7 +111,7 @@ class Mision:
         self.añadir_registro(f"se ha asignado la mision a {jugador.nombre}")
         #self.añadir_registro(self.dialogos["info"][0])
          
-    def dialogos_proceso(self):
+    def dialogos_proceso(self, view:Layout):
         limpiar_consola()
         dialogos_proceso = self.dialogos["proceso"]
         
@@ -106,46 +119,72 @@ class Mision:
             #imprime el dialogo y las respuestas la llave dialogo del personaje y value lista de respuestas para player
             for key, value in d.items():
                 while True:
-                    limpiar_consola()
-                    print(f"{self.personaje_asigna.nombre}: {key}")
-                    print(" ")
-                    print("Respuestas:")
+                    view["conten"]["dialogos"]["dialogo"].update(Panel(f"[dark_orange3]{self.personaje_asigna.nombre}[/][bright_black]: {key}[/]", style="dodger_blue1", title="Dialogo de Entidad"))
+                    
+                    #respuestassssss
+                    text_respuestas=""
+                    text_respuestas += "Respuestas:\n"
+                    
                     #imprimir las respuestas
                     for i, respuesta in enumerate(value):
-                        print(f"{i+1}. {respuesta}")
+                        text_respuestas += f"[green]{i+1}.[/][white] {respuesta}[/]\n"
+                    
+                    #añadimos la info como panel al layout
+                    view["conten"]["dialogos"]["respuestas"].update(Panel(Text.from_markup(text_respuestas), style="dodger_blue2"))
+                    #actualizamos vista
+                    view["conten"]["dialogos"]["respuestas"].visible = True
+                    
+                    #centrador
+                    centra = Layout(Panel(view, style="bright_black"))
+                    
+                    #imprimimos layout 
+                    consola.print(centra)
                     try:
                         #añadimos lo que dijo el sujeto a los registros de la mision
                         self.añadir_registro(f"{self.personaje_asigna.nombre}: {key}")
-                        #esperar seleccion del jugador
-                        print(" ")
+                        #esperar seleccion del jugador y reiniciamos response
+                        view["response"].visible = False
                         seleccion = int(input("> ")) - 1
                         if seleccion < 0 or seleccion >= len(value):
-                            limpiar_consola()
-                            print("⌘Selección inválida. Intenta de nuevo.")
-                            print(" ")
+                            view["response"].update(Panel("⌘ Selección inválida. Intenta de nuevo.", style="alert"))
+                            #actualizamos response
+                            view["response"].visible = True
                             continue
                         elif seleccion == 0:
                             return
                         
                     except ValueError:
-                        limpiar_consola()
-                        print("⌘Entrada inválida. Por favor, ingresa un número.")
-                        print(" ")
+                        view["response"].update(Panel("⌘ Entrada inválida. Por favor, ingresa un número.", style="alert"))
+                        #actualizamos response
+                        view["response"].visible = True
                         continue
                     break
     
     def describir_mision(self):
-        limpiar_consola()
-        print("="*10)  
-        print(f"Mision: {self.nombre}")
-        print(f"ID: {self.id}")
-        print(f"objetivo: {self.objetivos}")
-        print(f"Descripcion: {self.descripcion}")
-        print(f"Estado: {self.estado}")
-        print(f"Registros: ")
-        for r in self.registros[-5:]:
-            print(f"- {r}")
-        print("")
+        #gui
+        view = Layout()
+        view.split_column(
+            Layout(name="info"),
+            Layout(name="registros", size=10)
+        )
+        
+        info=Text.from_markup(f"[cyan]❏ Mision[/]: [white]{self.nombre}\n[blue]⥈ ID[/]: {self.id}\n[green]⎚ objetivo[/]: {self.objetivos}\n[dark_orange3]☖ Estado:[/] {self.estado}[/white]\n[yellow]▩ Descripcion[/]: \n[bright_black]{self.descripcion}[/]\n")
+    
+        formato=""
+        for r in self.registros[-8:]:
+            formato += (f"[white][green]⊳[/] {r}[/]\n")
+            
+        regi = Text.from_markup(formato)
+            
+        #actualizamos los layouts
+        view["info"].update(Panel(info, title="Descripcion de mision", style="chartreuse4"))
+        
+        view["registros"].update(Panel(regi, title="Registros", style="orange_red1"))
+        
+        #imprimimos el view
+        consola.print(view)
+        consola.input("⌬ Presiona cualquier cosita para continuar")
+        return
      
     def añadir_registro(self, texto:str):
         texto = texto.lower()
@@ -165,7 +204,7 @@ class Mision:
             resultados.append(encontrado)
         return resultados
     
-    def completar_mision(self, jugador:player, tipo:str = "exito"):
+    def completar_mision(self, jugador:player, view:Layout, tipo:str = "exito"):
         if tipo == "exito":
             #cambios de atrivutos
             self.estado = "completado"
@@ -181,65 +220,83 @@ class Mision:
                 #imprime el dialogo y las respuestas la llave dialogo del personaje y value lista de respuestas para player
                 for key, value in d.items():
                     while True:
-                        limpiar_consola()
-                        print(f"{self.personaje_asigna.nombre}: {key}")
-                        print(" ")
-                        print("Respuestas:")
+                        view["conten"]["dialogos"]["dialogo"].update(Panel(f"[dark_orange3]{self.personaje_asigna.nombre}[/][bright_black]: {key}[/]", style="dodger_blue1", title="Dialogo de Entidad"))
+                        
+                        #respuestassssss
+                        text_respuestas=""
+                        text_respuestas += "Respuestas:\n"
+                        
                         #imprimir las respuestas
                         for i, respuesta in enumerate(value):
-                            print(f"{i+1}. {respuesta}")
+                            text_respuestas += f"[green]{i+1}.[/][white] {respuesta}[/]\n"
+                        #añadimos la info como panel al layout
+                        view["conten"]["dialogos"]["respuestas"].update(Panel(Text.from_markup(text_respuestas), style="dodger_blue2"))
+                        #actualizamos vista
+                        view["conten"]["dialogos"]["respuestas"].visible = True
+                        
+                        #centrador
+                        centra = Layout(Panel(view, style="bright_black"))
+                        
+                        #imprimimos layout 
+                        consola.print(centra)
                         try:
                             #añadimos lo que dijo el sujeto a los registros de la mision
                             self.añadir_registro(f"{self.personaje_asigna.nombre}: {key}")
-                            #esperar seleccion del jugador
-                            print(" ")
+                            #esperar seleccion del jugador y reiniciamos response
+                            view["response"].visible = False
                             seleccion = int(input("> ")) - 1
                             if seleccion < 0 or seleccion >= len(value):
-                                limpiar_consola()
-                                print("⌘Selección inválida. Intenta de nuevo.")
-                                print(" ")
+                                view["response"].update(Panel("⌘ Selección inválida. Intenta de nuevo.", style="alert"))
+                                #actualizamos response
+                                view["response"].visible = True
                                 continue
                             elif seleccion == 0:
                                 break
                             
                         except ValueError:
-                            limpiar_consola()
-                            print("⌘Entrada inválida. Por favor, ingresa un número.")
-                            print(" ")
+                            view["response"].update(Panel("⌘ Entrada inválida. Por favor, ingresa un número.", style="alert"))
+                            #actualizamos response
+                            view["response"].visible = True
                             continue
                         
                         break
             
             #actualizamos el inventario
-            objetos_eliminados =[]
+            objetos_eliminados = ""
             if self.objetos_requeridos:
                 for o, c in self.objetos_requeridos.items():
                     temp = o
                     temp.cantidad = c
                     jugador.extraer_inventario(temp)
-                    objetos_eliminados.append(f"[Se elimino {o.nombre} x {temp.cantidad} de tu inventario]")
+                    objetos_eliminados += f"[red][Se elimino [white]{o.nombre} x {temp.cantidad}[/] de tu inventario][/red]\n"
             
             #entregamos recompensas todas
-            pagos = []
+            pagos = "\n"
             for recompensa in self.recompensas:
                 chek = jugador.agregar_inventario(recompensa) 
                 if not chek:
                     jugador.lugar_actual.agregar_objeto(recompensa)
-                    pagos.append(f"[Se agrego {recompensa.nombre} al lugar]")
+                    pagos += f"[green][Se agrego [white]{recompensa.nombre}[/] al lugar][/]\n"
                 else:
-                    pagos.append(f"[Se agrego {recompensa.nombre} a tu inventario]")
+                    pagos += f"[green][Se agrego [white]{recompensa.nombre}[/] a tu inventario][/]\n"
             
             jugador.nivel_combate += self.experiencia
             
             #imprimimos todo lo realizado
             limpiar_consola()
-            print(f"[Msision {self.nombre} Completada.]")
-            print("")
-            print(objetos_eliminados if objetos_eliminados else "")
-            print(pagos if pagos else "")
-            print("")
-            print(f"[Experiencia ganada {self.experiencia}]")
-            print("")
+            view["response"].update(Panel(f"[Msision {self.nombre} Completada.]", style="exito"))
+            
+            #objetos de mision y recompensas
+            view["conten"]["dialogos"]["dialogo"].update(Panel((Text.from_markup(objetos_eliminados)+Text.from_markup(pagos)) if not objetos_eliminados == "" else "", title="Objetos de mision y recompensas"))
+            
+            #experiencias
+            view["conten"]["dialogos"]["respuestas"].update(Panel(f"[Experiencia ganada [white]{self.experiencia}[/]]", title="Experiencia", style="orange3"))
+            
+            #centrador
+            centra=Layout(Panel(view, style="bright_black"))
+
+            consola.print(centra)
+            consola.input("⌬ Presiona cualquier cosita para continuar") 
             return
               
         else:

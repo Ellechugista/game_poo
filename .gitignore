@@ -1,2 +1,5 @@
 __pycache__/*.*
 saves/*.pkl
+.venv/*.*
+.venv/*
+test.py

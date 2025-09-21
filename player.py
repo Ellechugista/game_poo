@@ -1,14 +1,19 @@
 import random
 from objects import consumible, vestimenta
 from utils import *
+#GUI de consola
+from rich.panel import Panel
+from rich.text import Text
+
 class player:   
-    def __init__(self, nombre:str, lugar_actual, vida:float=100, habilidades:dict = {"atacar": 5, "defender": 5}, nivel_combate = 10, control_juego= None):
+    def __init__(self, nombre:str, lugar_actual, vida:float=100, habilidades:dict = {"atacar": 5, "defender": 5}, nivel_combate = 5, control_juego= None):
         self.nombre = nombre
         self.vida = round(vida, 1)
+        self.vida_limite = round(vida, 1)
         self.inventario = []
         self.vestimentas = []
         self.peso_inventario = 0
-        self.limite_inventario = 20
+        self.limite_inventario = 30
         self.habilidades = habilidades
         self.lugar_actual = lugar_actual 
         self.nivel_combate = round(nivel_combate, 2)
@@ -17,6 +22,9 @@ class player:
         
         #seccion de misiones
         self.registro_misiones = []
+        
+        #diseños
+        self.diseño= diagramas
 
 
     #misiones
@@ -25,57 +33,50 @@ class player:
         self.registro_misiones.append(mision)
         
     def mostrar_misiones(self):
-        limpiar_consola()
+        consola.clear()
+        text = ""
         if self.registro_misiones:
-            print("="*20)
-            for mision in self.registro_misiones:
+            for mision in self.registro_misiones[-5:]:
                 if mision.estado == "activo":
-                    print(f"#{mision.id} - {mision.nombre} [Mision activa]")
+                    text += f"[bright_cyan]⌭ {mision.id}[/] - {mision.nombre} [green][Mision activa][/]\n"
                 else:
-                    print(f"#{mision.id} - {mision.nombre} [Mision pasada]")
+                    text += f"[bright_cyan]⌭ {mision.id}[/] - {mision.nombre} [bright_black][Mision pasada][/]\n"
         else:
-            print("⌘No tienes misiones activas")
+            text += "[bright_black]⌬ No tienes misiones activas[/]"
         
+        
+        return Panel(Text.from_markup(text, style="white"), title="Misiones", style="dark_green",)
+             
     def estadisticas(self):
-        print(f"{"-"*10}ESTADISTICAS{"-"*10}")
-        print(f"☺ Nombre: {self.nombre}")
-        print(f"🎔 Vida: {self.vida}")
-        print(f"⍚ Nivel de combate: {self.nivel_combate}")
-        print(f"❖ Habilidades: Ataque:{self.habilidades['atacar']} Defensa:{self.habilidades['defender']}")
+        text = Text.from_markup(f"[yellow1]♦[/] Nombre: {self.nombre}\n[red]♥[/] Vida: {self.vida}/{self.vida_limite}\n[cyan1]♣[/] Nivel de combate: {self.nivel_combate}\n[chartreuse4]♠[/] Habilidades: Ataque:{self.habilidades['atacar']} Defensa:{self.habilidades['defender']} \n[orange4]〄[/] Inventario: {self.peso_inventario}g/{self.limite_inventario}g")
+        
+        return Panel(text, title="Estadisticas Player", style="white")
      
     def mover_a(self, direccion):
-        limpiar_consola()
+        consola.clear()
         """necesitara un parametro la cual es la direccion"""
         if direccion:
             if direccion in self.lugar_actual.conexiones:
                 if self.lugar_actual.conexiones[direccion].bloqueado:
                     if self.lugar_actual.conexiones[direccion].razon:
-                        limpiar_consola()
-                        print(f"⌘No puedes ir a este lugar porque: {self.lugar_actual.conexiones[direccion].razon}")
-                        print(" ")
+                        return Panel(f"⊠ No puedes ir a este lugar porque: {self.lugar_actual.conexiones[direccion].razon}", style="coin")
                     else:
-                        limpiar_consola()
-                        print("⌘No puedes ir a este lugar")
-                        print(" ")
+                        return Panel("⊠ No puedes ir a este lugar", style="coin")
                 else:        
                     nuevo_lugar = self.lugar_actual.conexiones[direccion]
                     self.lugar_actual = nuevo_lugar
             else:
-                limpiar_consola()
-                print("No puedes ir en esa direccion")
-                print(" ")
+                return Panel("⌬ No puedes ir en esa direccion", style="info")
         else:
-            print("El jugador no esta en ningun lugar")
+            print("⌬ El jugador no esta en ningun lugar")
             print(" ")
          
     def agregar_inventario(self, objeto):
         """esta funcion agrega un objeto al inventario del jugador"""
-        limpiar_consola()
-        peso = objeto.peso + self.peso_inventario
+        consola.clear()
+        peso = (objeto.peso*objeto.cantidad) + self.peso_inventario
         if  peso > self.limite_inventario:
-            print("⌘No puedes llevar mas objetos en tu inventario sobrepeso")
-            print(" ")
-            return False
+            return Panel("⌬ No puedes llevar mas objetos en tu inventario sobrepeso", style="alert")
         else:
             for item in self.inventario:
                 if item.nombre == objeto.nombre:
@@ -85,18 +86,16 @@ class player:
                 self.inventario.append(objeto)
                 
             self.peso_inventario += objeto.peso * objeto.cantidad
-            print(f"⌘has tomado {objeto.nombre} (Cantidad: {objeto.cantidad})")
-            print(" ")
             return True
        
-    def extraer_inventario(self, objeto):
+    def extraer_inventario(self, objeto, cantidad:int = None):
         """esta funcion elimina un objeto del inventario del jugador"""
-        limpiar_consola()
+        consola.clear()
         for item in self.inventario:
             if item.nombre == objeto.nombre:
-                if item.cantidad > objeto.cantidad:
-                    item.cantidad -= objeto.cantidad
-                    self.peso_inventario -= objeto.peso * objeto.cantidad
+                if item.cantidad > (objeto.cantidad if not cantidad else cantidad):
+                    item.cantidad -= objeto.cantidad if not cantidad else cantidad
+                    self.peso_inventario -= objeto.peso * (objeto.cantidad if not cantidad else cantidad)
 
                 elif item.cantidad == objeto.cantidad:
                     self.inventario.remove(item)
@@ -112,67 +111,115 @@ class player:
          
     def mostrar_inventario(self):
         """esta funcion muestra el inventario del jugador y permite hacer mucho mass"""
-        limpiar_consola()
+        consola.clear()
+        #GUI structure
+        view = Layout()
+        
+        #altura
+        view.split_column(
+            Layout(name="response", size=3, visible=False),
+            Layout(name="centrado", size=28)
+        )
+        
+        #secciones
+        view["centrado"].split_row(
+            Layout(name="inventario"),
+            Layout(name="equipados")
+        )
+        
+        view["centrado"]["equipados"].split_column(
+            Layout(name="objetos", size=11),
+            Layout(name="estadisticas", size=17)
+        )
+        
+        view["centrado"]["equipados"]["estadisticas"].split_row(
+            Layout(name="diagrama"),
+            Layout(name="estadistica", ratio=2)
+        )
+        
         while True:
             if self.inventario or self.vestimentas:
-                print("Tienes:")
+                text_inventario=f"[b]Tienes:[/]\n"
                 for item in self.inventario:
                     if item.cantidad == 1:
-                        print(f"ⵚ {item.nombre}")
+                        text_inventario += f"[green4]ⵚ[/] [white]{item.nombre}[/]\n"
                     else:
-                        print(f"ⵚ {item.nombre} x{item.cantidad}")
-                print(f"----------------------------------{self.peso_inventario}/{self.limite_inventario}")
-                
+                        text_inventario += f"[green4]ⵚ[/] [white]{item.nombre} x({item.cantidad})[/]\n"
+
+                text_equipados = f"Tienes equipado:\n"
                 if self.vestimentas:
-                    print(" ")
-                    print("Tienes equipado:")
                     for item in self.vestimentas:
                         if item.tipo == "casco":
-                            print(f"⛑ {item.nombre}")
+                            text_equipados += f"⛑ {item.nombre}\n"
                         elif item.tipo == "coraza":
-                            print(f"🧥 {item.nombre}")
+                            text_equipados += f"🧥 {item.nombre}\n"
                         elif item.tipo == "guantes":
-                            print(f"🧤 {item.nombre}")
+                            text_equipados += f"🧤 {item.nombre}\n"
                         elif item.tipo == "botas":
-                            print(f"🥾 {item.nombre}")
+                            text_equipados += f"🥾 {item.nombre}\n"
                         elif item.tipo == "pantalones":
-                            print(f"👖 {item.nombre}")
+                            text_equipados += f"👖 {item.nombre}\n"
                         elif item.tipo == "mochila":
-                            print(f"🎒 {item.nombre}")
+                            text_equipados += f"🎒 {item.nombre}\n"
                         elif item.tipo == "arma":
-                            print(f"🗡 {item.nombre}")
+                            text_equipados += f"🗡 {item.nombre}\n"
                         elif item.tipo == "escudo":
-                            print(f"🛡 {item.nombre}")
+                            text_equipados += f"🛡 {item.nombre}\n"
                         else:
-                            print(f"🥼 {item.nombre}")
+                            text_equipados += f"🥼 {item.nombre}\n"
                 else:
-                    print(" ")
-                    print("⌘no tienes nada equipado")
+                    text_equipados = "[bright_black]⌬ No tienes nada equipado[/]"
+                
+                #actualizamos la seccion de inventario
+                view["centrado"]["inventario"].update(Panel(Text.from_markup(text_inventario), title="Inventario", style="dark_cyan", subtitle=f"Peso: {self.peso_inventario}k/{self.limite_inventario}k", subtitle_align="right"))
+                
+                #actualizamos la seccion de inventario equipados
+                view["centrado"]["equipados"]["objetos"].update(Panel(Text.from_markup(text_equipados), title="Equipados", style="dark_orange3"))
+                
+                #actualizamos estadistica del personaje
+                view["centrado"]["equipados"]["estadistica"].update(self.estadisticas())
+                
+                #actualizar diagrama
+                view["centrado"]["equipados"]["diagrama"].update(Panel(self.diseño["normal"] if self.vida > (self.vida*0.8) else self.diseño["herido"], title="Estado",style=f"{"green4" if self.vida > (self.vida*0.8) else "red"}"))
+                
+                #imprimimos GUI con centra
+                centra = Layout(Panel(view, style="bright_black"))
+                consola.print(centra)
             else:
-                print("⌘no tienes nada en tu inventario")
-                break
+                return Panel("⌬ No tienes nada en tu inventario", style="info")
             
+            comando = str(input("➥ ")).lower().split()
             
-            comando = str(input("> ")).lower().split()
+            #reiniciamos la vista de la seccion de response
+            view["response"].visible = False
+            
+            #validamos que no este vacio
+            if not comando:
+                view["response"].update(Panel("Selecciona una opcion Valida", style="alert"))
+                view["response"].visible = True
+                continue
+            
             match comando[0]:
                 case "equipar":
-                    limpiar_consola()
+                    consola.clear()
                     if len(comando) > 1:
                         objeto = comando[1].lower().strip()
                         for item in self.inventario:
                             if item.nombre.lower() == objeto:
                                 if isinstance(item, vestimenta):
-                                    item.vestir(self)
+                                    #actualisamos seccion de respuesta para que si o si mustre un mensaje
+                                    view["response"].update(item.vestir(self))
+                                    view["response"].visible = True
                                     break
                         else:
-                            print(f"⌘No tienes {objeto} en tu inventario")
-                            print(" ")  
+                            view["response"].update(Panel(f"⌬ No tienes {objeto} en tu inventario",style="info"))
+                            view["response"].visible = True  
                     else:
-                        print("⌘No has especificado el objeto a equipar")
-                        print(" ")
+                        view["response"].update(Panel("⌬ No has especificado el objeto a equipar",style="info"))
+                        view["response"].visible = True 
                 
                 case "desequipar":
-                    limpiar_consola()
+                    consola.clear()
                     if len(comando) > 1:
                         objeto = comando[1].lower().strip()
                         for item in self.vestimentas:
@@ -180,86 +227,86 @@ class player:
                                 item.desequipar(self)
                                 break
                         else:
-                            print(f"⌘No tienes {objeto} en tu inventario")
+                            print(f"⌬ No tienes {objeto} en tu inventario")
                             print(" ")  
                     else:
-                        print("⌘No has especificado el objeto a equipar")
+                        print("⌬ No has especificado el objeto a equipar")
                         print(" ")
                 
                 case "usar":
-                    limpiar_consola()
+                    consola.clear()
                     if len(comando) > 1:
                         objeto = comando[1].lower().strip()
-                        print (objeto)
+                        #print (objeto)
                         for item in self.inventario:
                             if item.nombre.lower() == objeto:
                                 if isinstance(item, consumible):
-                                    item.usar(self)
+                                    respuesta = item.usar(self)
+                                    if isinstance(respuesta, Panel):
+                                        view["response"].update(respuesta)
+                                        view["response"].visible = True
                                     break
                                 else:
-                                    print(f"⌘No puedes usar {objeto}, no es un consumible")
-                                    print(" ")
+                                    view["response"].update(Panel(f"⌬ No puedes usar {objeto}, no es un consumible", style="info"))
+                                    view["response"].visible = True
                                     break       
                         else:
-                            print(f"⌘No tienes {objeto} en tu inventario")
-                            print(" ")  
+                            view["response"].update(Panel(f"⌬ No tienes {objeto} en tu inventario", style="info"))
+                            view["response"].visible = True
                     else:
-                        print("⌘No has especificado el objeto a usar")
-                        print(" ")
+                        view["response"].update(Panel(f"⌬ No has especificado el objeto a usar", style="info"))
+                        view["response"].visible = True
                 case "informacion":
-                    limpiar_consola()
+                    consola.clear()
                     if len(comando) > 1:
-                        if self.inventario:
-                            for item in self.inventario:
+                        if self.inventario or self.vestimentas:
+                            all_vestiman= self.inventario + self.vestimentas
+                            for item in all_vestiman:
                                 #print(item.nombre.lower())
                                 if item.nombre.lower() == comando[1].strip():
-                                    self.descrip_objeto(item)
+                                    item.describir()
                                     break
                             else:
-                                limpiar_consola()
-                                print(f"⌘No tienes {comando[1]} en tu inventario")
-                                print(" ")
+                                view["response"].update(Panel(f"⌬ No tienes {comando[1]} en tu inventario", style="info"))
+                                view["response"].visible = True
                         else:
-                            limpiar_consola()
-                            print("⌘No tienes nada en tu inventario")  
-                            print(" ")
+                            view["response"].update(Panel("⌬ No tienes nada en tu inventario",style="info" ))
+                            view["response"].visible = True
                     else:
-                        limpiar_consola()
-                        print("⌘Debes especificar el objeto del que quieres informacion")  
-                        print(" ")
+                        consola.clear()
+                        view["response"].update(Panel("⌬ Debes especificar el objeto del que quieres informacion", style="info"))  
+                        view["response"].visible = True
                 case "tirar":
-                    limpiar_consola()
+                    consola.clear()
                     if len(comando) > 1:
                         objeto = comando[1].lower()
                         for item in self.inventario:
                             if item.nombre.lower() == objeto:
                                 self.extraer_inventario(item)
                                 self.lugar_actual.agregar_objeto(item)
-                                print(f"⌘Has tirado {objeto}")
-                                print(" ")
+                                view["response"].update(Panel(f"⌬ Has tirado {objeto}", style="info"))
+                                view["response"].visible = True
                                 break
                         else:
-                            print(f"⌘No tienes {objeto} en tu inventario")
-                            print(" ")
+                            view["response"].update(Panel(f"⌬ No tienes {objeto} en tu inventario", style="info"))
+                            view["response"].visible = True
                     else:
-                        print("⌘No has especificado el objeto a tirar")
-                        print(" ")
+                        view["response"].update(Panel("⌬ No has especificado el objeto a tirar", style="info"))
+                        view["response"].visible = True
                 case "salir":
-                    limpiar_consola()
+                    consola.clear()
                     break
                 case _:
-                    limpiar_consola()
-                    print("⌘Comando no valido")
-                    print(" ")
+                    consola.clear()
+                    view["response"].update(Panel("⌬ Comando no valido", style="info"))
+                    view["response"].visible = True
 
     def agregar_vestimenta(self, objeto):
         """esta funcion agrega un objeto al inventario del jugador sin aplicar sus efectos"""
-        limpiar_consola()
+        consola.clear()
         for item in self.vestimentas:
             if item.tipo == objeto.tipo:
-                print("⌘No puedes llevar dos veces la misma vestimenta")
-                print(" ")
-                return False  
+                return Panel("⌬ No puedes llevar dos veces la misma vestimenta", style="alert") 
         else:
             #aqui funciona todo correctamente y se agrega el objeto al inventario
             self.vestimentas.append(objeto)
@@ -269,7 +316,7 @@ class player:
 
     def extraer_vestimenta(self, objeto):
         """esta funcion elimina un objeto del inventario del jugador"""
-        limpiar_consola()
+        consola.clear()
         for item in self.vestimentas:
             if item.nombre == objeto.nombre:
                 self.vestimentas.remove(objeto)
@@ -277,47 +324,40 @@ class player:
                 return True
         else:
             #aqui funciona todo correctamente y se agrega el objeto al inventario
-            print("⌘No tienes esa vestimenta equipada")
+            print("⌬ No tienes esa vestimenta equipada")
             print(" ")
             return False  
-            
-    def descrip_objeto(self, objeto):
-        limpiar_consola()
-        objeto.describir()
         
     def tomar_objeto(self, objeto):
-        limpiar_consola()
+        consola.clear()
         for item in self.lugar_actual.objetos:
             if objeto == "cofre":
-                print("⌘No puedes tomar un cofre")
-                return False
+                return Panel("⌬ No puedes tomar un cofre", style="info")
             elif item.nombre.lower() == objeto:
-                    chek= self.agregar_inventario(item)
-                    if chek:
+                    respuesta= self.agregar_inventario(item)
+                    if respuesta == True:
                         self.lugar_actual.quitar_objeto(item)
-                        return
+                        return Panel(f"⌬ has tomado {item.nombre} (Cantidad: {item.cantidad})", style="info")
                     else:
-                        return
+                        return respuesta
         else:
-            print(f"⌘No hay {objeto} aqui.")
-            print("")
-        
+            return Panel(f"⌬ No hay {objeto} aqui.", style="info")
         
     def calcular_ventaja(self, contrincante):
         """esta funcion devuelve si hay ventaja en el combate y devuelve true si hay ventaja y false si no hay ventaja y iguales si son iguales"""
         #cuando el nivel de combate del jugador es mayor al del contrincante
         if self.nivel_combate > contrincante.nivel_combate:
-            print(f"⌘¡Tienes ventaja sobre {contrincante.nombre}!")
+            print(f"⌬ ¡Tienes ventaja sobre {contrincante.nombre}!")
             print(" ")
             return True
         #cuando el nivel de combate del contrincante es mayor al del jugador
         elif self.nivel_combate < contrincante.nivel_combate:
-            print(f"⌘¡{contrincante.nombre} tiene ventaja sobre ti!")
+            print(f"⌬ ¡{contrincante.nombre} tiene ventaja sobre ti!")
             print(" ")
             return False
         #cuando los niveles son iguales
         elif self.nivel_combate == contrincante.nivel_combate:
-            print("⌘Niveles iguales - combate justo")
+            print("⌬ Niveles iguales - combate justo")
             print(" ")
             return "iguales"
 
@@ -325,8 +365,7 @@ class player:
         """Ataca a un contrincante basado en el nivel de combate"""
         #validamos si el contrincante ya está muerto si ya lo esta que retorne
         if contrincante.vida <= 0:
-            print(f"{contrincante.nombre} ya está muerto")
-            return
+            return Panel(f"{contrincante.nombre} ya está muerto")
         # Validamos la ventaja según nivel de combate
         ventaja = self.calcular_ventaja(contrincante)
         #calculamos la diferencia de nivel entre rivales
@@ -357,8 +396,8 @@ class player:
             #validamos si ataca o no probabilidad de ataque
             ataca = self.ataque_probabilidad(probabilidad_ataque)
             if ataca == False:
-                print(f"⌘{self.nombre} ha fallado el ataque")
-                return
+                return f"⌬ [white]{self.nombre} ha fallado el ataque[/]\n"
+                
 
             #calculo de daño
             daño_base = self.habilidades["atacar"]
@@ -369,7 +408,7 @@ class player:
                 daño_final = 0
             #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
+            return f"⌬ Has causado [white]{daño_final}[/] de daño a {contrincante.nombre}\n"
 
         #cuando el nivel de combate del contrincante es mayor al del jugador
         elif ventaja == False:
@@ -392,8 +431,7 @@ class player:
             #validamos si ataca o no probabilidad de ataque
             ataca = self.ataque_probabilidad(probabilidad_ataque)
             if ataca == False:
-                print(f"⌘{self.nombre} ha fallado el ataque")
-                return
+                return f"⌬ [white]{self.nombre} ha fallado el ataque [/]\n"
 
             #calculo de daño
             daño_base = self.habilidades["atacar"]
@@ -404,7 +442,7 @@ class player:
                 daño_final = 0
             #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
+            return f"⌬ Has causado [white]{daño_final}[/] de daño a {contrincante.nombre}\n"
 
         #cuando los niveles son iguales
         elif ventaja == "iguales":
@@ -427,8 +465,7 @@ class player:
             #validamos si ataca o no probabilidad de ataque
             ataca = self.ataque_probabilidad(probabilidad_ataque)
             if ataca == False:
-                print(f"⌘{self.nombre} ha fallado el ataque")
-                return
+                return f"⌬ [white]{self.nombre} ha fallado el ataque[/]\n"
 
             #calculo de daño
             daño_base = self.habilidades["atacar"]
@@ -439,7 +476,7 @@ class player:
                 daño_final = 0
             #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
+            return f"⌬ Has causado [white]{daño_final}[/] de daño a {contrincante.nombre}\n"
 
     @classmethod
     def ataque_probabilidad(self, probabilidad:float):
@@ -449,7 +486,7 @@ class player:
     def defender(self):
         """esta funcion hace que el jugador se defienda cambie el booleano de defensa_activa a True pero al final de su turno se debe desactivar desde afuera"""
         self.defensa_activa = True
-        print(f"{self.nombre} se defiende")
+        return f"⌘ [green]{self.nombre} se defiende[/]\n"
     
     def game_over(self):
         """esta funcion hace que el jugador muera"""
@@ -466,9 +503,61 @@ class player:
  ░                       ░      
 """)
         print(" ")
-        print("⌘Game Over")
+        print("⌬ Game Over")
         input("_")
         self.control_juego.game_over()
+
+
+#clases imagenes asciii
+
+diagramas = {
+    "normal":Text(f"""                    
+       :#@@#:       
+       @@@@@@       
+       =@@@@=       
+       .-++-.       
+    .+@@@@@@@@+.    
+    :@%@@@@@@%@-    
+    :@=@@@@@@=@-    
+    :@=@@@@@@=@-    
+    .#=@@@@@@=#:    
+      :@@++@@:      
+      :@@++@@:      
+      :@@++@@:      
+      :@@++@@:      
+      .@@-:@@.      
+                    """, style="white"),
+    "herido":Text(f"""                                
+        ::               
+        **               
+        =-               
+        -=               
+    .-.#@@#.-.           
+       .##.              
+        %%               
+        @@               
+        @@               
+        @%               
+        %#               
+        #*               
+        ++               
+        .:               
+                                """),
+    "muerto":Text(f"""                                  
+    :@@@@@@@@:            
+  .@@@@@@@@@@@@.          
+  @@@@@@@@@@@@@@          
+  @@@+*@@@@*=%@@          
+  %@   :@@-   @@          
+   @@%@@##@@%@@           
+    .@@@@@@@@.            
+      %*%%*@              
+      % %% #                      """)
+} 
+
+
+
+
 
 
 

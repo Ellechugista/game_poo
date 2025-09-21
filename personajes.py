@@ -3,7 +3,7 @@ from utils import *
 from objects import *
 # entidad otros seres personajes y demás 
 class entidad:
-    def __init__(self, nombre: str, dialogos, vida:float,descripcion:str=None, rutinas=None, nivel_combate=4, habilidades:dict = {"atacar": 5, "defender": 5}, animo=50):
+    def __init__(self, nombre: str, dialogos, vida:float,descripcion:str=None, rutinas=None, nivel_combate=4, habilidades:dict = {"atacar": 5, "defender": 5}, animo=50, diagrama:Text=Text("aqui imagen en ASCII")):
         self.nombre = nombre
         # los dialogos deben ser un diccionario como clave el tipo de diálogo y como valor un diccionario con las opciones de respuesta
         self.dialogos = dialogos
@@ -14,6 +14,7 @@ class entidad:
         self.habilidades = habilidades
         self.nivel_combate = nivel_combate
         self.defensa_activa = False
+        self.diagrama = diagrama #diagrama de imagen en ASCII
         
         #estado para verificar si esta vivo o muerto (relacion con misiones)
         self.estado = "vivo"
@@ -31,18 +32,43 @@ class entidad:
         #registramos la entidad en el registro de entidades para acceder a ella desde el registro
         RegistroEntidades.registrar(self)
         
-    def estadisticas(self):
-        print(" ")
-        print("⊢---------------ENTIDY_INFO-------------------⊣")
-        print(f"☺ Nombre: {self.nombre}")
-        print(f"🎔 Vida: {self.vida}")
-        print(f"⍚ Nivel de combate: {self.nivel_combate}")
-        print(f"❖ Habilidades: Ataque:{self.habilidades['atacar']} Defensa:{self.habilidades['defender']}")
-        print(f"✧ Animo: {self.calcular_animo()}")
-        print("⊢---------------------------------------------⊣")
-        self.presentacion()
-        print(" ")
+    def estadisticas(self, GUI:bool=None):
+        if GUI == False:
+            return Panel(Text.from_markup(f"[yellow]☺ Nombre:[/] [white]{self.nombre}[/]\n[red]🎔 Vida:[/] [white]{self.vida}[/]\n[orange3]✧ Animo:[/] [white]{self.calcular_animo()}[/]\n[blue]⍚ Nivel de combate:[/] [white]{self.nivel_combate}[/]\n[green]❖ Habilidades:[/] [white]Ataque:{self.habilidades['atacar']} Defensa:{self.habilidades['defender']}[/]\n"), title = "Estadisticcas contrincante", style="white")
         
+        #GUI
+        view= Layout()
+        
+        #seccion de informacion
+        view.split_column(
+            Layout(Panel(Text("INFORMACION DE ENTIDAD", justify="center"), style="info"), size=3),
+            Layout(name="centra", size=28)
+        )
+        
+        #secciones y layouts
+        view["centra"].split_row(
+            Layout(name="diagrama", size=45),
+            Layout(name="info", ratio=2)
+        )
+        
+        texto = Text.from_markup(f"[yellow]☺ Nombre:[/] [white]{self.nombre}[/]\n[red]🎔 Vida:[/] [white]{self.vida}[/]\n[orange3]✧ Animo:[/] [white]{self.calcular_animo()}[/]\n[blue]⍚ Nivel de combate:[/] [white]{self.nivel_combate}[/]\n[green]❖ Habilidades:[/] [white]Ataque:{self.habilidades['atacar']} Defensa:{self.habilidades['defender']}[/]\n\n")
+        
+        #añadimos texto de presentacion
+        texto.append(self.presentacion())
+        
+        #actualizamos los paneles
+        view["centra"]["info"].update(Panel(texto, style="white", title="Estadisticas"))
+        
+        view["centra"]["diagrama"].update(Panel(self.diagrama, title="Diagrama",style="orange3"))
+        
+        #baner centrador
+        centra = Layout(Panel(view, style="bright_black"))
+        
+        #imprimimos el view
+        consola.print(centra)
+        consola.input("⌬ Presiona cualquier cosita para continuar")
+        return
+
     def calcular_animo(self):
         """aqui calculamos el animo de la entidad, y lo devolvemos como un string para que el jugador sepa como se siente
         si el animo es mayor a 50 la entidad se siente normal, si es mayor a 70 feliz, si es menor a 50 triste, si es menor a 30 enojado y si es menor o igual a 0 el animo se pone en 0
@@ -64,23 +90,48 @@ class entidad:
     
     def hablar(self, jugador):
         """aqui el sujeto tendrá una lista de diccionarios qué tendrán textos que mostrará según el carácter de la entidad, y otro diccionario que tendrá las respuestas que el usuario puede darle"""
+        #GUI
+        view = Layout()
+        
+        view.split_column(
+            Layout(name="response", size=3, visible=False),
+            Layout(name="conten", size=28)
+        )
+        
+        #dividimos el contenido
+        view["conten"].split_row(
+            Layout(name="dialogos", ratio=3),
+            Layout(name="diagrama", size=45)
+        )
+        
+        #dividimos segmento dialogos
+        view["conten"]["dialogos"].split_column(
+            Layout(name="dialogo", ratio=3),
+            Layout(name="respuestas", ratio=1, minimum_size=8)
+        )
+        
+        #si o si actializamos el diagrama
+        view["conten"]["diagrama"].update(Panel(self.diagrama,style="dark_orange3", title="Diagrama"))
+        
+        #centrador
+        centra = Layout(Panel(view, style="bright_black"))
         
         if self.misiones_a_dar:
             for m in self.misiones_a_dar:
                 if m.estado == "inactivo":
-                    m.dialogos_iniciar(jugador)
+                    m.dialogos_iniciar(jugador, view)
                     break
                 elif m.estado == "activo":
                     resultado = m.validar_objeto_inventario(jugador)
-                    print(resultado)
-                    print(all(resultado))
-                    input("pausa")
+                    #print(resultado)
+                    #print(all(resultado))
+                    #input("pausa")
                     if resultado == None or not all(resultado):
-                        m.dialogos_proceso()
+                        m.dialogos_proceso(view)
                         limpiar_consola()
                         break
                     elif resultado and all(resultado):
-                        m.completar_mision(jugador, tipo="exito")
+                        m.completar_mision(jugador, view,tipo="exito")
                         break
                 elif m.estado == "completado" or m.estado == "fallido":
                     self.misiones_a_dar.remove(m)
@@ -99,29 +150,43 @@ class entidad:
                             for anunciado in d[self]:
                                 for info, respuestas in anunciado.items():
                                     while True:
-                                        limpiar_consola()
-                                        print(f"{self.nombre}: {info}")
-                                        print("")
-                                        print("Respuestas:")
+                                        view["conten"]["dialogos"]["dialogo"].update(Panel(f"[dark_orange3]{self.nombre}[/][bright_black]: {info}[/]", style="dodger_blue1", title="Dialogo de Entidad"))
+                                        
+                                        #respuestassssss
+                                        text_respuestas=""
+                                        text_respuestas += "Respuestas:\n"
+                                        #añadimos las respuestas
                                         for i, r in enumerate(respuestas):
-                                            print(f"{i+1}. {r}")
+                                            text_respuestas += f"[green]{i+1}.[/][white] {r}[/]\n"
+                                            
+                                        #añadimos la info como panel al layout
+                                        view["conten"]["dialogos"]["respuestas"].update(Panel(Text.from_markup(text_respuestas), style="dodger_blue2"))
+                                        #actualizamos vista
+                                        view["conten"]["dialogos"]["respuestas"].visible = True
+                                        
+                                        #centrador
+                                        centra = Layout(Panel(view, style="bright_black"))
+                                        
+                                        #imprimimos layout 
+                                        consola.print(centra)
                                         try:
-                                            #esperar seleccion del jugador
-                                            print(" ")
-                                            seleccion = int(input("> ")) - 1
+                                            #esperar seleccion del jugador y reiniciamos response
+                                            view["response"].visible = False
+                                            seleccion = int(input("➥ ")) - 1
                                             if seleccion < 0 or seleccion >= len(respuestas):
-                                                limpiar_consola()
-                                                print("⌘Selección inválida. Intenta de nuevo.")
-                                                print(" ")
+                                                view["response"].update(Panel("⌘ Selección inválida. Intenta de nuevo.", style="alert"))
+                                                #actualizamos response
+                                                view["response"].visible = True
                                                 continue
                                             elif seleccion == 0:
                                                 return
+                                            
                                             #añadimos lo que dijo el sujeto a los registros de la mision
                                             m.añadir_registro(f"{self.nombre}: {info}")
                                         except ValueError:
-                                            limpiar_consola()
-                                            print("⌘Entrada inválida. Por favor, ingresa un número.")
-                                            print(" ")
+                                            view["response"].update(Panel("⌘ Entrada inválida. Por favor, ingresa un número.", style="alert"))
+                                            #actualizamos response
+                                            view["response"].visible = True
                                             continue
                                         break
                         #esto rompe el for del que itera por cada dialogo en los dialogos otros
@@ -131,27 +196,31 @@ class entidad:
                     self.eliminar_dialogos_otra_mision(m)
             limpiar_consola()
         
-        else:    
+        else:
             clave = self.calcular_animo()
             #aqui se elige la respuesta dependiendo del animo de la entidad
                 
             match clave:
                 case "normal":
                     respuesta = random.choice(self.dialogos["normal"])
-                    print(f"{self.nombre}: {respuesta}")
                 case "feliz":
                     respuesta = random.choice(self.dialogos["content"])
-                    print(f"{self.nombre}: {respuesta}")
                 case "triste":
                     respuesta = random.choice(self.dialogos["triste"])
-                    print(f"{self.nombre}: {respuesta}")
                 case "enojado":
                     respuesta = random.choice(self.dialogos["enojado"])
-                    print(f"{self.nombre}: {respuesta}")
                 case "repetido":
                     respuesta = random.choice(self.dialogos["repetido"])
-                    print(f"{self.nombre}: {respuesta}")
-                                
+            #actualizamos el contenido
+            view["conten"]["dialogos"]["dialogo"].update(Panel(f"[dark_orange3]{self.nombre}[/][bright_black]: {respuesta}[/]", style="dodger_blue1", title="Dialogo de Entidad"))
+            
+            #debemos ocultar las respuestas ya no las usaremos aqui
+            view["conten"]["dialogos"]["respuestas"].visible = False
+            
+            #imprimimos la info actualizada
+            consola.print(centra)
+            input("⌬ Oprime cualquier opcion para salir")
+            return            
                     
     def agregar_dialogos_otra_mision(self, mision):
         self.dialogos_otra_mision.append(mision)
@@ -162,26 +231,91 @@ class entidad:
     def luteador(self, jugador):
         """esta funcion genera un loop donde el jugador decide que tomar de los objetos que tenia el personaje en su inventarios"""
         
+        #gui
+        view=Layout()
+        
+        #seccionamos 
+        view.split_column(
+            Layout(name="response", size=3, visible=False),
+            Layout(name="conten", size=28)
+        )
+        
+        view["conten"].split_row(
+            Layout(name="e-inven"),
+            Layout(name="p-inven")
+        )
+            
+        centra = Layout(Panel(view, style="bright_black"))
+        
         while True:
-            #mostramos la info
-            print(f"☺Contenido de {self.nombre} (jubilado):")
+            #informacion de la entidad
+            text_entidad = f"☠ Contenido de {self.nombre} (jubilado):\n"
             if self.inventario:
                 for item in self.inventario:
                     if item.cantidad == 1:
-                        print(f"- {item.nombre}")
+                        text_entidad += f"[green4]ⵚ[/] [white]{item.nombre}[/]\n"
                     else:
-                        print(f"- {item.nombre} (x{item.cantidad})")
+                        text_entidad += f"[green4]ⵚ[/] [white]{item.nombre} x({item.cantidad})[/]\n"
             else:
-                print("⌘No hay nada aqui.")
-                print(" ")
+                #tenemos que salir de inmediato de ente bucle ya que no hay mas que hacer
                 break
+            
+            #informacion del inventario del jugador
+            text_player= f"[b]Tienes:[/]\n"
+            if jugador.inventario:
+                for item in jugador.inventario:
+                    if item.cantidad == 1:
+                        text_player += f"[green4]ⵚ[/] [white]{item.nombre}[/]\n"
+                    else:
+                        text_player += f"[green4]ⵚ[/] [white]{item.nombre} x({item.cantidad})[/]\n"
+            else:
+                text_player = "[bright_black]⌬ No tienes nada en tu inventario[/]"
                 
-            print(" ")
+            #actualizamos el GUI
+            #inventario de entidad
+            view["conten"]["e-inven"].update(Panel(Text.from_markup(text_entidad), style="dodger_blue2", title="Inventario Del Difunto"))
+            
+            #inventario del jugador
+            view["conten"]["p-inven"].update(Panel(Text.from_markup(text_player), style="orange3",title="Tu inventario"))
+            
+            #imprimimos el layout 
+            consola.print(centra)
+            
             #aqui debera escribir que desea hacer con el contenido
             comando = str(input("> ")).lower().split()
+            view["response"].visible = False
+            
+            if not comando:
+                view["response"].update(Panel(f"⌬ Debes especificar que quieres tomar", style="info"))
+                view["response"].visible = True
+                continue
+            
             match comando[0]:
                 case "tomar":
                     if len(comando) > 1:
+                        #toma todo el contenido del cofre
+                        if comando[1] == "*":
+                            items = self.inventario[:]  # copia
+                            for item in items:
+                                if jugador.agregar_inventario(item):
+                                    self.extraer_inventario(item)
+                                else:
+                                    view["response"].update(Panel("algo salo mal", style="alert"))
+                                    view["response"].visible=True
+                                    break
+                            else:
+                                #actualizamos info del baner
+                                view["response"].update(Panel("has tomado todo.", style="exito"))
+                                view["response"].visible = True
+                                
+                                #actualizamos inventariado del difunto
+                                view["conten"]["e-inven"].update(Panel("⌬ Aqui no hay nada", style="bright_black"))
+                                
+                                #imprimimos la actualizacion
+                                consola.print(centra)
+                                consola.input("⌬ Presiona cualquier cosita para continuar")
+                            continue
+                        
                         for item in self.inventario:
                             if comando[1] == "cofre":
                                 limpiar_consola()
@@ -189,23 +323,27 @@ class entidad:
                                 print(" ")
                                 continue
                             elif item.nombre.lower() == comando[1]:
-                                if jugador.agregar_inventario(item):
+                                resultado = jugador.agregar_inventario(item) 
+                                if isinstance(resultado, Panel):
+                                    #actualizamos layout
+                                    view["response"].update(resultado)
+                                    view["response"].visible = True
+                                    break
+                                elif resultado == True:
                                     self.extraer_inventario(item)
-                                    limpiar_consola()
-                                    print(f"⌘Has tomado {item.nombre}")
-                                    print(" ")
+                                    view["response"].update(Panel(f"⌬ Has tomado {item.nombre}", style="exito"))
+                                    view["response"].visible = True
                                     break
                                 else:
                                     break
                         else:
                             limpiar_consola()
-                            print(f"⌘No hay {comando[1]} aqui")
-                            print(" ")
+                            view["response"].update(Panel(f"⌬ No hay {comando[1]} aqui", style="info"))
+                            view["response"].visible = True
                             continue
                     else:
-                        limpiar_consola()
-                        print("⌘Debes especificar que quieres tomar")
-                        print(" ")
+                        view["response"].update(Panel(f"⌬ Debes especificar que quieres tomar", style="info"))
+                        view["response"].visible = True
                         continue
                 case "dejar":
                     if len(comando) > 1:
@@ -213,18 +351,16 @@ class entidad:
                             if item.nombre.lower() == comando[1]:
                                 self.agregar_inventario(item)
                                 jugador.extraer_inventario(item)
-                                limpiar_consola()
-                                print(f"⌘Has dejado {item.nombre}")
+                                view["response"].update(Panel(f"⌬ Has dejado {item.nombre}", style="exito"))
+                                view["response"].visible = True
                                 break
                         else:
-                            limpiar_consola()
-                            print(f"⌘No tienes {comando[1]} en tu inventario")
-                            print(" ")
+                            view["response"].update(Panel(f"⌬ No tienes {comando[1]} en tu inventario", style="info"))
+                            view["response"].visible = True
                             continue
                     else:
-                        limpiar_consola()
-                        print("⌘Debes especificar que quieres dejar")
-                        print(" ")
+                        view["response"].update(Panel(f"⌬ Debes especificar que quieres dejar", style="info"))
+                        view["response"].visible = True
                         continue
                 case "inventario":
                     limpiar_consola()
@@ -235,8 +371,8 @@ class entidad:
                     break
                 case _:
                     limpiar_consola()
-                    print("⌘Que es lo que quieres hacer?")
-                    print(" ")
+                    view["response"].update(Panel(f"⌬ Comando invalido", style="info"))
+                    view["response"].visible = True
                     continue
 
     def soltar_azar(self):
@@ -310,8 +446,7 @@ class entidad:
             #validamos si ataca o no probabilidad de ataque
             ataca = self.ataque_probabilidad(probabilidad_ataque)
             if ataca == False:
-                print(f"⌘{self.nombre} ha fallado el ataque")
-                return
+                return f"⌘ [white]{self.nombre} ha fallado el ataque[/]\n"
 
             #calculo de daño
             daño_base = self.habilidades["atacar"]
@@ -322,7 +457,7 @@ class entidad:
                 daño_final = 0
             #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
+            return f"⌘ Has causado [white]{daño_final}[/] de daño a {contrincante.nombre}\n"
 
         #cuando el nivel de combate del contrincante es mayor al del jugador
         elif ventaja == False:
@@ -345,8 +480,7 @@ class entidad:
             #validamos si ataca o no probabilidad de ataque
             ataca = self.ataque_probabilidad(probabilidad_ataque)
             if ataca == False:
-                print(f"⌘{self.nombre} ha fallado el ataque")
-                return
+                return f"⌘ [white]{self.nombre} ha fallado el ataque[/]\n"
 
             #calculo de daño
             daño_base = self.habilidades["atacar"]
@@ -357,7 +491,7 @@ class entidad:
                 daño_final = 0
             #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
+            return f"⌘Has causado [white]{daño_final}[/] de daño a {contrincante.nombre}\n"
 
         #cuando los niveles son iguales
         elif ventaja == "iguales":
@@ -380,8 +514,7 @@ class entidad:
             #validamos si ataca o no probabilidad de ataque
             ataca = self.ataque_probabilidad(probabilidad_ataque)
             if ataca == False:
-                print(f"⌘{self.nombre} ha fallado el ataque")
-                return
+                return f"⌘ [white]{self.nombre} ha fallado el ataque[/]\n"
 
             #calculo de daño
             daño_base = self.habilidades["atacar"]
@@ -392,7 +525,7 @@ class entidad:
                 daño_final = 0
             #hacemos daño al contrincante
             contrincante.vida = max(0, contrincante.vida - daño_final)
-            print(f"⌘Has causado {daño_final} de daño a {contrincante.nombre}")
+            return f"⌘ Ha causado [white]{daño_final}[/] de daño a {contrincante.nombre}\n"
 
     def ataque_probabilidad(self, probabilidad:float):
         """esta funcion calcula la probabilidad de ataque y devuelve True o False"""
@@ -401,8 +534,7 @@ class entidad:
     def defender(self):
         """esta funcion hace que el jugador se defienda cambie el booleano de defensa_activa a True pero al final de su turno se debe desactivar desde afuera"""
         self.defensa_activa = True
-        print(f"{self.nombre} se defiende")
-        print(" ")
+        return f"⌘ [green]{self.nombre} se defiende[/]\n"
     
     def agregar_inventario(self, objeto):
         if isinstance(objeto, list):
@@ -440,29 +572,29 @@ class entidad:
 #estendemos la clase entidad para crear razas o tipos de entidades
 #humanos
 class humano(entidad):
-    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=5, habilidades = { "atacar": 5,"defender": 5 }, animo=50):
-        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo)
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=5, habilidades = { "atacar": 5,"defender": 5 }, animo=50, diagrama:Text=Text("aqui imagen en ASCII")):
+        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo, diagrama)
     def presentacion(self):
-        print(f"✧{self.nombre} es un humano, {self.descripcion}")
+        return Text.from_markup(f"✧{self.nombre} es un humano\n [bright_black]{self.descripcion}[/]")
 #ELFOS  
 class elfo(entidad):
-    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=8, habilidades = { "atacar": 8,"defender": 15 }, animo=50):
-        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo)
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=8, habilidades = { "atacar": 8,"defender": 15 }, animo=50, diagrama:Text=Text("aqui imagen en ASCII")):
+        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo, diagrama)
     def presentacion(self):
-        print(f"✧{self.nombre} es un elfo, {self.descripcion}")
+        return Text.from_markup(f"✧{self.nombre} es un elfo\n [bright_black]{self.descripcion}[/]")
 #ORCOS
 class orco(entidad):
-    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=3, habilidades = { "atacar": 15,"defender": 12 }, animo=50):
-        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo)
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=3, habilidades = { "atacar": 15,"defender": 12 }, animo=50, diagrama:Text=Text("aqui imagen en ASCII")):
+        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo, diagrama)
     def presentacion(self):
-        print(f"✧{self.nombre} es un orco, {self.descripcion}")
+        return Text.from_markup(f"✧{self.nombre} es un orco\n [bright_black]{self.descripcion}[/]")
         
 #DUENDES
 class duende(entidad):
-    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=2, habilidades = { "atacar": 2,"defender": 2 }, animo=50):
-        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo)
+    def __init__(self, nombre, dialogos, vida, descripcion = None, rutinas=None, nivel_combate=2, habilidades = { "atacar": 2,"defender": 2 }, animo=50, diagrama:Text=Text("aqui imagen en ASCII")):
+        super().__init__(nombre, dialogos, vida, descripcion, rutinas, nivel_combate, habilidades, animo, diagrama)
     def presentacion(self):
-        print(f"✧{self.nombre} es un duende, {self.descripcion}")
+        return Text.from_markup(f"✧{self.nombre} es un duende\n [bright_black]{self.descripcion}[/]")
 
 
    
@@ -541,20 +673,22 @@ dialogos_ejemplos = {
 }
 
 #aqui creamos a los personajes
+
+
 #humanos de valle lidien
-petriscax = humano("Petriscax", dialogos_ejemplos, 100, "Un anciano de vastante edad, cabello y barba larga y blanca su cara refleja una vida llena de vivencias y penurias que quedan marcadas en el tiempo.", nivel_combate=29, habilidades={"atacar":20,"defender":25}, animo=50)
+petriscax = humano("Petriscax", dialogos_ejemplos, 100, "Un anciano de vastante edad, cabello y barba larga y blanca su cara refleja una vida llena de vivencias y penurias que quedan marcadas en el tiempo.", nivel_combate=29, habilidades={"atacar":20,"defender":25}, animo=50, diagrama=imagen_assci(os.path.join(humanos_ruta, "humano_anciano.png")))
 
-marcelito = humano("Marcelito", dialogos_ejemplos, 100, "Un chico joven. muy reservado, cabello corto y lentes arcaicos, con fuerte sentido de moral y justicia.", nivel_combate=11, habilidades={"atacar":18,"defender":15}, animo=50)
+marcelito = humano("Marcelito", dialogos_ejemplos, 100, "Un chico joven. muy reservado, cabello corto y lentes arcaicos, con fuerte sentido de moral y justicia.", nivel_combate=11, habilidades={"atacar":18,"defender":15}, animo=50, diagrama=imagen_assci(os.path.join(humanos_ruta, "humano_2.png")))
 
-laura = humano("Laura", dialogos_ejemplos, 100, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual, en las tardes trabaja en la herreria de su tio.",nivel_combate=9,habilidades={"atacar":14,"defender":10}, animo=50)
+laura = humano("Laura", dialogos_ejemplos, 100, "Una chica joven y alegre, optimista y energica, morena cabello largo negro, y una sonrisa sin igual, en las tardes trabaja en la herreria de su tio.",nivel_combate=9,habilidades={"atacar":14,"defender":10}, animo=50, diagrama=imagen_assci(os.path.join(humanos_ruta,"laura.jpg")))
 
 laura.agregar_inventario([monedax10, monedax10, monedax10, escudo])
 
-madre = humano("Madre", dialogos_ejemplos, 100, "Esta mujer es tu madre, una persona gastada pero con porte inquebrantable que ha llevado una vida dificil pero con mucho amor, pues tu su hijo es su mas grande logro, lee algunas veces y se impresiona con la simplesa de la vida.")
+madre = humano("Madre", dialogos_ejemplos, 100, "Esta mujer es tu madre, una persona gastada pero con porte inquebrantable que ha llevado una vida dificil pero con mucho amor, pues tu su hijo es su mas grande logro, lee algunas veces y se impresiona con la simplesa de la vida.", diagrama=imagen_assci(os.path.join(humanos_ruta,"humano_feme1.png")))
 
-matrifutchka = duende("Mtrifutchka", dialogos_ejemplos, 80, "Este sujeto, es curioso y misterioso, se arrincona a una esquina del lugar donde menos pega a luz, parece herido, pero no permite hablar, una vibra oscura irradia de el", nivel_combate=35, habilidades={"atacar": 34, "defender": 22}, animo=25)
+matrifutchka = duende("Mtrifutchka", dialogos_ejemplos, 80, "Este sujeto, es curioso y misterioso, se arrincona a una esquina del lugar donde menos pega a luz, parece herido, pero no permite hablar, una vibra oscura irradia de el", nivel_combate=35, habilidades={"atacar": 34, "defender": 22}, animo=25, diagrama=imagen_assci(os.path.join(duendes_ruta,"duende_sangano.png")))
 
-rufian = orco("melchorro", dialogos_ejemplos, 130, "A prendas rasgadas y maltratades este sujeto irradia un mal augurio, pues la vida no fue sutil con el, su cuerpo lleno de sicatrices y heridas lo demuestran, a de ser un gerrero fijo", nivel_combate=20, habilidades={"atacar": 20, "defender": 23}, animo=10)
+rufian = orco("melchorro", dialogos_ejemplos, 130, "A prendas rasgadas y maltratades este sujeto irradia un mal augurio, pues la vida no fue sutil con el, su cuerpo lleno de sicatrices y heridas lo demuestran, a de ser un gerrero fijo", nivel_combate=20, habilidades={"atacar": 20, "defender": 23}, animo=10, diagrama=imagen_assci(os.path.join(orco_ruta,"orco_regular.png")))
 
 
 

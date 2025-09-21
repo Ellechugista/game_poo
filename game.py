@@ -8,6 +8,10 @@ from utils import *
 from misiones import *
 import time
 import pickle
+#render
+from rich.panel import Panel
+from rich.table import Table
+
 
 #clase madre donde el flujo del juego se desarrolla, aqui se manejan los objetos y el flujo del juego
 class Game:
@@ -15,6 +19,7 @@ class Game:
         self.player = player("Mariano", casa, 100, habilidades = {"atacar": 100, "defender": 100}, control_juego=self)
         self.enemigos_derrotados = 0
         self.registros_batallas = []
+        self.version = "0.1.7"
         
     def guardar_datos(self, name_file = "datos.pkl"):
         """guarda los datos del juego"""
@@ -27,8 +32,6 @@ class Game:
 
         carpeta_saves = os.path.join(path, "saves")
         
-        print("⌘Guardando datos...")
-        print(" ")
         # Guardamos los datos del juego y las entidades
         datos_game = {
             "estado_game": self.__dict__,
@@ -44,8 +47,10 @@ class Game:
         with open(nombre_archivo, "wb") as f:
             pickle.dump(datos_game, f)
         
-        print("⌘Datos guardados")
-        print(" ")
+        bar_carga(2, "⌬ Guardando datos...")
+        
+        consola.print("⌬ Datos guardados")
+         
         
     def cargar_datos(self):
         """carga los datos del juego"""
@@ -54,22 +59,29 @@ class Game:
         path = os.path.dirname(os.path.abspath(__file__))
         
         if not os.path.exists(os.path.join(path, "saves")):
-            print("⌘No hay archivos de guardado")
-            print(" ")
+            consola.print("⌬ No hay archivos de guardado")
+             
             return False
 
         carpeta_saves = os.path.join(path, "saves")
         archivos = os.listdir(carpeta_saves)
         
         #aqui se imprimen los archivos disponibless para cargar
-        limpiar_consola()
-        print("⌘Archivos de guardado disponibles:")
-        for archivo in archivos:
-            print(f"⌘{archivo}")
+        consola.clear()
         
-        print(" ")
-        print("⌘Cual archivo quieres cargar? (sin la extencion .pkl)")
-        nombre_archivo = str(input("> ")).lower()
+        tabla_archivos = Table(title="Archivos de guardado disponibles", style="info")
+        tabla_archivos.add_column("👁", justify="left", style="dark_green bold")
+        tabla_archivos.add_column("Nombre de archivo", justify="left", style="bold cyan")
+        tabla_archivos.add_column("Fecha", justify="right", style="bold")
+
+        for archivo in archivos:
+            tabla_archivos.add_row("⌬", archivo, archivo[:10])
+        
+        consola.print(tabla_archivos)
+        
+         
+        consola.print("⌬ Cual archivo quieres cargar?")
+        nombre_archivo = str(consola.input("➥ ") ).lower()
         if nombre_archivo.endswith(".pkl"):
             nombre_archivo = nombre_archivo[:-4]
         
@@ -77,21 +89,18 @@ class Game:
         if nombre_archivo.startswith("del"):
             nombre_archivo = nombre_archivo[3:]
             #procedemos a eliminar
-            limpiar_consola()
+            consola.clear()
             os.remove(os.path.join(carpeta_saves, nombre_archivo + ".pkl"))
-            print(f"⌘Partida {nombre_archivo} CORRECTAMENTE")
-            print("")
-            return False
+            return Panel(f"⌬ Partida [bold]{nombre_archivo}[/bold] eliminada CORRECTAMENTE", style="alert")
             
         
         archivo = os.path.join(carpeta_saves, nombre_archivo + ".pkl")
         if not os.path.isfile(archivo):
-            print("⌘El archivo no existe.")
-            print(" ")
-            return False
+            return Panel("⌬ El archivo no existe.", style="info")
 
-        print("⌘Cargando datos...")
-        print(" ")
+        consola.clear()
+        consola.print("⌬ Inicio proceso de carga")
+         
         try:
              # Cargamos los datos
             with open(archivo, "rb") as f:
@@ -137,103 +146,158 @@ class Game:
                     
              #3. Luego restauramos el juego
             self.__dict__.update(datos["estado_game"])
-                            
-            print("⌘Datos cargados correctamente.")
-            print(" ")
+            
+            bar_carga(3,"⌬ Cargando datos...")      
+            consola.print("⌬ Datos cargados correctamente.")
+             
             return True
         except FileNotFoundError:
-            print("⌘No se encontró un archivo de guardado. Iniciando un nuevo juego.")
-            print(" ")
+            consola.print("⌬ No se encontró un archivo de guardado. Iniciando un nuevo juego.")
+             
             return False
         except EOFError:
-            print("⌘El archivo de guardado está vacío. Iniciando un nuevo juego.")
-            print(" ")
+            consola.print("⌬ El archivo de guardado está vacío. Iniciando un nuevo juego.")
+             
             return False
         except pickle.UnpicklingError:
-            print("⌘Error al cargar el archivo de guardado. El archivo puede estar corrupto.")
-            print(" ")
+            consola.print("⌬ Error al cargar el archivo de guardado. El archivo puede estar corrupto.")
+             
             return False
         except AttributeError:
-            print("⌘Error al cargar los datos. Asegúrate de que el archivo de guardado sea compatible.")
-            print(" ")
+            consola.print("⌬ Error al cargar los datos. Asegúrate de que el archivo de guardado sea compatible.")
+             
             return False
         except TypeError:
-            print("⌘Error al cargar los datos. Asegúrate de que el archivo de guardado sea compatible.")
-            print(" ")
+            consola.print("⌬ Error al cargar los datos. Asegúrate de que el archivo de guardado sea compatible.")
+             
             return False
         except Exception as e:
-            print(f"⌘Error al cargar los datos: {e}")
-            print(" ")
+            consola.print(f"⌬ Error al cargar los datos: {e}")
+             
             return False
         
     def save_registro_batalla(self, batalla):
         """guarda el registro de la batalla"""
-        print("⌘Guardando registro de batalla...")
-        print(" ")
+        consola.print("⌬ Guardando registro de batalla...")
+         
         self.registros_batallas.append(batalla)
-        print("⌘Batalla guardada")
-        print(" ")
+        consola.print("⌬ Batalla guardada")
+         
     
     def mostrar_registros_batallas(self):
         """muestra el registro de batallas"""
-        limpiar_consola()
-        print(" ")
-        print("⊢---------------------Registros de Batallas----------------------⊣")
-        if self.registros_batallas:
-            print(" ")
-            for batalla in self.registros_batallas:
-                batalla.informe_batalla()
+        consola.clear()
+        
+        #gui
+        view = Layout()
+        
+        view.split_column(
+            Layout(name="conten")
+        )
+        
+        lista = []
+        
+        if self.registros_batallas: 
+            for batalla in self.registros_batallas[-4:]:
+                lista.append(batalla.informe_batalla())   
         else:
-            print("⌘No hay registros de batallas")
-            print(" ")
-    
+            return Panel("⌬ No hay registros de batallas", style="alert")
+        
+        # Agrupamos los panels
+        content = Group(*lista)
+        view["conten"].update(content)
+        
+        #centrador
+        centra = Layout(Panel(view, style="bright_black"))
+        
+        consola.print(centra)   
+         
+        consola.input("⌬ Presiona cualquier cosita para continuar")
+        
     def menu(self):
         #menu principal
-        limpiar_consola()
+        consola.clear()
+        
+        #layout GUI
+        contenido = Layout(name="contenido")
+        contenido.split_column(
+            Layout(name="response", size=3 ,visible=False),
+            Layout(name="menu")
+        )
+        
+        contenido["menu"].split_column(
+            Layout(name="titulo", size=10),
+            Layout(name="opciones")
+        )
+        
+        #partimos opciones para añadir un diagrama
+        contenido["menu"]["opciones"].split_row(
+            Layout(name="seleccion"),
+            Layout(name="diagrama", size=80)
+        )
+        
+        
+        view =Layout(Panel(contenido, title="Bienvenido".upper(), subtitle="By [green]ellechugista[/]", subtitle_align="right"))
+        
         while True:
-            print(r"""+==========================================================================+
+            #actualizamos el contenido GUI
+            contenido["menu"]["titulo"].update(Panel(Text(r"""+==========================================================================+
 |     ██████╗  █████╗ ███╗   ███╗███████╗    ██████╗  ██████╗  ██████╗     |
 |    ██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔══██╗██╔═══██╗██╔═══██╗    |
 |    ██║  ███╗███████║██╔████╔██║█████╗█████╗██████╔╝██║   ██║██║   ██║    |
 |    ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝╚════╝██╔═══╝ ██║   ██║██║   ██║    |
 |    ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ██║     ╚██████╔╝╚██████╔╝    |
 |     ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝    ╚═╝      ╚═════╝  ╚═════╝     |
-+==========================================================================+""")
-            print("⊢---------------------Menu Principal----------------------⊣")
-            print("⌘Bienvenido al juego de role GAME-POO")
-            print(" ")
-            print("⌘Iniciar juego")
-            print("⌘Guardar juego")
-            print("⌘Cargar juego")
-            print("⌘Salir del juego")
-            print("⌘Volver")
-            print("----------------------------------------------------------⊣")
-            print(" ")
-            comando = str(input("> ")).lower().split()
++==========================================================================+""", justify="center"), style="b dark_orange3"))
+            #panel de informacion
+            contenido["menu"]["opciones"]["seleccion"].update(Panel(Text.from_markup(r"""[white]⌬ Iniciar juego 
+⌬ Guardar juego 
+⌬ Cargar juego
+[bright_black]⌬ Salir del juego[/]
+⌬ Volver[/]"""), title="Bienvenido al juego de role [green][bold]GAME-POO[/bold][/green]",subtitle=f"V [green]{self.version}[/]",subtitle_align="right", style="cyan"))
+
+            #panel de diagrama
+            contenido["menu"]["opciones"]["diagrama"].update(imagen_assci(os.path.join("assets", "paisaje_2.jpg"), 70, "green",justify="center"))
+            
+            consola.print(view)
+            
+            comando = str(consola.input("➥ ")).lower().split()
+            
+            #reiniciamos el response
+            contenido["response"].visible= False
+            
             if comando[0] == "iniciar":
-                print(" ")
-                print("⌘Cual sera el nombre del guerreo?")
-                nombre = str(input("> ")).lower()
+                
+                #actualizamos contenido
+                contenido["menu"]["opciones"].update(Panel("⌬ Cual sera el nombre del guerreo?"))
+                
+                #reinprimimos
+                consola.print(view)
+                
+                nombre = str(consola.input("➥ ")).lower()
+                if not nombre:
+                    contenido["response"].update(Panel("⌬ Debes especificar un nombre valido a tu personaje"))
+                    contenido["response"].visible = True
+                    continue
+                
                 self.player = player(nombre, casa, 100, habilidades = {"atacar": 10, "defender": 10}, nivel_combate=10, control_juego=self)
-                limpiar_consola()
+                consola.clear()
                 self.iniciar()
             elif comando[0] == "salir":
-                seguro = str(input("⌘Estas seguro que quieres salir? (si/no) ")).lower()
+                seguro = str(consola.input("⌬ Estas seguro que quieres salir? (si/no) ")).lower()
                 if seguro == "si" or seguro == "s":
-                    limpiar_consola()
-                    print("⌘Gracias por jugar")
-                    print(" ")
+                    consola.clear()
+                    consola.print("⌬ Gracias por jugar")
                     exit()
                 elif seguro == "no" or seguro == "n":
-                    limpiar_consola()
+                    consola.clear()
                     continue
                 else:
-                    limpiar_consola()
-                    print("⌘Comando no valido")
-                    print(" ")
-
+                    consola.clear()
+                    consola.print("⌬ Comando no valido")
+                     
             elif comando[0] == "guardar":
-                limpiar_consola()
+                consola.clear()
                 if len(comando) > 1:
                     nombre_archivo = comando[1] + ".pkl"
                 else:
@@ -242,44 +306,114 @@ class Game:
                 self.guardar_datos(nombre_archivo)
                 
             elif comando[0] == "cargar":
-                limpiar_consola()
+                consola.clear()
                 
                 cargado = self.cargar_datos()
-                if cargado:
-                    self.iniciar()
+                if isinstance(cargado, Panel):
+                    contenido["response"].update(cargado)
+                    contenido["response"].visible = True
+                elif cargado == True:
+                    self.iniciar()          
                 else:
-                    print("⌘No se pudo cargar el juego")
-                    print(" ")
-            
+                    contenido["response"].update(Panel("⌬ No se pudo cargar el juego", style="info"))
+                    contenido["response"].visible = True
+                     
             elif comando[0] == "volver":
-                limpiar_consola()
+                consola.clear()
                 break
                     
             else:
-                limpiar_consola()
-                print("⌘Comando no valido")
-                print(" ")
+                contenido["response"].update(Panel("⌬ Comando no valido", style="info"))
+                contenido["response"].visible = True
+                 
 
     def iniciar(self):
+        limpiar_consola()
         #aqui se maneja el input del jugador prara ver que  accion quiere hacer dentro de cada escenario y se le muestra la informacion en desarrollo
+        
+        #GUI consol con rich
+        info_panel=Layout()
+        
+        info_panel.split_column(
+            Layout(Panel("Info", style="info"),name="response", size=3, visible=False),
+            Layout(name="general", ratio=1)
+        )
+        
+        #panel de informacion
+        info_panel["general"].split_row(
+            Layout(name="info_lugar", ratio=4),
+            Layout(name="estadisticas", ratio=2)
+        )
+        
+        #layout de info lugar
+        info_panel["general"]["info_lugar"].split_column(
+            Layout(name="descrip_lugar", size=20),
+            Layout(name="conexiones", size=8)
+        )
+        
+        #intentamos darle alto a la columna estadisticas
+        info_panel["general"]["estadisticas"].split_column(
+            Layout(name="estadis_player", size=7),
+            Layout(name="misiones", size=21)
+        )
+        
+        view=Layout(Panel(info_panel, subtitle=f"V {self.version}", subtitle_align="right",style="grey46"))
+        
         while True:
             lugar_actual = self.player.lugar_actual
-            lugar_actual.presentar_lugar()
-            comando = str(input("> ")).lower().split()
+            
+            #actualizamos el GUI
+            #actualizamos descripcion lugar
+            info_panel["general"]["info_lugar"]["descrip_lugar"].update(
+                lugar_actual.presentar_lugar()
+            )
+            
+            #actualizamos direcciones disponibles
+            info_panel["general"]["info_lugar"]["conexiones"].update(
+                lugar_actual.presentar_conexiones()
+            )
+            
+            #actualizamos estadisticas de jugador
+            info_panel["general"]["estadisticas"]["estadis_player"].update(
+                self.player.estadisticas()
+            )
+            
+            #actualizamos estadisticas de jugador
+            info_panel["general"]["estadisticas"]["misiones"].update(
+                self.player.mostrar_misiones()
+            )
+            
+            #imprimimos el GUI
+            consola.print(view)
+            
+            #preguntamos por la accion
+            comando = str(input("➥ ") ).lower().split()
+            
+            #quitamos las respuesta ya mostradas
+            info_panel["response"].visible = False
+            
             #validamos que comando no sea none
             if not comando:
-                limpiar_consola()
-                print("⌘Escoje una accion valida.")
-                print("")
+                consola.clear()
+                consola.print("⌬ Escoje una accion valida.")
+                consola.print("")
                 continue
                 
             match comando[0]:
                 case "ir":
-                    self.player.mover_a(comando[1])
+                    if len(comando) > 1:
+                        resultado = self.player.mover_a(comando[1])
+                        if resultado:
+                            info_panel["response"].update(resultado)
+                            info_panel["response"].visible=True
+                    else:
+                        info_panel["response"].update(Panel("⌬ Debes especificar a donde quieres ir.", style="info"))
+                        #activamos la seccion d einformacion
+                        info_panel["response"].visible = True
                 case "tomar":
-                    limpiar_consola()
-                    self.player.tomar_objeto(comando[1])
-                    print(" ")
+                    consola.clear()
+                    info_panel["response"].update(self.player.tomar_objeto(comando[1]))
+                    info_panel["response"].visible= True
                 case "abrir":
                     if len(comando) > 1:
                         if lugar_actual.objetos:
@@ -288,40 +422,40 @@ class Game:
                                     item.abrir(self.player)
                                     break
                             else:
-                                limpiar_consola()
-                                print(f"⌘No hay ningun {comando[1]} para abrir")
-                                print(" ")
+                                info_panel["response"](Panel(f"⌬ No hay ningun {comando[1]} para abrir"))
+                                 
                     else:
-                        limpiar_consola()
-                        print("⌘Debes espesificar que quieres abrir")
-                        print(" ")
+                        consola.clear()
+                        consola.print("⌬ Debes espesificar que quieres abrir")
+                         
                 case "hablar":
                     if len(comando) > 1:
                         if lugar_actual.presentes:
                             for p in lugar_actual.presentes:
                                 if p.nombre.lower() == comando[1]:
-                                    limpiar_consola()
+                                    consola.clear()
                                     p.hablar(self.player)
-                                    print(" ")
                                     break
                             else:
-                                limpiar_consola()
-                                print(f"⌘No hay nadie llamado {comando[1]}")
-                                print(" ")
+                                info_panel["response"].update(Panel(f"⌬ No hay nadie llamado {comando[1]}", style="alert"))
+                                info_panel["response"].visible = True
+                                 
                         else:
-                            limpiar_consola()
-                            print("⌘No hay nadie con quien hablar")
-                            print(" ")
+                            info_panel["response"].update(Panel("⌬ No hay nadie con quien hablar", style="info"))
+                            info_panel["response"].visible = True
+                             
                     else:
-                        limpiar_consola()
-                        print("⌘Debes especificar con quien quieres hablar")
-                        print(" ")
+                        consola.clear()
+                        consola.print("⌬ Debes especificar con quien quieres hablar")
+                         
                 case "inventario":
-                    limpiar_consola()
-                    self.player.mostrar_inventario()
-                    print(" ")
+                    consola.clear()
+                    resultado = self.player.mostrar_inventario()
+                    if isinstance(resultado, Panel):
+                        info_panel["response"].update(resultado)
+                        info_panel["response"].visible = True
                 case "informacion":
-                    limpiar_consola()
+                    consola.clear()
                     if len(comando) > 2:    
                         if self.player.registro_misiones and comando[1] == "mision":
                                 id = comando[2]
@@ -329,56 +463,52 @@ class Game:
                                     if str(m.id) == id:
                                         m.describir_mision()
                                     else:
-                                        print(f"⌘No existe mision {id} activa.")
+                                        info_panel["response"].update(Panel(f"⌬ No existe mision {id} activa.", style="info"))
+                                        info_panel["response"].visible = True
                                         break
                         else:
-                            print("⌘No has iniciado misiones.")
-                            print("")
+                            info_panel["response"].update(Panel("⌬ No has iniciado misiones.", style = "info"))
+                            info_panel["response"].visible = True
                             continue
                         
                     elif len(comando) > 1:
                         if self.player.inventario:
                             for item in self.player.inventario:
-                                #print(item.nombre.lower())
+                                #consola.print(item.nombre.lower())
                                 if item.nombre.lower() == comando[1].strip():
-                                    self.player.descrip_objeto(item)
-                                    print(" ")
+                                    #self.player.descrip_objeto(item) old way to do this shit 
+                                    item.describir()
                                     break
                             else:
-                                limpiar_consola()
-                                print(f"⌘No tienes {comando[1]} en tu inventario")
-                                print(" ")
+                                info_panel["response"].update(Panel(f"⌬ No tienes {comando[1]} en tu inventario", style="info"))
+                                info_panel["response"].visible=True
                                 continue
                         else:
-                            limpiar_consola()
-                            print("⌘No tienes nada en tu inventario")  
-                            print(" ")
+                            consola.clear()
+                            info_panel["response"].update(Panel("⌬ No tienes nada en tu inventario", style="info")) 
+                            info_panel["response"].visible=True
+                             
                             continue
                     else:
-                        limpiar_consola()
-                        print("⌘Debes especificar el objeto del que quieres informacion")  
-                        print(" ")
+                        consola.clear()
+                        info_panel["response"].update(Panel("⌬ Debes especificar el objeto del que quieres informacion", style="info")) 
+                        info_panel["response"].visible=True 
                 case "estadisticas":
                     if len(comando) > 1:
                         if lugar_actual.presentes:
                             for p in lugar_actual.presentes:
                                 if comando[1] == p.nombre.lower():
-                                    limpiar_consola()
+                                    consola.clear()
                                     p.estadisticas()
-                                    print(" ")
                                     break
                             else:
-                                limpiar_consola()
-                                print(f"⌘No hay nadie llamado {comando[1]}")
-                                print(" ")
+                                info_panel["response"].update(Panel(f"⌬ No hay nadie llamado {comando[1]}", style="info"))
+                                info_panel["response"].visible = True
+                                 
                         else:
-                            limpiar_consola()
-                            print("⌘No hay nadie para ver sus estadisticas")
-                            print(" ")
-                    else:
-                        limpiar_consola()
-                        self.player.estadisticas()
-                        print(" ")
+                            info_panel["response"].update(Panel("⌬ No hay nadie para ver sus estadisticas", style="info"))
+                            info_panel["response"].visible = True
+                             
                 case "atacar":
                     #aqui se maneja la batalla
                     if len(comando) > 1:
@@ -389,36 +519,36 @@ class Game:
                                     pelea.iniciar()
                                     self.save_registro_batalla(pelea)
                                     self.enemigos_derrotados += 1
-                                    print(" ")
-                                else:
-                                    limpiar_consola()
-                                    print(f"⌘No hay nadie llamado {comando[1]}")
-                                    print(" ")
+                                    break      
+                            else:
+                                info_panel["response"].update(Panel(f"⌬ No hay nadie llamado {comando[1]}", style="info"))
+                                info_panel["response"].visible = True   
                         else:
-                            limpiar_consola()
-                            print("⌘No hay nadie para atacar")
-                            print(" ")
+                            info_panel["response"].update(Panel("⌬ No hay nadie para atacar", style="info"))
+                            info_panel["response"].visible = True
+                             
                     else:
-                        limpiar_consola()
-                        print("⌘Debes especificar con quien quieres pelear.")
-                        print(" ")
-                case "misiones":
-                    self.player.mostrar_misiones()
-                    print(" ")
+                        info_panel["response"].update(Panel("⌬ Debes especificar con quien quieres pelear.", style="info"))
+                        info_panel["response"].visible = True
+                     
                 case "registros":
-                    self.mostrar_registros_batallas()
+                    resultado = self.mostrar_registros_batallas()
+                    if isinstance(resultado, Panel):
+                        info_panel["response"].update(resultado)
+                        info_panel["response"].visible = True
                 case "menu":
                     self.menu()
                 case "salir":
+                    consola.clear()
                     break
                 case _:
-                    limpiar_consola()
-                    print("⌘Comando no valido")
-                    print(" ")
+                    consola.clear()
+                    info_panel["response"].update(Panel("⌬ Comando no valido", style="info"))
+                    info_panel["response"].visible = True
 
     def game_over(self):
-        limpiar_consola()
-        print(r"""
+        consola.clear()
+        consola.print(r"""
  ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ 
 ██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗
 ██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║██║   ██║█████╗  ██████╔╝
@@ -427,10 +557,10 @@ class Game:
  ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝
 """)
         self.player.estadisticas()
-        print("")
-        print(f"{self.player.nombre} ha fallecido en batalla, como un heroe, ladron, bricon de puesntes, guardia fiel a la prole, o simplemente olgasaneando entre los pueblos del basto reino de Elrond.")
-        print("")
-        print("ahora solo queda volver a esa gran y maravillosa aventura a la que llamamos vida tu y yo, y bueno espero tu tengas mas que yo, os deseo lo mejor.")
+        consola.print("")
+        consola.print(f"{self.player.nombre} ha fallecido en batalla, como un heroe, ladron, bricon de puesntes, guardia fiel a la prole, o simplemente olgasaneando entre los pueblos del basto reino de Elrond.")
+        consola.print("")
+        consola.print("ahora solo queda volver a esa gran y maravillosa aventura a la que llamamos vida tu y yo, y bueno espero tu tengas mas que yo, os deseo lo mejor.")
         input("_se despide ellechugista ;)")
         exit()
 
