@@ -217,7 +217,7 @@ _⚠️ Este mapa está sujeto a cambios y correcciones a medida que avanza la h
     <code><strong>0.1.7 GUI</strong></code>
   </summary>
   <ul>
-   <li> <b>NEW</b>: Se implemento sistema grafico con  [RICH](https://rich.readthedocs.io/en/stable/index.html)</li> 
+   <li> <b>NEW</b>: Se implemento sistema grafico con  <a href="https://rich.readthedocs.io/en/stable/index.html">RICH</a></li> 
     <br>
    <li> <b>NEW</b>: Se cambio la logica de respuestas de todos las funciones y clases para que se adaptaran al sistema de GUI</li>
     <br>
